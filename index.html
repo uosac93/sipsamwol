@@ -1748,7 +1748,7 @@ function selectChildCount(n) {
   for (var i = 0; i < actualCount; i++) {
     var row = document.createElement('div');
     row.className = 'age-input-row';
-    row.innerHTML = '<label>' + (i+1) + '번째</label><input class="age-input" type="text" inputmode="numeric" placeholder="0" data-child-idx="' + i + '"><span class="age-unit">세 (만 나이)</span>';
+    row.innerHTML = '<label>' + (i+1) + '번째</label><input class="age-input" type="text" inputmode="numeric" placeholder="2020" data-child-idx="' + i + '"><span class="age-unit">년생</span>';
     container.appendChild(row);
   }
   document.getElementById('childNextBtn').disabled = false;
@@ -1770,9 +1770,14 @@ function selectChildCount(n) {
 
 function collectChildAges() {
   S.childAges = [];
+  S.childBirthYears = [];
+  var baseYear = 2025; // 귀속연도 12월 31일 기준
   document.querySelectorAll('#childAgeInputs .age-input').forEach(function(inp) {
     var v = parseInt(inp.value);
-    if (!isNaN(v) && v >= 0) S.childAges.push(v);
+    if (!isNaN(v) && v > 1900 && v <= baseYear) {
+      S.childBirthYears.push(v);
+      S.childAges.push(baseYear - v); // 만 나이 자동 계산
+    }
   });
 }
 
