@@ -535,6 +535,103 @@ body {
 .spouse-salary-unit { font-size: 14px; color: var(--text3); }
 .spouse-salary-hint { font-size: 12px; color: var(--text4); margin-top: 6px; line-height: 1.4; }
 
+/* === Bottom Sheet / Auth Modal === */
+.bottomsheet-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4); z-index: 200;
+  opacity: 0; transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.bottomsheet-overlay.show { opacity: 1; pointer-events: auto; }
+.bottomsheet {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+  width: 100%; max-width: 440px; background: #fff;
+  border-radius: 20px 20px 0 0; z-index: 201;
+  padding: 28px 28px max(28px, env(safe-area-inset-bottom));
+  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.bottomsheet.show { transform: translateX(-50%) translateY(0); }
+.bottomsheet-handle {
+  width: 36px; height: 4px; border-radius: 2px; background: #d1d1d6;
+  margin: 0 auto 20px;
+}
+.bottomsheet-title {
+  font-size: 20px; font-weight: 800; letter-spacing: -0.5px;
+  text-align: center; margin-bottom: 24px;
+}
+.auth-buttons { display: flex; flex-direction: column; gap: 12px; }
+.auth-btn {
+  display: flex; align-items: center; gap: 14px;
+  width: 100%; padding: 16px 20px; border-radius: 14px;
+  border: 1.5px solid #e5e5ea; background: #fff;
+  font-size: 16px; font-weight: 600; color: var(--text);
+  font-family: inherit; cursor: pointer; transition: all 0.15s;
+  min-height: 56px;
+}
+.auth-btn:active { transform: scale(0.97); background: var(--card); }
+.auth-btn-logo {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+.auth-btn-logo.kakao { background: #FEE500; color: #3C1E1E; }
+.auth-btn-logo.pass { background: #E52528; }
+.auth-btn-logo.naver { background: #03C75A; }
+.auth-btn-logo.toss { background: #0064FF; }
+
+.auth-loading {
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  padding: 40px 0;
+}
+.auth-spinner {
+  width: 40px; height: 40px; border: 3px solid #e5e5ea;
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+.auth-loading-text { font-size: 15px; color: var(--text2); font-weight: 500; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* === Simple Auth Button (Deduction Tab) === */
+.simple-auth-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: calc(100% - 56px); margin: 0 28px 16px; padding: 14px 0;
+  border-radius: 12px; border: 1.5px solid var(--accent);
+  background: rgba(0,113,227,0.04); color: var(--accent);
+  font-size: 15px; font-weight: 700; font-family: inherit;
+  cursor: pointer; transition: all 0.15s;
+}
+.simple-auth-btn:active { background: rgba(0,113,227,0.1); transform: scale(0.98); }
+.simple-auth-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* === Financial Product Recommendation === */
+.product-section { margin: 28px 28px 0; }
+.product-section-title {
+  font-size: 18px; font-weight: 800; letter-spacing: -0.5px;
+  margin-bottom: 14px; color: var(--text);
+}
+.product-card {
+  padding: 18px 20px; background: #f0f5ff; border-radius: 14px;
+  margin-bottom: 10px; position: relative; overflow: hidden;
+}
+.product-card-tag {
+  font-size: 11px; font-weight: 700; color: var(--accent);
+  margin-bottom: 6px;
+}
+.product-card-text {
+  font-size: 14px; font-weight: 600; color: var(--text);
+  line-height: 1.5; margin-bottom: 4px;
+}
+.product-card-sub {
+  font-size: 12px; color: var(--text3); line-height: 1.4;
+}
+.product-card-cta {
+  display: inline-block; margin-top: 10px; padding: 8px 16px;
+  background: var(--accent); color: #fff; border-radius: 8px;
+  font-size: 13px; font-weight: 700; border: none;
+  font-family: inherit; cursor: pointer; transition: all 0.15s;
+}
+.product-card-cta:active { transform: scale(0.96); opacity: 0.85; }
+
 /* Animations */
 @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeSlideLeft { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
@@ -838,6 +935,11 @@ body {
     <p class="monthly-tip-label" id="tipMonth"></p>
     <p class="monthly-tip-text" id="tipText"></p>
   </div>
+
+  <div class="product-section" id="productSection" style="display:none;">
+    <div class="product-section-title">맞춤 절세 상품</div>
+    <div id="productCards"></div>
+  </div>
 </div>
 
 <!-- ============================================ -->
@@ -852,12 +954,43 @@ body {
     <span class="deduction-total-label">총 예상 절세액</span>
     <span class="deduction-total-value" id="totalSavingDisplay">+0만원</span>
   </div>
+  <button class="simple-auth-btn" onclick="openAuthSheet()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4"/></svg>
+    간편인증으로 불러오기
+  </button>
   <div class="prefill-prev-wrap">
     <button class="prefill-prev-btn" onclick="prefillPrevYear()">전년도와 동일하게 반영하기</button>
   </div>
   <div id="deductionAccordions"></div>
   <div class="deduction-save-wrap">
     <button class="primary-btn" id="deductionSaveBtn" onclick="saveDeductions()">저장하기</button>
+  </div>
+</div>
+
+<!-- Bottom Sheet: Auth -->
+<div class="bottomsheet-overlay" id="authOverlay" onclick="closeAuthSheet()"></div>
+<div class="bottomsheet" id="authSheet">
+  <div class="bottomsheet-handle"></div>
+  <div id="authSheetContent">
+    <div class="bottomsheet-title">인증 방법을 선택하세요</div>
+    <div class="auth-buttons">
+      <button class="auth-btn" onclick="selectAuth('kakao')">
+        <div class="auth-btn-logo kakao">K</div>
+        카카오톡
+      </button>
+      <button class="auth-btn" onclick="selectAuth('pass')">
+        <div class="auth-btn-logo pass">P</div>
+        PASS
+      </button>
+      <button class="auth-btn" onclick="selectAuth('naver')">
+        <div class="auth-btn-logo naver">N</div>
+        네이버
+      </button>
+      <button class="auth-btn" onclick="selectAuth('toss')">
+        <div class="auth-btn-logo toss">T</div>
+        토스
+      </button>
+    </div>
   </div>
 </div>
 
@@ -949,6 +1082,21 @@ body {
       </div>
       <div class="settings-row" id="carNoticeRow" style="display:none;">
         <span class="settings-label" style="font-size:12px; color:var(--text4);">배우자와 공동명의만 비과세 인정됩니다</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-label">알림</div>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div>
+          <span class="settings-label">맞춤 혜택 알림 받기</span>
+          <div style="font-size:12px; color:var(--text4); margin-top:3px;">절세에 도움되는 금융상품 정보를 보내드려요</div>
+        </div>
+        <button class="toggle" id="marketingToggle" onclick="toggleMarketing()">
+          <div class="toggle-knob"></div>
+        </button>
       </div>
     </div>
   </div>
@@ -2388,6 +2536,9 @@ function renderHome() {
   // 공제항목 자동 추천 카드 렌더링
   renderRecommendCards();
 
+  // 맞춤 금융상품 추천
+  renderProductCards();
+
   // 프로필 요약
   var profileText = fmt(S.salary) + '만원';
   if (S.married) profileText += ' · 기혼';
@@ -2990,6 +3141,128 @@ function renderRecommendCards() {
     card.onclick = rec.action;
     container.appendChild(card);
   });
+}
+
+// ===========================
+// SIMPLE AUTH (간편인증)
+// ===========================
+function openAuthSheet() {
+  // Reset content
+  document.getElementById('authSheetContent').innerHTML =
+    '<div class="bottomsheet-title">인증 방법을 선택하세요</div>' +
+    '<div class="auth-buttons">' +
+      '<button class="auth-btn" onclick="selectAuth(\'kakao\')"><div class="auth-btn-logo kakao">K</div>카카오톡</button>' +
+      '<button class="auth-btn" onclick="selectAuth(\'pass\')"><div class="auth-btn-logo pass">P</div>PASS</button>' +
+      '<button class="auth-btn" onclick="selectAuth(\'naver\')"><div class="auth-btn-logo naver">N</div>네이버</button>' +
+      '<button class="auth-btn" onclick="selectAuth(\'toss\')"><div class="auth-btn-logo toss">T</div>토스</button>' +
+    '</div>';
+  document.getElementById('authOverlay').classList.add('show');
+  document.getElementById('authSheet').classList.add('show');
+}
+
+function closeAuthSheet() {
+  document.getElementById('authOverlay').classList.remove('show');
+  document.getElementById('authSheet').classList.remove('show');
+}
+
+function selectAuth(provider) {
+  // Show loading
+  var names = { kakao: '카카오톡', pass: 'PASS', naver: '네이버', toss: '토스' };
+  document.getElementById('authSheetContent').innerHTML =
+    '<div class="auth-loading">' +
+      '<div class="auth-spinner"></div>' +
+      '<div class="auth-loading-text">' + names[provider] + '(으)로 인증 요청 중...</div>' +
+    '</div>';
+
+  // Simulate auth (1.5s)
+  setTimeout(function() {
+    // Fill virtual data
+    S.deductions['card'] = { on: true, values: { credit: 800, debit: 300, cash: 50, market: 0, transport: 0 } };
+    S.deductions['medical'] = { on: true, values: { general: 120, nanim: 0, glasses: 0, postpartum: 0 } };
+    S.deductions['insurance'] = { on: true, values: { general: 80, disabled: 0 } };
+    S.deductions['pension'] = { on: true, values: { pension_saving: 400, irp: 0 } };
+
+    closeAuthSheet();
+    renderDeductions();
+    showToast('홈택스 자료를 불러왔습니다');
+  }, 1500);
+}
+
+// ===========================
+// FINANCIAL PRODUCT RECOMMENDATION
+// ===========================
+function renderProductCards() {
+  var section = document.getElementById('productSection');
+  var container = document.getElementById('productCards');
+  if (!section || !container) return;
+  container.innerHTML = '';
+
+  var annual = S.salary * 10000;
+  if (annual <= 0) { section.style.display = 'none'; return; }
+
+  var nonTax = calcNonTaxableForFinal();
+  var totalPay = Math.max(annual - nonTax, 0);
+  var products = [];
+
+  // 연금저축 미가입/부족
+  var currentPen = dOn('pension') ? (dVal('pension', 'pension_saving') + dVal('pension', 'irp')) * 10000 : 0;
+  if (currentPen < 9000000) {
+    var penRate = totalPay <= 55000000 ? 0.15 : 0.12;
+    var remainPen = 9000000 - currentPen;
+    var penSaving = Math.round(remainPen * penRate / 10000);
+    products.push({
+      tag: '연금저축',
+      text: '연금저축 가입하면 약 ' + fmt(penSaving) + '만원 절세 가능',
+      sub: '한도 900만원 중 ' + fmt(Math.round(remainPen / 10000)) + '만원 여유 있음'
+    });
+  }
+
+  // 보장성보험료 부족
+  var currentIns = dOn('insurance') ? dVal('insurance', 'general') * 10000 : 0;
+  if (currentIns < 1000000) {
+    var insRemain = 1000000 - currentIns;
+    var insSaving = Math.round(insRemain * 0.12 / 10000);
+    products.push({
+      tag: '보장성보험',
+      text: '보장성보험 가입하면 약 ' + fmt(insSaving) + '만원 추가 절세',
+      sub: '일반 보장성보험 한도 100만원까지 12% 세액공제'
+    });
+  }
+
+  // 정치자금 기부 없음
+  if (!dOn('political') || dVal('political', 'amount') === 0) {
+    products.push({
+      tag: '정치자금 기부',
+      text: '10만원 기부하면 전액 돌려받아요',
+      sub: '10만원 기부 시 약 9.1만원 환급, 가장 확실한 절세'
+    });
+  }
+
+  if (products.length === 0) { section.style.display = 'none'; return; }
+
+  section.style.display = 'block';
+  products.slice(0, 3).forEach(function(p) {
+    var card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML =
+      '<div class="product-card-tag">' + p.tag + '</div>' +
+      '<div class="product-card-text">' + p.text + '</div>' +
+      '<div class="product-card-sub">' + p.sub + '</div>' +
+      '<button class="product-card-cta" onclick="showToast(\'토스 앱에서 바로 가입할 수 있습니다\')">자세히 보기</button>';
+    container.appendChild(card);
+  });
+}
+
+// ===========================
+// MARKETING TOGGLE
+// ===========================
+var marketingOptIn = false;
+
+function toggleMarketing() {
+  marketingOptIn = !marketingOptIn;
+  var toggle = document.getElementById('marketingToggle');
+  toggle.classList.toggle('on', marketingOptIn);
+  showToast(marketingOptIn ? '맞춤 혜택 알림을 받습니다' : '맞춤 혜택 알림을 해제했습니다');
 }
 
 // ===========================
