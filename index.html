@@ -89,6 +89,7 @@ body {
 .salary-input:focus { border-bottom-color: var(--accent); }
 .salary-input::placeholder { color: #d1d1d6; }
 .salary-unit { position: absolute; right: 0; bottom: 16px; font-size: 28px; font-weight: 700; color: var(--text2); }
+.salary-unit-below { font-size: 16px; font-weight: 500; color: var(--text3); margin-top: 8px; }
 .salary-monthly { font-size: 13px; color: var(--text3); margin-top: 8px; min-height: 18px; }
 .salary-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
 .salary-chip {
@@ -528,11 +529,11 @@ body {
   <div class="onboarding-screen">
     <div class="onboarding-title">2026년<br>예상 세전연봉은?</div>
     <div class="onboarding-sub">대략적인 금액이면 충분해요</div>
-    <div class="salary-input-wrap">
-      <input class="salary-input" id="salaryInput" type="text" inputmode="numeric" placeholder="3,000">
-      <span class="salary-unit">만원</span>
+    <div class="salary-input-wrap" style="text-align:center;">
+      <input class="salary-input" id="salaryInput" type="text" inputmode="numeric" placeholder="0" style="text-align:center; padding-right:0;">
+      <div class="salary-unit-below">만원</div>
     </div>
-    <div class="salary-monthly" id="salaryMonthly"></div>
+    <div class="salary-monthly" id="salaryMonthly" style="text-align:center;"></div>
     <button class="primary-btn" id="startBtn" disabled>다음</button>
   </div>
 </div>
