@@ -492,6 +492,16 @@ body {
   margin-top: 0;
 }
 
+/* Prefill previous year button */
+.prefill-prev-wrap { margin: 0 28px 16px; }
+.prefill-prev-btn {
+  width: 100%; padding: 14px 0; font-size: 15px; font-weight: 600;
+  color: var(--text2); background: var(--bg); border: 1px solid var(--border);
+  border-radius: 12px; cursor: pointer; font-family: inherit;
+  transition: all 0.2s;
+}
+.prefill-prev-btn:active { background: #e8e8ea; transform: scale(0.98); }
+
 /* Accordion header saving */
 .accordion-header-right {
   display: flex; align-items: center; gap: 10px;
@@ -841,6 +851,9 @@ body {
   <div class="deduction-total">
     <span class="deduction-total-label">총 예상 절세액</span>
     <span class="deduction-total-value" id="totalSavingDisplay">+0만원</span>
+  </div>
+  <div class="prefill-prev-wrap">
+    <button class="prefill-prev-btn" onclick="prefillPrevYear()">전년도와 동일하게 반영하기</button>
   </div>
   <div id="deductionAccordions"></div>
   <div class="deduction-save-wrap">
@@ -2447,7 +2460,21 @@ function showToast(msg) {
 }
 
 function showSyncToast() {
-  showToast('토스 앱 연동 시 자동으로 입력됩니다');
+  showToast('토스 앱 연동 시 자동으로 불러옵니다');
+}
+
+function prefillPrevYear() {
+  // 카드 사용
+  S.deductions['card'] = { on: true, values: { credit: 800, debit: 300, cash: 50, market: 0, transport: 0, culture: 0 } };
+  // 의료비
+  S.deductions['medical'] = { on: true, values: { general: 120, nanim: 0, glasses: 0, postpartum: 0 } };
+  // 보장성보험료
+  S.deductions['insurance'] = { on: true, values: { general: 80, disabled: 0 } };
+  // 연금저축
+  S.deductions['pension'] = { on: true, values: { pension_saving: 400, irp: 0 } };
+
+  renderDeductions();
+  showToast('전년도 예상 데이터로 반영했습니다. 실제 금액에 맞게 수정해주세요.');
 }
 
 // ===========================
@@ -2557,7 +2584,7 @@ function renderDeductions() {
           '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' +
             '<path d="M6.5 9.5L4.5 9.5C3.12 9.5 2 8.38 2 7C2 5.62 3.12 4.5 4.5 4.5L6.5 4.5M9.5 6.5L11.5 6.5C12.88 6.5 14 7.62 14 9C14 10.38 12.88 11.5 11.5 11.5L9.5 11.5M5 8H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
           '</svg>' +
-          '연동하기</button>';
+          '불러오기</button>';
       }
 
       var inputsHTML = '<div class="deduction-item-inputs">' + syncBtnHTML;
