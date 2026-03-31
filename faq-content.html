@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>십삼월 - FAQ & 절세 가이드</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root {
+    --accent: #0071e3;
+    --accent-light: #e8f2fd;
+    --bg: #ffffff;
+    --card-bg: #f5f5f7;
+    --text-primary: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --text-tertiary: #aeaeb2;
+    --border: #e5e5ea;
+    --success: #30d158;
+    --radius: 16px;
+    --radius-sm: 12px;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .faq-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ── Section Headers ── */
+  .section-header {
+    padding: 48px 0 20px;
+  }
+
+  .section-header h2 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: var(--text-primary);
+  }
+
+  .section-header p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+  }
+
+  /* ── Category Tabs ── */
+  .category-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 0 0 16px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-tab {
+    flex-shrink: 0;
+    padding: 8px 18px;
+    border-radius: 100px;
+    border: none;
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .category-tab:hover {
+    background: #e8e8ed;
+  }
+
+  .category-tab.active {
+    background: var(--text-primary);
+    color: #fff;
+  }
+
+  /* ── Accordion ── */
+  .accordion-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 24px;
+  }
+
+  .accordion-item {
+    background: var(--card-bg);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: background 0.2s ease;
+  }
+
+  .accordion-item[data-category] {
+    display: none;
+  }
+
+  .accordion-item.visible {
+    display: block;
+  }
+
+  .accordion-trigger {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    gap: 12px;
+  }
+
+  .accordion-trigger:hover {
+    opacity: 0.8;
+  }
+
+  .accordion-q {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    letter-spacing: -0.2px;
+    flex: 1;
+  }
+
+  .accordion-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 1px;
+  }
+
+  .accordion-icon svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--text-tertiary);
+  }
+
+  .accordion-item.open .accordion-icon {
+    transform: rotate(180deg);
+  }
+
+  .accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .accordion-item.open .accordion-body {
+    max-height: 600px;
+  }
+
+  .accordion-answer {
+    padding: 0 20px 18px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .accordion-answer strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .law-ref {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    background: rgba(0,0,0,0.03);
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  .answer-highlight {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ── Monthly Checklist ── */
+  .month-selector {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    padding-bottom: 20px;
+  }
+
+  .month-btn {
+    padding: 10px 0;
+    border-radius: 10px;
+    border: none;
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .month-btn:hover {
+    background: #e8e8ed;
+  }
+
+  .month-btn.active {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .month-btn.current {
+    position: relative;
+  }
+
+  .month-btn.current::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .month-btn.current.active::after {
+    background: #fff;
+  }
+
+  .checklist-panel {
+    display: none;
+  }
+
+  .checklist-panel.active {
+    display: block;
+  }
+
+  .checklist-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .checklist-month-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.3px;
+  }
+
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .checklist-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .checklist-item:first-child {
+    padding-top: 0;
+  }
+
+  .check-box {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  .check-box.checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .check-box.checked svg {
+    opacity: 1;
+  }
+
+  .check-box svg {
+    width: 14px;
+    height: 14px;
+    stroke: #fff;
+    stroke-width: 2.5;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .check-label {
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 1.5;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .check-label.checked {
+    color: var(--text-tertiary);
+    text-decoration: line-through;
+  }
+
+  /* ── Always Check Section ── */
+  .always-check {
+    background: var(--accent-light);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .always-check-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .always-check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .always-check-item .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── Tax-Free Guide Cards ── */
+  .guide-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 24px;
+  }
+
+  .guide-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: transform 0.2s ease;
+  }
+
+  .guide-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .guide-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .guide-card-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .guide-card-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .guide-info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+
+  .guide-info-row:last-child {
+    border-bottom: none;
+  }
+
+  .guide-info-label {
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  .guide-info-value {
+    font-weight: 600;
+    text-align: right;
+    color: var(--text-primary);
+  }
+
+  .guide-info-value.highlight {
+    color: var(--accent);
+  }
+
+  .guide-notice {
+    margin-top: 14px;
+    padding: 14px;
+    background: rgba(0,0,0,0.03);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .guide-notice-title {
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+
+  .guide-notice ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .guide-notice li {
+    padding: 2px 0;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .guide-notice li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+    color: var(--text-tertiary);
+  }
+
+  /* ── Divider ── */
+  .section-divider {
+    height: 8px;
+    background: var(--card-bg);
+    margin: 0 -20px;
+  }
+
+  /* ── Disclaimer ── */
+  .disclaimer {
+    padding: 24px 0 48px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  /* ── Progress Ring ── */
+  .progress-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .progress-ring-wrap {
+    position: relative;
+    width: 44px;
+    height: 44px;
+  }
+
+  .progress-ring {
+    transform: rotate(-90deg);
+  }
+
+  .progress-ring-bg {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 3;
+  }
+
+  .progress-ring-fill {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.5s ease;
+  }
+
+  .progress-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .progress-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .progress-label strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="faq-container">
+
+  <!-- ============================================ -->
+  <!-- SECTION 1: FAQ -->
+  <!-- ============================================ -->
+  <div class="section-header">
+    <h2>자주 묻는 질문</h2>
+    <p>연말정산 핵심 Q&A 20선</p>
+  </div>
+
+  <div class="category-tabs" id="faqTabs">
+    <button class="category-tab active" data-filter="all">전체</button>
+    <button class="category-tab" data-filter="tax-free">비과세</button>
+    <button class="category-tab" data-filter="income-deduction">소득공제</button>
+    <button class="category-tab" data-filter="tax-credit">세액공제</button>
+    <button class="category-tab" data-filter="dependent">부양가족</button>
+    <button class="category-tab" data-filter="card">카드</button>
+  </div>
+
+  <div class="accordion-group" id="faqAccordion">
+
+    <!-- 비과세 -->
+    <div class="accordion-item visible" data-category="tax-free">
+      <button class="accordion-trigger">
+        <span class="accordion-q">식대 비과세 한도가 얼마인가요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          월 <strong class="answer-highlight">20만원</strong>까지 비과세입니다. 회사에서 현물 식사를 제공하면서 동시에 식대를 지급하면 추가 식대는 과세됩니다. 현물 식사 없이 식대만 지급하면 월 20만원까지 비과세입니다.
+          <br><span class="law-ref">소득세법 제12조 제3호 어목</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="tax-free">
+      <button class="accordion-trigger">
+        <span class="accordion-q">자가운전보조금, 리스차도 비과세 되나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          <strong class="answer-highlight">리스/렌트 차량은 불가</strong>합니다. 본인 명의(배우자 공동명의 포함) 차량만 월 20만원 이내 비과세입니다. 운용리스(렌트 포함)는 소유권이 리스회사에 있으므로 비과세 적용이 안 됩니다.
+          <br><span class="law-ref">소득세법 시행령 제12조</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="tax-free">
+      <button class="accordion-trigger">
+        <span class="accordion-q">육아보육수당 맞벌이 둘 다 받을 수 있나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          <strong class="answer-highlight">네, 둘 다 가능합니다.</strong> 육아보육수당 비과세는 근로자 본인이 회사로부터 받는 수당에 대한 것이므로, 맞벌이 부부가 각각 자기 회사에서 보육수당을 받으면 양쪽 모두 월 20만원까지 비과세 적용됩니다. 단, 양쪽 회사 모두 보육수당 제도가 있어야 합니다.
+          <br><span class="law-ref">소득세법 제12조 제3호 머목</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="tax-free">
+      <button class="accordion-trigger">
+        <span class="accordion-q">비과세 항목은 따로 신고해야 하나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          <strong>아닙니다.</strong> 비과세 소득은 회사에서 급여 지급 시 원천징수 대상에서 이미 제외하므로, 별도 신고할 필요 없습니다. 다만 원천징수영수증에 비과세 항목이 정확히 반영됐는지 확인하세요.
+          <br><span class="law-ref">소득세법 제12조</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 소득공제 -->
+    <div class="accordion-item visible" data-category="income-deduction">
+      <button class="accordion-trigger">
+        <span class="accordion-q">신용카드 소득공제는 어떻게 계산되나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          총급여의 <strong>25%를 초과</strong>하여 사용한 금액에 대해 공제합니다. 공제율은 신용카드 15%, 체크카드/현금영수증 30%, 전통시장 40%, 대중교통 80%(한시 적용), 도서/공연/영화 30%(총급여 7천만원 이하)입니다. 공제한도는 총급여 7천만원 이하 시 <strong class="answer-highlight">300만원</strong>입니다.
+          <br><span class="law-ref">조세특례제한법 제126조의2</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="income-deduction">
+      <button class="accordion-trigger">
+        <span class="accordion-q">주택청약종합저축 소득공제 받으려면?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          총급여 <strong>7천만원 이하 무주택 세대주</strong>인 근로자가 납입한 금액의 40%를 소득공제받을 수 있습니다. 연 납입액 300만원 한도이며, 최대 공제액은 <strong class="answer-highlight">120만원</strong>입니다.
+          <br><span class="law-ref">조세특례제한법 제87조</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="income-deduction">
+      <button class="accordion-trigger">
+        <span class="accordion-q">전세자금대출 소득공제는 얼마나 되나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          무주택 세대주가 국민주택규모(85m2) 이하 주택 임차를 위해 대출받은 경우, 원리금 상환액의 <strong>40%</strong>를 소득공제받습니다. 연 <strong class="answer-highlight">400만원 한도</strong>입니다.
+          <br><span class="law-ref">소득세법 제52조 제4항</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="income-deduction">
+      <button class="accordion-trigger">
+        <span class="accordion-q">인적공제(부양가족 기본공제)는 얼마인가요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          본인, 배우자, 부양가족 1인당 연 <strong class="answer-highlight">150만원</strong> 소득공제입니다. 추가공제로 경로우대(70세 이상, 100만원), 장애인(200만원), 부녀자(50만원), 한부모(100만원)가 있습니다.
+          <br><span class="law-ref">소득세법 제50조, 제51조</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 세액공제 -->
+    <div class="accordion-item visible" data-category="tax-credit">
+      <button class="accordion-trigger">
+        <span class="accordion-q">태아보험도 보험료 세액공제 되나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          원칙적으로 <strong class="answer-highlight">불가</strong>합니다. 태아는 기본공제 대상자가 아닙니다. 다만, 해당 과세연도 중 자녀가 출생한 경우 <strong>출생 이후 납입분</strong>에 한해 보장성보험 세액공제가 가능합니다.
+          <br><span class="law-ref">소득세법 제59조의4 제2항</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="tax-credit">
+      <button class="accordion-trigger">
+        <span class="accordion-q">실손보험 세액공제 되나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          <strong class="answer-highlight">가능합니다.</strong> 보장성보험에 해당하여 연 100만원 한도, 12% 세액공제됩니다. 단, 실손보험으로 보전받은 의료비는 <strong>의료비 세액공제에서 차감</strong>해야 합니다.
+          <br><span class="law-ref">소득세법 제59조의4 제2항</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="tax-credit">
+      <button class="accordion-trigger">
+        <span class="accordion-q">안경/콘택트렌즈 의료비 공제 되나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          <strong class="answer-highlight">가능합니다.</strong> 시력보정용 안경, 콘택트렌즈 구입비가 1인당 연 <strong>50만원 한도</strong>로 의료비 세액공제 대상입니다. 선글라스는 제외됩니다. 안경점에서 시력보정용 확인 영수증을 받아두세요.
+          <br><span class="law-ref">소득세법 시행령 제118조의5</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="tax-credit">
+      <button class="accordion-trigger">
+        <span class="accordion-q">라식/라섹도 의료비 공제 되나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          <strong class="answer-highlight">가능합니다.</strong> 시력교정 목적이므로 일반 의료비로 분류되며, 안경/렌즈의 50만원 한도와 별도로 공제됩니다. 총급여 3%를 초과하는 의료비에 대해 15% 세액공제됩니다.
+          <br><span class="law-ref">소득세법 제59조의4 제3항</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="tax-credit">
+      <button class="accordion-trigger">
+        <span class="accordion-q">산후조리원 비용도 공제 되나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          <strong class="answer-highlight">가능합니다.</strong> 총급여 <strong>7,000만원 이하</strong> 근로자에 한하며, 출산 1회당 <strong>200만원 한도</strong>입니다. 본인 또는 기본공제 대상 배우자의 산후조리원 비용이 대상입니다.
+          <br><span class="law-ref">소득세법 제59조의4 제3항</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="tax-credit">
+      <button class="accordion-trigger">
+        <span class="accordion-q">의료비 세액공제 한도는 얼마인가요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          총급여의 <strong>3%를 초과</strong>하는 의료비에 대해 <strong class="answer-highlight">15%</strong> 세액공제됩니다. 본인/65세 이상/장애인 의료비는 한도 없이 공제되며, 그 외 부양가족 의료비는 연 700만원 한도입니다. 난임시술비는 30%, 미숙아 의료비는 20% 공제율입니다.
+          <br><span class="law-ref">소득세법 제59조의4 제3항</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="tax-credit">
+      <button class="accordion-trigger">
+        <span class="accordion-q">교육비 세액공제 범위는 어디까지?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          <strong class="answer-highlight">15%</strong> 세액공제이며, 본인은 전액 한도 없음, 취학 전 아동/초중고는 연 300만원, 대학생은 연 900만원 한도입니다. <strong>학원비는 취학 전 아동만 가능</strong>하고, 초중고 학생의 학원비는 공제 불가합니다.
+          <br><span class="law-ref">소득세법 제59조의4 제4항</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="tax-credit">
+      <button class="accordion-trigger">
+        <span class="accordion-q">월세 세액공제 조건은?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          총급여 <strong>8천만원 이하</strong> 무주택 세대주가 국민주택규모 이하 또는 기준시가 4억원 이하 주택에 거주하면서 월세를 납부하는 경우 공제됩니다. 총급여 5,500만원 이하 시 <strong class="answer-highlight">17%</strong>, 초과 시 15% 세액공제(연 1,000만원 한도)입니다.
+          <br><span class="law-ref">소득세법 제95조의2</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="tax-credit">
+      <button class="accordion-trigger">
+        <span class="accordion-q">정치자금 기부하면 얼마나 돌려받나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          10만원까지 <strong class="answer-highlight">100/110 세액공제</strong>로 사실상 전액 환급됩니다. 10만원 초과 ~ 3,000만원 이하는 15%, 3,000만원 초과는 25% 공제됩니다. 최소 10만원은 기부하는 것이 유리합니다.
+          <br><span class="law-ref">조세특례제한법 제76조</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 부양가족 -->
+    <div class="accordion-item visible" data-category="dependent">
+      <button class="accordion-trigger">
+        <span class="accordion-q">부양가족 소득 조건이 어떻게 되나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          연간 소득금액 합계 <strong class="answer-highlight">100만원 이하</strong>여야 합니다. 근로소득만 있는 경우 총급여 <strong>500만원 이하</strong>이면 부양가족 공제 가능합니다. 양도소득, 퇴직소득 등도 합산하므로 주의하세요.
+          <br><span class="law-ref">소득세법 제50조 제1항</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="dependent">
+      <button class="accordion-trigger">
+        <span class="accordion-q">부모님을 부양가족으로 등록하려면?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          만 <strong>60세 이상</strong>이고, 연간 소득금액 100만원 이하여야 합니다. 따로 사는 부모님도 실질 부양 시 가능합니다. 형제자매 중 <strong class="answer-highlight">1명만 공제 가능</strong>하며, 중복공제 시 불이익이 있습니다.
+          <br><span class="law-ref">소득세법 제50조 제1항 제3호</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="dependent">
+      <button class="accordion-trigger">
+        <span class="accordion-q">맞벌이 부부는 서로 부양가족 등록 가능한가요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          배우자의 연간 소득금액이 <strong>100만원 이하</strong>(근로소득만 있으면 총급여 500만원 이하)인 경우에만 배우자 공제가 가능합니다. 맞벌이로 양쪽 다 소득 요건을 초과하면 <strong class="answer-highlight">서로 배우자 공제를 받을 수 없습니다.</strong>
+          <br><span class="law-ref">소득세법 제50조 제1항 제2호</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="dependent">
+      <button class="accordion-trigger">
+        <span class="accordion-q">자녀가 아르바이트하면 부양가족 공제 안 되나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          자녀의 아르바이트 소득 총급여가 <strong class="answer-highlight">500만원을 초과</strong>하면 부양가족 공제를 받을 수 없습니다. 500만원 이하이면 공제 가능합니다.
+          <br><span class="law-ref">소득세법 제50조 제1항 제3호</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 카드 -->
+    <div class="accordion-item visible" data-category="card">
+      <button class="accordion-trigger">
+        <span class="accordion-q">맞벌이 의료비, 누구한테 몰아줘야 해?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          일반적으로 <strong class="answer-highlight">총급여가 낮은 쪽</strong>이 유리합니다. 의료비는 총급여 3% 초과분부터 공제되므로, 총급여가 낮을수록 기준금액이 낮아져 더 많이 공제받을 수 있습니다. 시뮬레이션을 통해 확인하는 것이 최선입니다.
+          <br><span class="law-ref">소득세법 제59조의4 제3항</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="card">
+      <button class="accordion-trigger">
+        <span class="accordion-q">가족카드 사용분도 공제 받을 수 있나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          본인 명의 카드의 사용금액만 본인의 소득공제 대상입니다. 다만 <strong>기본공제 대상인 부양가족</strong>(소득 요건 충족)의 카드 사용분은 기본공제를 받는 근로자가 합산하여 공제받을 수 있습니다.
+          <br><span class="law-ref">조세특례제한법 제126조의2</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item visible" data-category="card">
+      <button class="accordion-trigger">
+        <span class="accordion-q">해외에서 사용한 카드도 소득공제 되나요?</span>
+        <span class="accordion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-answer">
+          <strong class="answer-highlight">아닙니다.</strong> 해외 사용분은 신용카드 소득공제 대상이 아닙니다. 면세점 구매액도 마찬가지로 공제 대상에서 제외됩니다.
+          <br><span class="law-ref">조세특례제한법 제126조의2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 2: Monthly Checklist -->
+  <!-- ============================================ -->
+  <div class="section-header">
+    <h2>월별 체크리스트</h2>
+    <p>매달 챙겨야 할 절세 포인트</p>
+  </div>
+
+  <div class="month-selector" id="monthSelector">
+    <button class="month-btn" data-month="1">1월</button>
+    <button class="month-btn" data-month="2">2월</button>
+    <button class="month-btn" data-month="3">3월</button>
+    <button class="month-btn" data-month="4">4월</button>
+    <button class="month-btn" data-month="5">5월</button>
+    <button class="month-btn" data-month="6">6월</button>
+    <button class="month-btn" data-month="7">7월</button>
+    <button class="month-btn" data-month="8">8월</button>
+    <button class="month-btn" data-month="9">9월</button>
+    <button class="month-btn" data-month="10">10월</button>
+    <button class="month-btn" data-month="11">11월</button>
+    <button class="month-btn" data-month="12">12월</button>
+  </div>
+
+  <div id="checklistPanels">
+
+    <div class="checklist-panel" data-month="1">
+      <div class="checklist-card">
+        <div class="progress-container">
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44"><circle class="progress-ring-bg" cx="22" cy="22" r="18"/><circle class="progress-ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg>
+            <span class="progress-text">0%</span>
+          </div>
+          <div class="progress-label"><strong>1월</strong> 체크리스트</div>
+        </div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">전년도 연말정산 결과 확인 (추가 납부 또는 환급액 점검)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">올해 예상 세액 시뮬레이션 (전년도 결과 기반)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">연간 카드 사용 전략 수립 (체크카드 vs 신용카드 비율 결정)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">부양가족 소득 변동 확인 (아르바이트, 부동산 매도 예정 등)</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-panel" data-month="2">
+      <div class="checklist-card">
+        <div class="progress-container">
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44"><circle class="progress-ring-bg" cx="22" cy="22" r="18"/><circle class="progress-ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg>
+            <span class="progress-text">0%</span>
+          </div>
+          <div class="progress-label"><strong>2월</strong> 체크리스트</div>
+        </div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">전년도 연말정산 원천징수영수증 수령 및 검토</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">비과세 항목(식대, 자가운전보조금 등) 정확히 반영됐는지 확인</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">누락 항목 있으면 5월 종합소득세 신고 시 경정청구 준비</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-panel" data-month="3">
+      <div class="checklist-card">
+        <div class="progress-container">
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44"><circle class="progress-ring-bg" cx="22" cy="22" r="18"/><circle class="progress-ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg>
+            <span class="progress-text">0%</span>
+          </div>
+          <div class="progress-label"><strong>3월</strong> 체크리스트</div>
+        </div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">주택청약종합저축 납입 현황 점검 (무주택 세대주 확인)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">전세자금대출/주택담보대출 상환 계획 점검</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">연금저축/IRP 납입 계획 수립 (연금저축 600만원 + IRP 포함 900만원 한도)</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-panel" data-month="4">
+      <div class="checklist-card">
+        <div class="progress-container">
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44"><circle class="progress-ring-bg" cx="22" cy="22" r="18"/><circle class="progress-ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg>
+            <span class="progress-text">0%</span>
+          </div>
+          <div class="progress-label"><strong>4월</strong> 체크리스트</div>
+        </div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">기부금 납부 계획 수립 (정치자금 10만원 기부 검토)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">부양가족 자격 재점검 (부모님 소득, 나이 요건)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">중소기업 취업자 소득세 감면 해당 여부 확인</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-panel" data-month="5">
+      <div class="checklist-card">
+        <div class="progress-container">
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44"><circle class="progress-ring-bg" cx="22" cy="22" r="18"/><circle class="progress-ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg>
+            <span class="progress-text">0%</span>
+          </div>
+          <div class="progress-label"><strong>5월</strong> 체크리스트</div>
+        </div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">전년도 연말정산 누락분 경정청구 (종합소득세 신고 기간)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">월세 세액공제 증빙 준비 (임대차계약서, 이체내역)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">의료비 지출 내역 중간 점검</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-panel" data-month="6">
+      <div class="checklist-card">
+        <div class="progress-container">
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44"><circle class="progress-ring-bg" cx="22" cy="22" r="18"/><circle class="progress-ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg>
+            <span class="progress-text">0%</span>
+          </div>
+          <div class="progress-label"><strong>6월</strong> 체크리스트</div>
+        </div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">상반기 카드 사용 현황 점검 (총급여 25% 초과 여부 확인)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">25% 미달 시 하반기 카드 사용 집중 전략 수립</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">체크카드/현금영수증 비중 높이기 (공제율 30%)</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-panel" data-month="7">
+      <div class="checklist-card">
+        <div class="progress-container">
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44"><circle class="progress-ring-bg" cx="22" cy="22" r="18"/><circle class="progress-ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg>
+            <span class="progress-text">0%</span>
+          </div>
+          <div class="progress-label"><strong>7월</strong> 체크리스트</div>
+        </div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">하반기 카드 사용 전략 실행</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">전통시장, 대중교통 사용 비중 확인</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">교육비 납부 내역 확인 (학원비, 대학 등록금 등)</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-panel" data-month="8">
+      <div class="checklist-card">
+        <div class="progress-container">
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44"><circle class="progress-ring-bg" cx="22" cy="22" r="18"/><circle class="progress-ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg>
+            <span class="progress-text">0%</span>
+          </div>
+          <div class="progress-label"><strong>8월</strong> 체크리스트</div>
+        </div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">보장성보험 납입액 점검 (연 100만원 한도 확인)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">의료비 영수증 수집 시작 (안경, 라식 등 포함)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">기부금 영수증 발급 가능한 단체 확인</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-panel" data-month="9">
+      <div class="checklist-card">
+        <div class="progress-container">
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44"><circle class="progress-ring-bg" cx="22" cy="22" r="18"/><circle class="progress-ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg>
+            <span class="progress-text">0%</span>
+          </div>
+          <div class="progress-label"><strong>9월</strong> 체크리스트</div>
+        </div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">연금저축/IRP 납입 현황 확인 (목표 대비 진도 체크)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">부족분 남은 기간 균등 배분 계획</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">주택마련저축 납입 현황 확인</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-panel" data-month="10">
+      <div class="checklist-card">
+        <div class="progress-container">
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44"><circle class="progress-ring-bg" cx="22" cy="22" r="18"/><circle class="progress-ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg>
+            <span class="progress-text">0%</span>
+          </div>
+          <div class="progress-label"><strong>10월</strong> 체크리스트</div>
+        </div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">국세청 연말정산 미리보기 서비스 활용 (10월 말 오픈)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">예상 환급/납부액 시뮬레이션</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">남은 기간 절세 전략 조정 (카드, 연금, 기부금 등)</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-panel" data-month="11">
+      <div class="checklist-card">
+        <div class="progress-container">
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44"><circle class="progress-ring-bg" cx="22" cy="22" r="18"/><circle class="progress-ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg>
+            <span class="progress-text">0%</span>
+          </div>
+          <div class="progress-label"><strong>11월</strong> 체크리스트</div>
+        </div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">연금저축/IRP 마감 전 부족분 집중 납입</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">주택청약종합저축 연 납입액 확인 (300만원 한도)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">의료비 집중 지출 (치과, 안과 등 계획된 의료비)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">기부금 마무리 (정치자금, 지정기부금)</span></div>
+      </div>
+    </div>
+
+    <div class="checklist-panel" data-month="12">
+      <div class="checklist-card">
+        <div class="progress-container">
+          <div class="progress-ring-wrap">
+            <svg class="progress-ring" width="44" height="44"><circle class="progress-ring-bg" cx="22" cy="22" r="18"/><circle class="progress-ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg>
+            <span class="progress-text">0%</span>
+          </div>
+          <div class="progress-label"><strong>12월</strong> 체크리스트</div>
+        </div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">연금저축/IRP 최종 납입 마감 (12월 31일까지)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">카드 사용 최종 점검 (25% 초과 확인)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">부양가족 소득 요건 최종 확인 (연간 소득금액 100만원 이하)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">현금영수증 미발급분 자진등록</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">기부금 영수증 발급 요청 (12월 내 발급)</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">월세 이체내역 최종 정리</span></div>
+        <div class="checklist-item"><div class="check-box"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-label">모든 증빙서류 디지털 보관 (사진 또는 스캔)</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="always-check">
+    <div class="always-check-title">연간 상시 체크사항</div>
+    <div class="always-check-item"><span class="dot"></span>현금 결제 시 반드시 현금영수증 발급 요청</div>
+    <div class="always-check-item"><span class="dot"></span>매월 신용카드/체크카드 사용 비율 및 총액 확인</div>
+    <div class="always-check-item"><span class="dot"></span>병원, 약국, 안경점 영수증 수시 보관</div>
+    <div class="always-check-item"><span class="dot"></span>분기별 학원비, 교재비 등 교육비 영수증 정리</div>
+    <div class="always-check-item"><span class="dot"></span>기부 시마다 영수증 발급 및 보관</div>
+    <div class="always-check-item"><span class="dot"></span>월세는 반드시 계좌이체로 납부 (증빙용)</div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ============================================ -->
+  <!-- SECTION 3: Tax-Free Guide -->
+  <!-- ============================================ -->
+  <div class="section-header">
+    <h2>비과세 항목 가이드</h2>
+    <p>놓치면 아까운 비과세 3대 항목</p>
+  </div>
+
+  <div class="guide-cards">
+
+    <!-- 식대 -->
+    <div class="guide-card">
+      <div class="guide-card-header">
+        <div class="guide-card-icon">&#127858;</div>
+        <div>
+          <div class="guide-card-title">식대</div>
+          <div class="guide-card-subtitle">소득세법 제12조 제3호 어목</div>
+        </div>
+      </div>
+      <div class="guide-info-row">
+        <span class="guide-info-label">비과세 한도</span>
+        <span class="guide-info-value highlight">월 20만원</span>
+      </div>
+      <div class="guide-info-row">
+        <span class="guide-info-label">적용 시점</span>
+        <span class="guide-info-value">2023년 귀속분부터</span>
+      </div>
+      <div class="guide-info-row">
+        <span class="guide-info-label">별도 신고</span>
+        <span class="guide-info-value">불필요</span>
+      </div>
+      <div class="guide-notice">
+        <div class="guide-notice-title">주의사항</div>
+        <ul>
+          <li>현물 식사만 제공 시 전액 비과세 (한도 제한 없음)</li>
+          <li>식대만 지급 시 월 20만원까지 비과세</li>
+          <li>현물 식사 + 식대 동시 지급 시 추가 식대는 과세</li>
+          <li>야근식대, 잔업식대도 동일하게 적용</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 육아보육수당 -->
+    <div class="guide-card">
+      <div class="guide-card-header">
+        <div class="guide-card-icon">&#128118;</div>
+        <div>
+          <div class="guide-card-title">육아보육수당</div>
+          <div class="guide-card-subtitle">소득세법 제12조 제3호 머목</div>
+        </div>
+      </div>
+      <div class="guide-info-row">
+        <span class="guide-info-label">비과세 한도</span>
+        <span class="guide-info-value highlight">자녀 1인당 월 20만원</span>
+      </div>
+      <div class="guide-info-row">
+        <span class="guide-info-label">나이 조건</span>
+        <span class="guide-info-value">만 6세 이하 자녀</span>
+      </div>
+      <div class="guide-info-row">
+        <span class="guide-info-label">맞벌이 중복</span>
+        <span class="guide-info-value highlight">양쪽 모두 가능</span>
+      </div>
+      <div class="guide-notice">
+        <div class="guide-notice-title">주의사항</div>
+        <ul>
+          <li>2024년 귀속분부터 월 10만원에서 20만원으로 인상</li>
+          <li>근로자 본인이 소속 회사로부터 수령해야 함</li>
+          <li>맞벌이 부부 각각 자기 회사에서 받으면 양쪽 모두 비과세</li>
+          <li>회사의 사내 규정에 따라 지급 여부가 결정됨</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 자가운전보조금 -->
+    <div class="guide-card">
+      <div class="guide-card-header">
+        <div class="guide-card-icon">&#128663;</div>
+        <div>
+          <div class="guide-card-title">자가운전보조금</div>
+          <div class="guide-card-subtitle">소득세법 시행령 제12조</div>
+        </div>
+      </div>
+      <div class="guide-info-row">
+        <span class="guide-info-label">비과세 한도</span>
+        <span class="guide-info-value highlight">월 20만원</span>
+      </div>
+      <div class="guide-info-row">
+        <span class="guide-info-label">기본 조건</span>
+        <span class="guide-info-value">본인 소유 차량 업무 사용</span>
+      </div>
+      <div class="guide-info-row">
+        <span class="guide-info-label">배우자 공동명의</span>
+        <span class="guide-info-value highlight">인정</span>
+      </div>
+      <div class="guide-info-row">
+        <span class="guide-info-label">리스/렌트 차량</span>
+        <span class="guide-info-value" style="color:#ff3b30">불가</span>
+      </div>
+      <div class="guide-notice">
+        <div class="guide-notice-title">주의사항</div>
+        <ul>
+          <li>본인 단독명의 또는 배우자 공동명의만 비과세 가능</li>
+          <li>부모, 형제 등 타인과의 공동명의는 불가</li>
+          <li>법인 명의 차량 불가</li>
+          <li>운용리스(렌트 포함)는 소유권이 리스회사에 있어 불가</li>
+          <li>출장기록부, 운행일지 등 증빙 갖추는 것이 유리</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="disclaimer">
+    본 자료는 일반적인 연말정산 정보를 정리한 것으로,<br>
+    개인의 구체적인 상황에 따라 적용이 달라질 수 있습니다.<br>
+    정확한 세무 판단은 국세청(126) 또는 세무전문가에게 문의하세요.<br>
+    <br>
+    2025년 귀속 연말정산 기준 | 최종 업데이트 2026-03-31
+  </div>
+
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── FAQ Category Tabs ──
+  const tabs = document.querySelectorAll('#faqTabs .category-tab');
+  const items = document.querySelectorAll('#faqAccordion .accordion-item');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.dataset.filter;
+
+      items.forEach(item => {
+        if (filter === 'all' || item.dataset.category === filter) {
+          item.classList.add('visible');
+        } else {
+          item.classList.remove('visible');
+          item.classList.remove('open');
+        }
+      });
+    });
+  });
+
+  // ── FAQ Accordion ──
+  document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const item = trigger.closest('.accordion-item');
+      const wasOpen = item.classList.contains('open');
+
+      // Close all in same group
+      item.parentElement.querySelectorAll('.accordion-item.open').forEach(openItem => {
+        openItem.classList.remove('open');
+      });
+
+      if (!wasOpen) {
+        item.classList.add('open');
+      }
+    });
+  });
+
+  // ── Monthly Checklist ──
+  const currentMonth = new Date().getMonth() + 1;
+  const monthBtns = document.querySelectorAll('#monthSelector .month-btn');
+  const panels = document.querySelectorAll('#checklistPanels .checklist-panel');
+
+  // Mark current month
+  monthBtns.forEach(btn => {
+    const m = parseInt(btn.dataset.month);
+    if (m === currentMonth) {
+      btn.classList.add('current');
+    }
+  });
+
+  function selectMonth(month) {
+    monthBtns.forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.month) === month);
+    });
+    panels.forEach(panel => {
+      panel.classList.toggle('active', parseInt(panel.dataset.month) === month);
+    });
+  }
+
+  monthBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectMonth(parseInt(btn.dataset.month));
+    });
+  });
+
+  // Initialize with current month
+  selectMonth(currentMonth);
+
+  // ── Checkbox Logic ──
+  const STORAGE_KEY = 'sipsamwol_checklist';
+
+  function loadChecked() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch {
+      return {};
+    }
+  }
+
+  function saveChecked(data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function updateProgress(panel) {
+    const boxes = panel.querySelectorAll('.check-box');
+    const checked = panel.querySelectorAll('.check-box.checked').length;
+    const total = boxes.length;
+    const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+    const circumference = 2 * Math.PI * 18; // r=18
+    const fill = panel.querySelector('.progress-ring-fill');
+    const text = panel.querySelector('.progress-text');
+
+    if (fill) {
+      fill.style.strokeDashoffset = circumference - (circumference * pct / 100);
+    }
+    if (text) {
+      text.textContent = pct + '%';
+    }
+  }
+
+  const checkedData = loadChecked();
+
+  document.querySelectorAll('.checklist-panel').forEach(panel => {
+    const month = panel.dataset.month;
+    const checkItems = panel.querySelectorAll('.checklist-item');
+
+    checkItems.forEach((item, idx) => {
+      const box = item.querySelector('.check-box');
+      const label = item.querySelector('.check-label');
+      const key = month + '_' + idx;
+
+      if (checkedData[key]) {
+        box.classList.add('checked');
+        label.classList.add('checked');
+      }
+
+      function toggle() {
+        const isChecked = box.classList.toggle('checked');
+        label.classList.toggle('checked', isChecked);
+
+        const data = loadChecked();
+        if (isChecked) {
+          data[key] = true;
+        } else {
+          delete data[key];
+        }
+        saveChecked(data);
+        updateProgress(panel);
+      }
+
+      box.addEventListener('click', toggle);
+      label.addEventListener('click', toggle);
+    });
+
+    updateProgress(panel);
+  });
+
+})();
+</script>
+
+</body>
+</html>
