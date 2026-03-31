@@ -605,8 +605,9 @@ body {
 </div>
 
 <!-- ============================================ -->
-<!-- SCREEN 4: PROFILE Q3 - Housing               -->
+<!-- SCREEN 4: PROFILE Q3 - Housing (multi-step)  -->
 <!-- ============================================ -->
+<!-- Step 3-1: 주택 수 -->
 <div id="screen-q3" class="screen">
   <div class="onboarding-screen">
     <div class="onboarding-top-bar">
@@ -615,13 +616,74 @@ body {
       </button>
       <span class="step-indicator" id="q3StepIndicator">3/4</span>
     </div>
-    <div class="onboarding-title">주택 관련 대출이<br>있으세요?</div>
-    <div class="onboarding-sub">대출 이자/원리금 상환 공제, 월세 공제에 반영돼요</div>
+    <div class="onboarding-title">보유 주택이<br>몇 채예요?</div>
+    <div class="onboarding-sub">주택 수에 따라 공제 항목이 달라져요</div>
     <div class="choice-list">
-      <button class="choice-btn" onclick="answerHousing('own')">주택담보대출 있어요</button>
-      <button class="choice-btn" onclick="answerHousing('jeonse')">전세자금대출 있어요</button>
-      <button class="choice-btn" onclick="answerHousing('rent')">월세 살고 있어요</button>
-      <button class="choice-btn" onclick="answerHousing('family')">없어요</button>
+      <button class="choice-btn" onclick="answerHousingCount(0)">0채 (무주택)</button>
+      <button class="choice-btn" onclick="answerHousingCount(1)">1채</button>
+      <button class="choice-btn" onclick="answerHousingCount(2)">2채 이상</button>
+    </div>
+    <!-- 2채 이상 안내 카드 -->
+    <div id="housingOverNotice" style="display:none; margin-top:24px; padding:18px 20px; background:rgba(255,59,48,0.08); border-radius:14px; animation: fadeSlideUp 0.3s ease;">
+      <div style="font-size:15px; font-weight:700; color:#FF3B30; margin-bottom:6px;">주택 관련 공제 대부분 해당 없음</div>
+      <div style="font-size:13px; color:var(--text2); line-height:1.5;">주택청약, 주담대, 전세대출, 월세 공제는<br>대부분 무주택 또는 1주택자만 가능해요</div>
+      <button class="primary-btn" onclick="finishHousingMultiOwner()" style="margin-top:16px;">다음</button>
+    </div>
+  </div>
+</div>
+
+<!-- Step 3-2: 세대주 여부 -->
+<div id="screen-q3b" class="screen">
+  <div class="onboarding-screen">
+    <div class="onboarding-top-bar">
+      <button class="back-btn" onclick="goScreen('screen-q3')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span class="step-indicator" id="q3bStepIndicator">3/4</span>
+    </div>
+    <div class="onboarding-title">세대주이신가요?</div>
+    <div class="onboarding-sub">주택청약, 월세, 전세대출 공제 조건에 필요해요</div>
+    <div class="choice-list">
+      <button class="choice-btn" onclick="answerHousehead(true)">네</button>
+      <button class="choice-btn" onclick="answerHousehead(false)">아니요</button>
+    </div>
+  </div>
+</div>
+
+<!-- Step 3-3: 주거 상황 (무주택일 때만) -->
+<div id="screen-q3c" class="screen">
+  <div class="onboarding-screen">
+    <div class="onboarding-top-bar">
+      <button class="back-btn" onclick="goScreen('screen-q3b')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span class="step-indicator" id="q3cStepIndicator">3/4</span>
+    </div>
+    <div class="onboarding-title">지금 어떻게<br>살고 계세요?</div>
+    <div class="onboarding-sub">주거 상황에 맞는 공제를 찾아드려요</div>
+    <div class="choice-list">
+      <button class="choice-btn" onclick="answerLivingType('rent')">월세</button>
+      <button class="choice-btn" onclick="answerLivingType('jeonse')">전세</button>
+      <button class="choice-btn" onclick="answerLivingType('parents')">부모님과 함께</button>
+      <button class="choice-btn" onclick="answerLivingType('other')">기타</button>
+    </div>
+  </div>
+</div>
+
+<!-- Step 3-4: 대출 유무 -->
+<div id="screen-q3d" class="screen">
+  <div class="onboarding-screen">
+    <div class="onboarding-top-bar">
+      <button class="back-btn" id="q3dBackBtn" onclick="goScreen('screen-q3c')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span class="step-indicator" id="q3dStepIndicator">3/4</span>
+    </div>
+    <div class="onboarding-title" id="q3dTitle">대출이 있으세요?</div>
+    <div class="onboarding-sub" id="q3dSub">대출 이자/원리금 상환 공제에 반영돼요</div>
+    <div class="choice-list">
+      <button class="choice-btn" onclick="answerLoan(true)">네</button>
+      <button class="choice-btn" onclick="answerLoan(false)">아니요</button>
     </div>
   </div>
 </div>
@@ -632,7 +694,7 @@ body {
 <div id="screen-q4" class="screen">
   <div class="onboarding-screen">
     <div class="onboarding-top-bar">
-      <button class="back-btn" onclick="goScreen('screen-q3')">
+      <button class="back-btn" onclick="goBackFromQ4()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
       <span class="step-indicator" id="q4StepIndicator">4/4</span>
@@ -836,7 +898,7 @@ body {
         <span class="settings-value" id="setChildDisplay" style="font-size:15px;font-weight:600;color:var(--accent);">없음</span>
       </div>
       <div class="settings-row">
-        <span class="settings-label">주택 대출</span>
+        <span class="settings-label">주택</span>
         <span class="settings-value" id="setHousingDisplay" style="font-size:15px;font-weight:600;color:var(--accent);">-</span>
       </div>
       <div class="settings-row">
@@ -908,7 +970,12 @@ var S = {
   hasChildren: false,
   childCount: 0,
   childAges: [],
-  housing: '', // 'rent' | 'jeonse' | 'own' | 'family'
+  housing: '', // legacy compat: 'rent' | 'jeonse' | 'own' | 'family'
+  housingCount: -1, // 0=무주택, 1=1채, 2=2채이상
+  isHousehead: false,
+  livingType: '', // 'rent' | 'jeonse' | 'parents' | 'other'
+  hasHomeLoan: false,
+  hasJeonseLoan: false,
   depType: 'none', // 'none' | 'parents' | 'other'
   depParentCount: 0,
   depSeniorCount: 0,
@@ -952,7 +1019,7 @@ var ALL_DEDUCTION_ITEMS = [
     ],
     priority: 10, profileFilter: function() { return true; } },
   { id: 'housing', name: '주택청약', cat: 'income', desc: '납입액의 40%, 한도 120만원', condition: '총급여 7천만 이하, 무주택 세대주', type: 'input', inputLabel: '연 납입액', inputKey: 'amount', unit: '만원',
-    priority: 6, profileFilter: function() { return S.housing !== 'own'; } },
+    priority: 6, profileFilter: function() { return S.housingCount === 0 && S.isHousehead; } },
   { id: 'loan', name: '주택담보대출 이자', cat: 'income', desc: '상환기간/방식에 따라 한도', condition: '', type: 'multi_input',
     inputs: [
       { key: 'amount', label: '연 이자상환액', placeholder: '0', unit: '만원' },
@@ -964,9 +1031,9 @@ var ALL_DEDUCTION_ITEMS = [
       {value:'10_both', text:'10~15년, 고정+비거치 (600만)'},
       {value:'10_either', text:'10~15년, 고정 or 비거치 (300만)'}
     ]}],
-    priority: 7, profileFilter: function() { return S.housing === 'own'; } },
+    priority: 7, profileFilter: function() { return S.housingCount === 1 && S.hasHomeLoan; } },
   { id: 'jeonse_loan', name: '전세자금 대출 이자', cat: 'income', desc: '원리금 상환액의 40%, 한도 400만원', condition: '무주택 세대주', type: 'input', inputLabel: '연 원리금상환액', inputKey: 'amount', unit: '만원',
-    priority: 6, profileFilter: function() { return S.housing === 'jeonse'; } },
+    priority: 6, profileFilter: function() { return S.housingCount === 0 && S.hasJeonseLoan; } },
   { id: 'dependents', name: '부양가족 기본공제', cat: 'income', desc: '1인당 150만원 소득공제', condition: '연소득 100만원 이하 직계존비속', type: 'count', countLabel: '인원', countKey: 'count',
     priority: 8, profileFilter: function() { return S.depType !== 'none'; } },
   { id: 'dep_senior', name: '경로우대 추가공제', cat: 'income', desc: '만 70세 이상 1인당 100만원 추가', condition: '', type: 'count', countLabel: '인원', countKey: 'count',
@@ -1003,7 +1070,7 @@ var ALL_DEDUCTION_ITEMS = [
     ],
     priority: 5, profileFilter: function() { return true; } },
   { id: 'rent', name: '월세 세액공제', cat: 'tax_credit', desc: '15~17%, 연 1,000만원 한도 (월 납입액 입력)', condition: '총급여 8,000만원 이하, 무주택 세대주', type: 'input', inputLabel: '월세 (월)', inputKey: 'amount', unit: '만원',
-    priority: 9, profileFilter: function() { return S.housing === 'rent'; } },
+    priority: 9, profileFilter: function() { return S.housingCount === 0 && S.livingType === 'rent'; } },
   { id: 'child_credit', name: '자녀세액공제', cat: 'tax_credit', desc: '만 8세 이상 자녀', condition: '프로필에서 자동 계산', type: 'auto',
     priority: 9, profileFilter: function() { return S.hasChildren && S.childAges.some(function(a){return a>=8;}); } },
   { id: 'political', name: '정치자금 기부금', cat: 'tax_credit', desc: '10만원까지 전액 환급', condition: '정당/후원회 기부금', type: 'input', inputLabel: '기부금액', inputKey: 'amount', unit: '만원',
@@ -1244,7 +1311,7 @@ function calcFinalTax(annualSalary) {
 
   // 주택청약
   var housingDed = 0;
-  if (dOn('housing') && totalPay <= 70000000 && S.housing !== 'own') {
+  if (dOn('housing') && totalPay <= 70000000 && S.housingCount === 0 && S.isHousehead) {
     var hAmt = dVal('housing', 'amount') * 10000;
     housingDed = Math.min(Math.min(hAmt, 3000000) * 0.40, 1200000);
   }
@@ -1258,7 +1325,7 @@ function calcFinalTax(annualSalary) {
 
   // 전세자금대출
   var jeonseDed = 0;
-  if (dOn('jeonse_loan') && S.housing !== 'own') {
+  if (dOn('jeonse_loan') && S.housingCount === 0 && S.hasJeonseLoan) {
     var jAmt = dVal('jeonse_loan', 'amount') * 10000;
     jeonseDed = Math.min(jAmt * 0.40, 4000000);
   }
@@ -1306,7 +1373,7 @@ function calcFinalTax(annualSalary) {
 
   // 월세
   var rentCredit = 0;
-  if (dOn('rent') && totalPay <= 80000000 && S.housing === 'rent') {
+  if (dOn('rent') && totalPay <= 80000000 && S.housingCount === 0 && S.livingType === 'rent') {
     var rentMonthly = dVal('rent', 'amount') * 10000;
     var annualRent = rentMonthly * 12;
     var rentBase = Math.min(annualRent, 10000000);
@@ -1430,17 +1497,17 @@ function calcItemSaving(item) {
       return Math.round((bd+ad)*mRate);
     }
     case 'housing': {
-      if (!dOn('housing') || totalPay>70000000 || S.housing==='own') return 0;
+      if (!dOn('housing') || totalPay>70000000 || S.housingCount!==0 || !S.isHousehead) return 0;
       var ha = dVal('housing','amount')*10000;
       return Math.round(Math.min(Math.min(ha,3000000)*0.40,1200000)*mRate);
     }
     case 'loan': {
-      if (!dOn('loan')) return 0;
+      if (!dOn('loan') || S.housingCount!==1 || !S.hasHomeLoan) return 0;
       var la = dVal('loan','amount')*10000;
       return Math.round(Math.min(la, getLoanLimit())*mRate);
     }
     case 'jeonse_loan': {
-      if (!dOn('jeonse_loan') || S.housing==='own') return 0;
+      if (!dOn('jeonse_loan') || S.housingCount!==0 || !S.hasJeonseLoan) return 0;
       var ja = dVal('jeonse_loan','amount')*10000;
       return Math.round(Math.min(ja*0.40,4000000)*mRate);
     }
@@ -1464,7 +1531,7 @@ function calcItemSaving(item) {
       return Math.round(pt * pr);
     }
     case 'rent': {
-      if (!dOn('rent') || totalPay>80000000 || S.housing!=='rent') return 0;
+      if (!dOn('rent') || totalPay>80000000 || S.housingCount!==0 || S.livingType!=='rent') return 0;
       var ra = dVal('rent','amount')*10000*12;
       var rr = totalPay<=55000000 ? 0.17 : 0.15;
       return Math.round(Math.min(ra,10000000)*rr);
@@ -1596,19 +1663,24 @@ function goScreen(id) {
     document.getElementById('startBtn').disabled = false;
   }
   // Update step indicators for unmarried flow (skip Q2)
+  var housingStepIds = ['q3StepIndicator','q3bStepIndicator','q3cStepIndicator','q3dStepIndicator'];
   if (!S.married) {
     // 미혼: 연봉 -> 결혼(1/3) -> 주택(2/3) -> 부양(3/3)
-    var q3s = document.getElementById('q3StepIndicator');
+    housingStepIds.forEach(function(sid) {
+      var el = document.getElementById(sid);
+      if (el) el.textContent = '2/3';
+    });
     var q4s = document.getElementById('q4StepIndicator');
-    if (q3s) q3s.textContent = '2/3';
     if (q4s) q4s.textContent = '3/3';
   } else {
     // 기혼: 연봉 -> 결혼+배우자급여(1/4) -> 자녀(2/4) -> 주택(3/4) -> 부양(4/4)
     var q2r = document.getElementById('q2StepIndicator');
-    var q3r = document.getElementById('q3StepIndicator');
-    var q4r = document.getElementById('q4StepIndicator');
     if (q2r) q2r.textContent = '2/4';
-    if (q3r) q3r.textContent = '3/4';
+    housingStepIds.forEach(function(sid) {
+      var el = document.getElementById(sid);
+      if (el) el.textContent = '3/4';
+    });
+    var q4r = document.getElementById('q4StepIndicator');
     if (q4r) q4r.textContent = '4/4';
   }
 }
@@ -1721,11 +1793,116 @@ function validateChildAndNext() {
   goScreen('screen-q3');
 }
 
+// === Housing multi-step ===
+function answerHousingCount(val) {
+  S.housingCount = val;
+  var btns = document.querySelectorAll('#screen-q3 .choice-list > .choice-btn');
+  btns.forEach(function(b, i) { b.classList.toggle('selected', i === val); });
+
+  if (val === 2) {
+    // 2채 이상: 안내 카드 보여주고 대기
+    document.getElementById('housingOverNotice').style.display = 'block';
+    // 주택 관련 state 초기화
+    S.isHousehead = false;
+    S.livingType = '';
+    S.hasHomeLoan = false;
+    S.hasJeonseLoan = false;
+    S.housing = 'family'; // legacy compat
+  } else {
+    document.getElementById('housingOverNotice').style.display = 'none';
+    setTimeout(function() { goScreen('screen-q3b'); }, 300);
+  }
+}
+
+function finishHousingMultiOwner() {
+  // 2채 이상 → 주택 관련 후속 질문 스킵
+  goScreen('screen-q4');
+}
+
+function answerHousehead(val) {
+  S.isHousehead = val;
+  var btns = document.querySelectorAll('#screen-q3b .choice-list > .choice-btn');
+  btns[0].classList.toggle('selected', val === true);
+  btns[1].classList.toggle('selected', val === false);
+
+  if (S.housingCount === 0) {
+    // 무주택 → 주거 상황 질문
+    setTimeout(function() { goScreen('screen-q3c'); }, 300);
+  } else {
+    // 1주택 → 주담대 질문
+    document.getElementById('q3dTitle').innerHTML = '주택담보대출이<br>있으세요?';
+    document.getElementById('q3dSub').textContent = '상환기간/방식에 따라 이자 소득공제 가능해요';
+    document.getElementById('q3dBackBtn').setAttribute('onclick', "goScreen('screen-q3b')");
+    setTimeout(function() { goScreen('screen-q3d'); }, 300);
+  }
+}
+
+function answerLivingType(val) {
+  S.livingType = val;
+  var btns = document.querySelectorAll('#screen-q3c .choice-list > .choice-btn');
+  var map = ['rent','jeonse','parents','other'];
+  btns.forEach(function(b, i) { b.classList.toggle('selected', map[i] === val); });
+
+  // 주거 상황에 따라 legacy housing 세팅 & 다음 분기
+  if (val === 'rent') {
+    // 월세 → 월세 공제 자동 활성화, 대출 질문 없이 다음으로
+    S.housing = 'rent';
+    S.hasJeonseLoan = false;
+    S.hasHomeLoan = false;
+    setTimeout(function() { goScreen('screen-q4'); }, 300);
+  } else if (val === 'jeonse') {
+    // 전세 → 전세대출 질문
+    S.housing = 'family'; // 대출 없으면 family로
+    document.getElementById('q3dTitle').innerHTML = '전세자금 대출이<br>있으세요?';
+    document.getElementById('q3dSub').textContent = '원리금 상환액의 40%, 한도 400만원 공제 가능해요';
+    document.getElementById('q3dBackBtn').setAttribute('onclick', "goScreen('screen-q3c')");
+    setTimeout(function() { goScreen('screen-q3d'); }, 300);
+  } else {
+    // 부모님과 함께 / 기타 → 대출 질문 없이 다음으로
+    S.housing = 'family';
+    S.hasJeonseLoan = false;
+    S.hasHomeLoan = false;
+    setTimeout(function() { goScreen('screen-q4'); }, 300);
+  }
+}
+
+function answerLoan(val) {
+  var btns = document.querySelectorAll('#screen-q3d .choice-list > .choice-btn');
+  btns[0].classList.toggle('selected', val === true);
+  btns[1].classList.toggle('selected', val === false);
+
+  if (S.housingCount === 1) {
+    // 1주택 주담대
+    S.hasHomeLoan = val;
+    S.housing = val ? 'own' : 'family';
+  } else if (S.livingType === 'jeonse') {
+    // 무주택 전세대출
+    S.hasJeonseLoan = val;
+    S.housing = val ? 'jeonse' : 'family';
+  }
+  setTimeout(function() { goScreen('screen-q4'); }, 300);
+}
+
+function goBackFromQ4() {
+  // Q4 뒤로가기: 마지막 주택 서브스텝으로
+  if (S.housingCount === 2) {
+    goScreen('screen-q3');
+  } else if (S.housingCount === 1) {
+    goScreen('screen-q3d');
+  } else if (S.housingCount === 0) {
+    if (S.livingType === 'jeonse') {
+      goScreen('screen-q3d');
+    } else {
+      goScreen('screen-q3c');
+    }
+  } else {
+    goScreen('screen-q3');
+  }
+}
+
+// legacy compat
 function answerHousing(val) {
   S.housing = val;
-  var btns = document.querySelectorAll('#screen-q3 .choice-btn');
-  var map = ['own','jeonse','rent','family'];
-  btns.forEach(function(b, i) { b.classList.toggle('selected', map[i] === val); });
   setTimeout(function() { goScreen('screen-q4'); }, 300);
 }
 
@@ -1785,10 +1962,12 @@ function validateDepAndFinish() {
 }
 
 function finishProfile() {
-  // Auto-set derived state from profile
-  if (S.housing !== 'own') {
-    // isHousehead = true for non-owners (assumption)
-  }
+  // Sync legacy housing field from new state
+  if (S.housingCount === 0 && S.livingType === 'rent') S.housing = 'rent';
+  else if (S.housingCount === 0 && S.livingType === 'jeonse' && S.hasJeonseLoan) S.housing = 'jeonse';
+  else if (S.housingCount === 1 && S.hasHomeLoan) S.housing = 'own';
+  else if (S.housingCount < 0) { /* not set yet, keep as-is */ }
+  else S.housing = 'family';
 
   // Auto-enable profile-implied items
   S.deductions['social_insurance'] = { on: true, values: {} };
@@ -2045,7 +2224,7 @@ function getItemHint(item) {
     'political': '10만원까지 사실상 전액 돌려받아요. 가장 확실한 절세!',
     'housing': '무주택 세대주, 총급여 7천만원 이하일 때 가능해요',
     'jeonse_loan': '원리금 상환액의 40%, 연 400만원 한도예요',
-    'loan': '상환기간과 방식에 따라 한도가 달라요',
+    'loan': '기준시가 6억 이하 주택, 상환기간/방식에 따라 한도가 달라요',
     'marriage_credit': '부부 각각 50만원, 생애 1회 한정이에요'
   };
   return hints[item.id] || '';
@@ -2621,8 +2800,16 @@ function loadSettings() {
   // Profile display
   document.getElementById('setMarriageDisplay').textContent = S.married ? '기혼' : '미혼';
   document.getElementById('setChildDisplay').textContent = S.hasChildren ? S.childCount + '명 (만 ' + S.childAges.join(', ') + '세)' : '없음';
-  var housingMap = {rent:'월세', jeonse:'전세자금대출', own:'주택담보대출', family:'없음'};
-  document.getElementById('setHousingDisplay').textContent = housingMap[S.housing] || '-';
+  var housingDisplay = '-';
+  if (S.housingCount === 2) housingDisplay = '2채 이상';
+  else if (S.housingCount === 1) housingDisplay = '1주택' + (S.hasHomeLoan ? ' · 주담대' : '');
+  else if (S.housingCount === 0) {
+    housingDisplay = '무주택';
+    if (S.livingType === 'rent') housingDisplay += ' · 월세';
+    else if (S.livingType === 'jeonse') housingDisplay += ' · 전세' + (S.hasJeonseLoan ? '(대출)' : '');
+    else if (S.livingType === 'parents') housingDisplay += ' · 부모님과';
+  }
+  document.getElementById('setHousingDisplay').textContent = housingDisplay;
   var depText = '없음';
   if (S.depType === 'parents') depText = '부모님 ' + S.depParentCount + '명' + (S.depSeniorCount > 0 ? ' (경로우대 ' + S.depSeniorCount + '명)' : '');
   else if (S.depType === 'other') depText = S.depOtherCount + '명';
@@ -2710,7 +2897,7 @@ function renderRecommendCards() {
   }
 
   // 월세 공제 추천
-  if (S.housing === 'rent' && !dOn('rent') && totalPay <= 80000000) {
+  if (S.housingCount === 0 && S.livingType === 'rent' && !dOn('rent') && totalPay <= 80000000) {
     var rentRate = totalPay <= 55000000 ? 0.17 : 0.15;
     recommendations.push({
       tag: '놓치기 쉬운 공제',
