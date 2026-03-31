@@ -472,6 +472,18 @@ body {
 }
 .toast.show { opacity: 1; }
 
+/* Sync Button */
+.sync-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 12px; font-size: 12px; font-weight: 600;
+  color: var(--accent); border: 1.5px solid var(--accent);
+  border-radius: 6px; background: transparent;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.2s; margin-bottom: 8px;
+}
+.sync-btn:active { background: rgba(0,113,227,0.06); transform: scale(0.96); }
+.sync-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+
 /* Deduction save button */
 .deduction-save-wrap {
   padding: 20px 28px 40px;
@@ -1010,7 +1022,7 @@ var ALL_DEDUCTION_ITEMS = [
       { key: 'market', label: '전통시장', placeholder: '0', unit: '만원' },
       { key: 'transport', label: '대중교통', placeholder: '0', unit: '만원' }
     ],
-    priority: 10, profileFilter: function() { return true; } },
+    syncable: true, priority: 10, profileFilter: function() { return true; } },
   { id: 'housing', name: '주택청약', cat: 'income', desc: '납입액의 40%, 한도 120만원', condition: '총급여 7천만 이하, 무주택 세대주', type: 'input', inputLabel: '연 납입액', inputKey: 'amount', unit: '만원',
     priority: 6, profileFilter: function() { return S.housingCount === 0 && S.isHousehead; } },
   { id: 'loan', name: '주택담보대출 이자', cat: 'income', desc: '상환기간/방식에 따라 한도', condition: '', type: 'multi_input',
@@ -1040,19 +1052,19 @@ var ALL_DEDUCTION_ITEMS = [
 
   // === 세액공제 ===
   { id: 'medical', name: '의료비', cat: 'tax_credit', desc: '총급여 3% 초과분', condition: '', type: 'medical_detail',
-    priority: 7, profileFilter: function() { return true; } },
+    syncable: true, priority: 7, profileFilter: function() { return true; } },
   { id: 'pension', name: '연금저축/IRP', cat: 'tax_credit', desc: '합산 900만원 한도', condition: '', type: 'multi_input',
     inputs: [
       { key: 'pension_saving', label: '연금저축', placeholder: '0', unit: '만원' },
       { key: 'irp', label: 'IRP', placeholder: '0', unit: '만원' }
     ],
-    priority: 10, profileFilter: function() { return true; } },
+    syncable: true, priority: 10, profileFilter: function() { return true; } },
   { id: 'insurance', name: '보장성보험료', cat: 'tax_credit', desc: '12~15%, 한도 100만원', condition: '', type: 'multi_input',
     inputs: [
       { key: 'general', label: '일반 보장성보험', placeholder: '0', unit: '만원' },
       { key: 'disabled', label: '장애인전용 보험', placeholder: '0', unit: '만원' }
     ],
-    priority: 6, profileFilter: function() { return true; } },
+    syncable: true, priority: 6, profileFilter: function() { return true; } },
   { id: 'education', name: '교육비', cat: 'tax_credit', desc: '15%', condition: '', type: 'education_detail',
     priority: 7, profileFilter: function() { return true; } },
   { id: 'donation', name: '기부금', cat: 'tax_credit', desc: '1,000만원 이하 15%, 초과 30%', condition: '', type: 'multi_input',
@@ -2434,6 +2446,10 @@ function showToast(msg) {
   setTimeout(function() { toast.classList.remove('show'); }, 1500);
 }
 
+function showSyncToast() {
+  showToast('토스 앱 연동 시 자동으로 입력됩니다');
+}
+
 // ===========================
 // SAVE DEDUCTIONS (공제 탭 저장하기)
 // ===========================
@@ -2535,7 +2551,16 @@ function renderDeductions() {
           '<div class="deduction-item-saving">' + savingText + '</div>' +
         '</div>';
 
-      var inputsHTML = '<div class="deduction-item-inputs">';
+      var syncBtnHTML = '';
+      if (item.syncable) {
+        syncBtnHTML = '<button class="sync-btn" onclick="showSyncToast(); event.stopPropagation();">' +
+          '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+            '<path d="M6.5 9.5L4.5 9.5C3.12 9.5 2 8.38 2 7C2 5.62 3.12 4.5 4.5 4.5L6.5 4.5M9.5 6.5L11.5 6.5C12.88 6.5 14 7.62 14 9C14 10.38 12.88 11.5 11.5 11.5L9.5 11.5M5 8H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '</svg>' +
+          '연동하기</button>';
+      }
+
+      var inputsHTML = '<div class="deduction-item-inputs">' + syncBtnHTML;
 
       if (item.type === 'toggle' || item.type === 'auto' || item.type === 'auto_count') {
         // No extra inputs
@@ -2633,6 +2658,8 @@ function refreshAccordionHeights() {
 }
 
 function handleDeductionClick(e) {
+  var syncBtn = e.target.closest('.sync-btn');
+  if (syncBtn) return;
   var toggleEl = e.target.closest('.deduction-item-toggle');
   if (toggleEl) {
     var itemId = toggleEl.getAttribute('data-item');
