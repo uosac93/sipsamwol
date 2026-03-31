@@ -937,7 +937,7 @@ body {
   </div>
 
   <div class="product-section" id="productSection" style="display:none;">
-    <div class="product-section-title">맞춤 절세 상품</div>
+    <div class="product-section-title">아직 챙기지 않은 절세 항목</div>
     <div id="productCards"></div>
   </div>
 </div>
@@ -1091,8 +1091,8 @@ body {
     <div class="settings-card">
       <div class="settings-row">
         <div>
-          <span class="settings-label">맞춤 혜택 알림 받기</span>
-          <div style="font-size:12px; color:var(--text4); margin-top:3px;">절세에 도움되는 금융상품 정보를 보내드려요</div>
+          <span class="settings-label">맞춤 절세 알림 받기</span>
+          <div style="font-size:12px; color:var(--text4); margin-top:3px;">놓치기 쉬운 절세 항목을 알려드려요</div>
         </div>
         <button class="toggle" id="marketingToggle" onclick="toggleMarketing()">
           <div class="toggle-knob"></div>
@@ -2536,7 +2536,7 @@ function renderHome() {
   // 공제항목 자동 추천 카드 렌더링
   renderRecommendCards();
 
-  // 맞춤 금융상품 추천
+  // 아직 챙기지 않은 절세 항목
   renderProductCards();
 
   // 프로필 요약
@@ -3189,7 +3189,7 @@ function selectAuth(provider) {
 }
 
 // ===========================
-// FINANCIAL PRODUCT RECOMMENDATION
+// 아직 챙기지 않은 절세 항목
 // ===========================
 function renderProductCards() {
   var section = document.getElementById('productSection');
@@ -3202,53 +3202,72 @@ function renderProductCards() {
 
   var nonTax = calcNonTaxableForFinal();
   var totalPay = Math.max(annual - nonTax, 0);
-  var products = [];
+  var items = [];
 
-  // 연금저축 미가입/부족
+  // 연금저축/IRP 미설정 또는 부족
   var currentPen = dOn('pension') ? (dVal('pension', 'pension_saving') + dVal('pension', 'irp')) * 10000 : 0;
   if (currentPen < 9000000) {
     var penRate = totalPay <= 55000000 ? 0.15 : 0.12;
     var remainPen = 9000000 - currentPen;
     var penSaving = Math.round(remainPen * penRate / 10000);
-    products.push({
-      tag: '연금저축',
-      text: '연금저축 가입하면 약 ' + fmt(penSaving) + '만원 절세 가능',
-      sub: '한도 900만원 중 ' + fmt(Math.round(remainPen / 10000)) + '만원 여유 있음'
+    items.push({
+      tag: '연금저축/IRP',
+      text: '연금저축 납입하면 약 ' + fmt(penSaving) + '만원 절세 가능',
+      sub: '한도 900만원 중 ' + fmt(Math.round(remainPen / 10000)) + '만원 남음'
     });
   }
 
-  // 보장성보험료 부족
+  // 보장성보험 공제 미설정 또는 부족
   var currentIns = dOn('insurance') ? dVal('insurance', 'general') * 10000 : 0;
   if (currentIns < 1000000) {
     var insRemain = 1000000 - currentIns;
     var insSaving = Math.round(insRemain * 0.12 / 10000);
-    products.push({
-      tag: '보장성보험',
-      text: '보장성보험 가입하면 약 ' + fmt(insSaving) + '만원 추가 절세',
+    items.push({
+      tag: '보장성보험 공제',
+      text: '보장성보험 공제를 설정하면 약 ' + fmt(insSaving) + '만원 절세 가능',
       sub: '일반 보장성보험 한도 100만원까지 12% 세액공제'
     });
   }
 
-  // 정치자금 기부 없음
+  // 정치자금 기부금 공제 미설정
   if (!dOn('political') || dVal('political', 'amount') === 0) {
-    products.push({
-      tag: '정치자금 기부',
-      text: '10만원 기부하면 전액 돌려받아요',
-      sub: '10만원 기부 시 약 9.1만원 환급, 가장 확실한 절세'
+    items.push({
+      tag: '정치자금 기부금',
+      text: '정치자금 10만원 기부하면 거의 전액 돌려받아요',
+      sub: '10만원 기부 시 약 9.1만원 환급'
     });
   }
 
-  if (products.length === 0) { section.style.display = 'none'; return; }
+  // 월세 공제 미설정
+  if (S.housingCount === 0 && S.livingType === 'rent' && !dOn('rent') && totalPay <= 80000000) {
+    var rentRate = totalPay <= 55000000 ? 0.17 : 0.15;
+    items.push({
+      tag: '월세 세액공제',
+      text: '월세 공제를 설정하면 최대 ' + fmt(Math.round(10000000 * rentRate / 10000)) + '만원 절세 가능',
+      sub: '무주택 세대주 · 총급여 8천만원 이하 대상'
+    });
+  }
+
+  // 결혼세액공제 미설정
+  if (S.married && !dOn('marriage_credit')) {
+    items.push({
+      tag: '결혼 세액공제',
+      text: '2024~2026 혼인신고 시 50만원 세액공제 가능',
+      sub: '생애 1회 한정'
+    });
+  }
+
+  if (items.length === 0) { section.style.display = 'none'; return; }
 
   section.style.display = 'block';
-  products.slice(0, 3).forEach(function(p) {
+  items.slice(0, 3).forEach(function(item) {
     var card = document.createElement('div');
     card.className = 'product-card';
     card.innerHTML =
-      '<div class="product-card-tag">' + p.tag + '</div>' +
-      '<div class="product-card-text">' + p.text + '</div>' +
-      '<div class="product-card-sub">' + p.sub + '</div>' +
-      '<button class="product-card-cta" onclick="showToast(\'토스 앱에서 바로 가입할 수 있습니다\')">자세히 보기</button>';
+      '<div class="product-card-tag">' + item.tag + '</div>' +
+      '<div class="product-card-text">' + item.text + '</div>' +
+      '<div class="product-card-sub">' + item.sub + '</div>' +
+      '<button class="product-card-cta" onclick="switchTab(\'tab-deduction\')">설정하기</button>';
     container.appendChild(card);
   });
 }
@@ -3262,7 +3281,7 @@ function toggleMarketing() {
   marketingOptIn = !marketingOptIn;
   var toggle = document.getElementById('marketingToggle');
   toggle.classList.toggle('on', marketingOptIn);
-  showToast(marketingOptIn ? '맞춤 혜택 알림을 받습니다' : '맞춤 혜택 알림을 해제했습니다');
+  showToast(marketingOptIn ? '맞춤 절세 알림을 받습니다' : '맞춤 절세 알림을 해제했습니다');
 }
 
 // ===========================
