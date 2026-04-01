@@ -1221,6 +1221,7 @@ var S = {
   hasChildren: false,
   childCount: 0,
   childAges: [],
+  childBirthYears: [],
   housing: '', // legacy compat: 'rent' | 'jeonse' | 'own' | 'family'
   housingCount: -1, // 0=무주택, 1=1채, 2=2채이상
   isHousehead: false,
@@ -1561,7 +1562,7 @@ function calcWithheld(annualSalary) {
   var annualTaxWithLocal = annualTax + Math.round(annualTax * 0.1); // 지방소득세 10%
   var monthlyTax = Math.round(annualTaxWithLocal / 12);
   var adjusted = Math.round(monthlyTax * (S.rate / 100));
-  return { annual: adjusted * 12, totalPay: totalPay };
+  return { annual: adjusted * wm, totalPay: totalPay };
 }
 
 function getLoanLimit() {
@@ -1630,9 +1631,10 @@ function calcFinalTax(annualSalary) {
       var cardLimit = totalPay <= 70000000 ? 3000000 : (totalPay <= 120000000 ? 2500000 : 2000000);
       basicDed = Math.min(basicDed, cardLimit);
 
-      // 추가한도: 전통시장 + 대중교통 합산 300만원
-      var addDed = marketOver * 0.40 + transportOver * 0.40; // 대중교통 40% (2025 귀속, 80% 한시인상 종료)
-      addDed = Math.min(addDed, 3000000);
+      // 추가한도: 전통시장(50%), 대중교통(80%), 각각 100만원 한도 (합산 300만원 이내)
+      var addMarket = Math.min(marketOver * 0.50, 1000000);   // 전통시장 50% (2025 한시 상향)
+      var addTransport = Math.min(transportOver * 0.80, 1000000); // 대중교통 80% (2024~2025 한시 상향)
+      var addDed = Math.min(addMarket + addTransport, 3000000);
 
       cardDeduction = basicDed + addDed;
     }
@@ -1697,7 +1699,7 @@ function calcFinalTax(annualSalary) {
   var medicalCredit = 0;
   if (dOn('medical')) {
     var medGeneral = dVal('medical', 'general') * 10000;
-    var medNanim = dVal('medical', 'nanim') * 10000;          // 난임 30%
+    var medNanim = dVal('medical', 'nanim') * 10000;          // 난임 20% (2025 귀속)
     var medPremature = dVal('medical', 'premature') * 10000;  // 미숙아/선천성이상아 20%
     var medGlasses = Math.min(dVal('medical', 'glasses') * 10000, 500000); // 안경 1인당 50만원 한도
     var medPostpartum = (totalPay <= 70000000) ? Math.min(dVal('medical', 'postpartum') * 10000, 2000000) : 0;
@@ -1877,7 +1879,7 @@ function calcItemSaving(item) {
       var bd = (cc-uc)*0.15+(dc-ud)*0.30+(cr-ucr)*0.30;
       var cl = totalPay<=70000000?3000000:(totalPay<=120000000?2500000:2000000);
       bd = Math.min(bd, cl);
-      var ad = (mk-um)*0.40+(tp-ut)*0.40; ad = Math.min(ad, 3000000);
+      var ad = Math.min((mk-um)*0.50,1000000)+Math.min((tp-ut)*0.80,1000000); ad = Math.min(ad, 3000000);
       return Math.round((bd+ad)*mRateLocal);
     }
     case 'housing': {
