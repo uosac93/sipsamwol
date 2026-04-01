@@ -680,6 +680,70 @@ input[type="text"], input[type="number"], input[type="date"], select, textarea {
 }
 .product-card-cta:active { transform: scale(0.96); opacity: 0.85; }
 
+/* Insurance warning */
+.insurance-warning {
+  margin-top: 8px; padding: 10px 14px; background: rgba(240,68,82,0.06);
+  border-radius: 10px; font-size: 12px; color: var(--red); line-height: 1.5; font-weight: 500;
+}
+.insurance-info-note {
+  margin-top: 4px; font-size: 11px; color: var(--text4); line-height: 1.4;
+}
+
+/* Workplace section */
+.workplace-card {
+  padding: 14px 16px; background: #fff; border-radius: 12px; margin-bottom: 10px;
+  border: 1.5px solid #e5e5ea;
+}
+.workplace-card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.workplace-card .settings-row { padding: 10px 0; }
+.workplace-add-btn {
+  width: 100%; padding: 12px; border: 1.5px dashed #d1d6db; border-radius: 12px;
+  background: transparent; font-size: 14px; font-weight: 600; color: var(--text3);
+  cursor: pointer; font-family: inherit; transition: all 0.2s; margin-top: 8px;
+}
+.workplace-add-btn:active { background: var(--card); }
+.workplace-remove-btn {
+  padding: 6px 12px; border: none; background: var(--red-light); border-radius: 8px;
+  font-size: 12px; font-weight: 600; color: var(--red); cursor: pointer; font-family: inherit;
+}
+
+/* Househead impact banner */
+.househead-impact {
+  margin: 8px 0; padding: 12px 16px; background: rgba(49,130,246,0.06);
+  border-radius: 12px; font-size: 13px; color: var(--accent); line-height: 1.5;
+}
+.househead-impact-title { font-weight: 700; margin-bottom: 4px; }
+.househead-impact-items { font-size: 12px; color: var(--text2); margin-top: 4px; }
+.househead-impact-diff { font-weight: 700; color: var(--accent); margin-top: 6px; }
+
+/* Goal tag */
+.goal-tag {
+  display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px;
+  border-radius: 100px; font-size: 11px; font-weight: 700; cursor: pointer;
+  transition: all 0.2s; border: 1.5px solid #e5e5ea; background: #fff; color: var(--text3);
+}
+.goal-tag.active { border-color: var(--green); background: var(--green-light); color: var(--green); }
+.goal-input-wrap {
+  margin-top: 8px; display: none; animation: fadeSlideUp 0.3s ease;
+}
+.goal-input-wrap.show { display: block; }
+.goal-preview {
+  margin-top: 6px; font-size: 12px; font-weight: 600; color: var(--green); line-height: 1.4;
+}
+
+/* Home goal comparison */
+.goal-comparison {
+  margin: 16px 20px 0; padding: 16px 20px; background: var(--green-light);
+  border-radius: 16px; display: flex; justify-content: space-between; align-items: center;
+}
+.goal-comparison-label { font-size: 13px; color: var(--text2); }
+.goal-comparison-value { font-size: 15px; font-weight: 700; color: var(--green); }
+
+/* Work period proration info */
+.proration-info {
+  margin-top: 4px; font-size: 11px; color: var(--text4); line-height: 1.3; font-style: italic;
+}
+
 /* Animations */
 @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeSlideLeft { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
@@ -961,6 +1025,18 @@ input[type="text"], input[type="number"], input[type="date"], select, textarea {
     </div>
   </div>
 
+  <div class="goal-comparison" id="goalComparison" style="display:none;">
+    <div>
+      <div class="goal-comparison-label">현재 환급 예상</div>
+      <div class="goal-comparison-value" id="goalCurrentRefund">0만원</div>
+    </div>
+    <div style="font-size:20px;color:var(--text4);">→</div>
+    <div style="text-align:right;">
+      <div class="goal-comparison-label">목표 달성 시</div>
+      <div class="goal-comparison-value" id="goalTargetRefund">0만원</div>
+    </div>
+  </div>
+
   <div class="insurance-card" id="insuranceCard">
     <div class="insurance-card-title">4대보험 (근로자 부담분)</div>
     <div class="insurance-row total">
@@ -1105,6 +1181,11 @@ input[type="text"], input[type="number"], input[type="date"], select, textarea {
         <span class="settings-value" id="setHousingDisplay" style="font-size:15px;font-weight:600;color:var(--accent);">-</span>
       </div>
       <div class="settings-row">
+        <span class="settings-label">세대주</span>
+        <span class="settings-value" id="setHouseheadDisplay" style="font-size:15px;font-weight:600;color:var(--accent);">-</span>
+      </div>
+      <div id="househeadImpactArea"></div>
+      <div class="settings-row">
         <span class="settings-label">부양가족</span>
         <span class="settings-value" id="setDepDisplay" style="font-size:15px;font-weight:600;color:var(--accent);">없음</span>
       </div>
@@ -1166,6 +1247,65 @@ input[type="text"], input[type="number"], input[type="date"], select, textarea {
         <div class="settings-row">
           <span class="settings-label">근무 월수</span>
           <span class="settings-value" id="setWorkMonthsDisplay" style="font-size:15px;font-weight:600;color:var(--accent);">12개월</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-label">복수 근무처</div>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div>
+          <span class="settings-label">올해 근무처가 2개 이상이에요</span>
+          <div style="font-size:12px; color:var(--text4); margin-top:3px;">종근무지 원천징수세액 별도 입력</div>
+        </div>
+        <button class="toggle" id="multiWorkplaceToggle" onclick="toggleMultiWorkplace()">
+          <div class="toggle-knob"></div>
+        </button>
+      </div>
+      <div id="multiWorkplaceDetail" style="display:none;">
+        <div id="workplaceList" style="padding:12px 16px;"></div>
+        <div style="padding:0 16px 12px;">
+          <button class="workplace-add-btn" onclick="addWorkplace()">+ 근무처 추가</button>
+        </div>
+        <div class="settings-row">
+          <span class="settings-label">합산 기납부세액</span>
+          <span class="settings-value" id="totalWithheldDisplay" style="font-size:15px;font-weight:700;color:var(--accent);">0만원</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section" id="prevReceiptSection" style="display:none;">
+    <div class="settings-section-label">전 직장 원천징수영수증</div>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div>
+          <span class="settings-label">전 직장 원천징수영수증이 있어요</span>
+          <div style="font-size:12px; color:var(--text4); margin-top:3px;">중도퇴사한 근무처의 기납부세액 직접 입력</div>
+        </div>
+        <button class="toggle" id="prevReceiptToggle" onclick="togglePrevReceipt()">
+          <div class="toggle-knob"></div>
+        </button>
+      </div>
+      <div id="prevReceiptDetail" style="display:none;">
+        <div class="settings-row">
+          <span class="settings-label">전 직장 기납부세액</span>
+          <div class="settings-value">
+            <input class="settings-input" id="setPrevWithheld" type="text" inputmode="numeric" placeholder="0">
+            <span class="settings-input-unit">만원</span>
+          </div>
+        </div>
+        <div class="settings-row">
+          <span class="settings-label">퇴사 시 정산 환급/추징액</span>
+          <div class="settings-value">
+            <input class="settings-input" id="setPrevRefund" type="text" inputmode="numeric" placeholder="0" style="width:100px;">
+            <select class="settings-select" id="setPrevRefundType" style="width:60px;">
+              <option value="refund">환급</option>
+              <option value="charge">추징</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
@@ -1240,6 +1380,13 @@ var S = {
   workStartDate: '', // YYYY-MM-DD
   workEndDate: '',   // YYYY-MM-DD
   workMonths: 12,
+  // 복수 근무처
+  hasMultiWorkplace: false,
+  workplaces: [], // [{name, startDate, endDate, salary, withheld, prevRefund}]
+  hasPrevWithholdingReceipt: false,
+  prevWithheld: 0, // 전 직장 기납부세액 (만원)
+  // 목표 설정
+  goals: {}, // {itemId: targetAmount}
   // Deductions data
   deductions: {}
 };
@@ -1293,8 +1440,10 @@ var ALL_DEDUCTION_ITEMS = [
       { key: 'credit', label: '신용카드', placeholder: '0', unit: '만원' },
       { key: 'debit', label: '체크카드', placeholder: '0', unit: '만원' },
       { key: 'cash', label: '현금영수증', placeholder: '0', unit: '만원' },
-      { key: 'market', label: '전통시장', placeholder: '0', unit: '만원' },
-      { key: 'transport', label: '대중교통', placeholder: '0', unit: '만원' }
+      { key: 'market', label: '전통시장 (50%, 2025 한시)', placeholder: '0', unit: '만원' },
+      { key: 'transport', label: '대중교통 (80%, 2025 한시)', placeholder: '0', unit: '만원' },
+      { key: 'culture', label: '도서/공연/미술관 (30%)', placeholder: '0', unit: '만원', note: '총급여 7천만 이하만 적용' },
+      { key: 'movie', label: '영화관람료 (40%, 2025 한시)', placeholder: '0', unit: '만원' }
     ],
     syncable: true, priority: 10, profileFilter: function() { return true; } },
   { id: 'housing', name: '주택청약', cat: 'income', desc: '납입액의 40%, 한도 300만원 (2024 개정)', condition: '총급여 7천만 이하, 무주택 세대주', type: 'input', inputLabel: '연 납입액', inputKey: 'amount', unit: '만원',
@@ -1341,11 +1490,12 @@ var ALL_DEDUCTION_ITEMS = [
       { key: 'irp', label: 'IRP', placeholder: '0', unit: '만원' }
     ],
     syncable: true, priority: 10, profileFilter: function() { return true; } },
-  { id: 'insurance', name: '보장성보험료', cat: 'tax_credit', desc: '일반 12% (100만), 장애인전용 15% (100만)', condition: '', type: 'multi_input',
+  { id: 'insurance', name: '보장성보험료', cat: 'tax_credit', desc: '일반 12% (100만), 장애인전용 15% (100만)', condition: '기본공제 대상자의 보장성보험만 공제 가능', type: 'multi_input',
     inputs: [
-      { key: 'general', label: '일반 보장성보험', placeholder: '0', unit: '만원' },
-      { key: 'disabled', label: '장애인전용 보장성보험', placeholder: '0', unit: '만원' }
+      { key: 'general', label: '일반 보장성보험', placeholder: '0', unit: '만원', note: '보장성보험: 만기환급금 <= 납입보험료 (공제 가능)' },
+      { key: 'disabled', label: '장애인전용 보장성보험', placeholder: '0', unit: '만원', note: '기본공제 대상 장애인이 피보험자인 보험' }
     ],
+    savingsWarning: '저축성보험(만기환급금 > 납입보험료)은 공제 대상이 아닙니다',
     syncable: true, priority: 6, profileFilter: function() { return true; } },
   { id: 'education', name: '교육비', cat: 'tax_credit', desc: '15%', condition: '', type: 'education_detail',
     priority: 7, profileFilter: function() { return true; } },
@@ -1613,8 +1763,13 @@ function calcFinalTax(annualSalary) {
     var cashReceipt = dVal('card', 'cash') * 10000;
     var marketSpend = dVal('card', 'market') * 10000;
     var transportSpend = dVal('card', 'transport') * 10000;
-    var totalSpend = creditCard + debitCard + cashReceipt + marketSpend + transportSpend;
-    var threshold = totalPay * 0.25;
+    var cultureSpend = dVal('card', 'culture') * 10000;
+    var movieSpend = dVal('card', 'movie') * 10000;
+    var totalSpend = creditCard + debitCard + cashReceipt + marketSpend + transportSpend + cultureSpend + movieSpend;
+
+    // 근로제공기간 기준: 중도입사/퇴사 시 총급여 25% 기준선 월할 적용
+    var cardWorkMonths = S.isMidCareer ? S.workMonths : 12;
+    var threshold = totalPay * 0.25 * (cardWorkMonths / 12);
 
     if (totalSpend > threshold) {
       var usedFromCredit = Math.min(creditCard, threshold);
@@ -1622,46 +1777,53 @@ function calcFinalTax(annualSalary) {
       var usedFromDebit = Math.min(debitCard, remain); remain -= usedFromDebit;
       var usedFromCash = Math.min(cashReceipt, remain); remain -= usedFromCash;
       var usedFromMarket = Math.min(marketSpend, remain); remain -= usedFromMarket;
-      var usedFromTransport = Math.min(transportSpend, remain);
+      var usedFromTransport = Math.min(transportSpend, remain); remain -= usedFromTransport;
+      var usedFromCulture = Math.min(cultureSpend, remain); remain -= usedFromCulture;
+      var usedFromMovie = Math.min(movieSpend, remain);
 
       var creditOver = creditCard - usedFromCredit;
       var debitOver = debitCard - usedFromDebit;
       var cashOver = cashReceipt - usedFromCash;
       var marketOver = marketSpend - usedFromMarket;
       var transportOver = transportSpend - usedFromTransport;
+      var cultureOver = cultureSpend - usedFromCulture;
+      var movieOver = movieSpend - usedFromMovie;
 
       // 기본한도 적용분
       var basicDed = creditOver * 0.15 + debitOver * 0.30 + cashOver * 0.30;
       var cardLimit = totalPay <= 70000000 ? 3000000 : (totalPay <= 120000000 ? 2500000 : 2000000);
       basicDed = Math.min(basicDed, cardLimit);
 
-      // 추가한도: 전통시장(50%), 대중교통(80%), 각각 100만원 한도 (합산 300만원 이내)
-      var addMarket = Math.min(marketOver * 0.50, 1000000);   // 전통시장 50% (2025 한시 상향)
-      var addTransport = Math.min(transportOver * 0.80, 1000000); // 대중교통 80% (2024~2025 한시 상향)
-      var addDed = Math.min(addMarket + addTransport, 3000000);
+      // 추가한도: 전통시장(50%), 대중교통(80%), 도서공연(30%), 영화(40%), 각각 100만원 한도 (합산 300만원 이내)
+      var addMarket = Math.min(marketOver * 0.50, 1000000);
+      var addTransport = Math.min(transportOver * 0.80, 1000000);
+      var addCulture = (totalPay <= 70000000) ? Math.min(cultureOver * 0.30, 1000000) : 0;
+      var addMovie = Math.min(movieOver * 0.40, 1000000);
+      var addDed = Math.min(addMarket + addTransport + addCulture + addMovie, 3000000);
 
       cardDeduction = basicDed + addDed;
     }
   }
 
-  // 주택청약
+  // 주택청약 (근무기간 중 납입분만 공제)
+  var housingProrate = S.isMidCareer ? (S.workMonths / 12) : 1;
   var housingDed = 0;
   if (dOn('housing') && totalPay <= 70000000 && S.housingCount === 0 && S.isHousehead) {
-    var hAmt = dVal('housing', 'amount') * 10000;
-    housingDed = Math.min(hAmt * 0.40, 3000000); // 납입액의 40%, 2024 개정: 연 300만원 한도
+    var hAmt = dVal('housing', 'amount') * 10000 * housingProrate;
+    housingDed = Math.min(hAmt * 0.40, 3000000);
   }
 
-  // 주택담보대출 (1주택 + 주담대 보유 시에만 적용)
+  // 주택담보대출 (근무기간 중 납입분만 공제)
   var loanDed = 0;
   if (dOn('loan') && S.housingCount === 1 && S.hasHomeLoan) {
-    var lAmt = dVal('loan', 'amount') * 10000;
+    var lAmt = dVal('loan', 'amount') * 10000 * housingProrate;
     loanDed = Math.min(lAmt, getLoanLimit());
   }
 
-  // 전세자금대출
+  // 전세자금대출 (근무기간 중 납입분만 공제)
   var jeonseDed = 0;
   if (dOn('jeonse_loan') && S.housingCount === 0 && S.hasJeonseLoan) {
-    var jAmt = dVal('jeonse_loan', 'amount') * 10000;
+    var jAmt = dVal('jeonse_loan', 'amount') * 10000 * housingProrate;
     jeonseDed = Math.min(jAmt * 0.40, 4000000);
   }
 
@@ -1788,11 +1950,12 @@ function calcFinalTax(annualSalary) {
     donCredit = donHighCredit + donRelCredit;
   }
 
-  // 보장성보험료
+  // 보장성보험료 (근무기간 중 납입분만 공제)
   var insCredit = 0;
   if (dOn('insurance')) {
-    var insGeneral = Math.min(dVal('insurance', 'general') * 10000, 1000000);
-    var insDisabled = Math.min(dVal('insurance', 'disabled') * 10000, 1000000);
+    var insProrate = S.isMidCareer ? (S.workMonths / 12) : 1;
+    var insGeneral = Math.min(dVal('insurance', 'general') * 10000 * insProrate, 1000000);
+    var insDisabled = Math.min(dVal('insurance', 'disabled') * 10000 * insProrate, 1000000);
     insCredit = insGeneral * 0.12 + insDisabled * 0.15;
   }
 
@@ -1885,15 +2048,22 @@ function calcItemSaving(item) {
       if (!dOn('card')) return 0;
       var cc = dVal('card','credit')*10000, dc = dVal('card','debit')*10000, cr = dVal('card','cash')*10000;
       var mk = dVal('card','market')*10000, tp = dVal('card','transport')*10000;
-      var ts = cc+dc+cr+mk+tp, th = totalPay*0.25;
+      var clt = dVal('card','culture')*10000, mv = dVal('card','movie')*10000;
+      var ts = cc+dc+cr+mk+tp+clt+mv;
+      var cardWM = S.isMidCareer ? S.workMonths : 12;
+      var th = totalPay*0.25*(cardWM/12);
       if (ts <= th) return 0;
       var uc = Math.min(cc,th), rm=Math.max(th-uc,0);
       var ud = Math.min(dc,rm); rm-=ud; var ucr=Math.min(cr,rm); rm-=ucr;
-      var um=Math.min(mk,rm); rm-=um; var ut=Math.min(tp,rm);
+      var um=Math.min(mk,rm); rm-=um; var ut=Math.min(tp,rm); rm-=ut;
+      var uclt=Math.min(clt,rm); rm-=uclt; var umv=Math.min(mv,rm);
       var bd = (cc-uc)*0.15+(dc-ud)*0.30+(cr-ucr)*0.30;
       var cl = totalPay<=70000000?3000000:(totalPay<=120000000?2500000:2000000);
       bd = Math.min(bd, cl);
-      var ad = Math.min((mk-um)*0.50,1000000)+Math.min((tp-ut)*0.80,1000000); ad = Math.min(ad, 3000000);
+      var adMk=Math.min((mk-um)*0.50,1000000), adTp=Math.min((tp-ut)*0.80,1000000);
+      var adClt=(totalPay<=70000000)?Math.min((clt-uclt)*0.30,1000000):0;
+      var adMv=Math.min((mv-umv)*0.40,1000000);
+      var ad = Math.min(adMk+adTp+adClt+adMv, 3000000);
       return Math.round((bd+ad)*mRateLocal);
     }
     case 'housing': {
@@ -2778,7 +2948,7 @@ function getItemHint(item) {
     'card': '총급여의 25%를 넘긴 소비부터 공제가 시작돼요',
     'rent': '무주택 세대주, 총급여 8,000만원 이하일 때 가능해요',
     'medical': '병원비, 약값, 안경 등 다 포함이에요',
-    'insurance': '저축성보험은 해당 안 돼요, 보장성보험만 가능해요',
+    'insurance': '기본공제 대상자의 보장성보험만 공제 가능해요. 저축성보험(만기환급금 > 납입보험료)은 공제 불가!',
     'political': '10만원까지 사실상 전액 돌려받아요. 가장 확실한 절세!',
     'housing': '무주택 세대주, 총급여 7천만원 이하일 때 가능해요',
     'jeonse_loan': '원리금 상환액의 40%, 연 400만원 한도예요',
@@ -2900,7 +3070,16 @@ function renderHome() {
   var annual = S.salary * 10000;
   var wh = calcWithheld(annual);
   var ft = calcFinalTax(annual);
-  var refund = wh.annual - ft.finalTax;
+  // 복수 근무처 또는 전 직장 기납부세액 반영
+  var totalWithheld = wh.annual;
+  if (S.hasMultiWorkplace && S.workplaces.length > 0) {
+    totalWithheld = 0;
+    S.workplaces.forEach(function(wp) { totalWithheld += (wp.withheld || 0) * 10000; });
+  }
+  if (S.hasPrevWithholdingReceipt && S.prevWithheld > 0) {
+    totalWithheld += S.prevWithheld * 10000;
+  }
+  var refund = totalWithheld - ft.finalTax;
   // 반올림 오차(5천원 미만)는 0으로 처리
   if (Math.abs(refund) < 5000) refund = 0;
 
@@ -2924,7 +3103,7 @@ function renderHome() {
 
   countUp(refundEl, Math.round(Math.abs(refund) / 10000), 1000);
 
-  document.getElementById('withheldDisplay').textContent = fmtMan(wh.annual) + '만원';
+  document.getElementById('withheldDisplay').textContent = fmtMan(totalWithheld) + '만원';
   document.getElementById('finalTaxDisplay').textContent = fmtMan(ft.finalTax) + '만원';
 
   // 4대보험
@@ -2942,6 +3121,9 @@ function renderHome() {
   // 절세 항목 요약
   var activeCount = ALL_DEDUCTION_ITEMS.filter(function(item) { return dOn(item.id); }).length;
   document.getElementById('savingSummaryText').innerHTML = '절세 가능 항목 <strong>' + activeCount + '개</strong>';
+
+  // 목표 비교 표시
+  renderGoalComparison();
 
   // 공제항목 자동 추천 카드 렌더링
   renderRecommendCards();
@@ -3026,7 +3208,7 @@ function showSyncToast() {
 
 function prefillPrevYear() {
   // 카드 사용
-  S.deductions['card'] = { on: true, values: { credit: 800, debit: 300, cash: 50, market: 0, transport: 0, culture: 0 } };
+  S.deductions['card'] = { on: true, values: { credit: 800, debit: 300, cash: 50, market: 0, transport: 0, culture: 0, movie: 0 } };
   // 의료비
   S.deductions['medical'] = { on: true, values: { general: 120, nanim: 0, glasses: 0, postpartum: 0 } };
   // 보장성보험료
@@ -3158,6 +3340,16 @@ function renderDeductions() {
 
       var inputsHTML = '<div class="deduction-item-inputs">' + syncBtnHTML;
 
+      // Proration info for work-period items
+      if (S.isMidCareer && isProrationItem(item.id)) {
+        inputsHTML += '<div class="proration-info">근무기간(' + S.workMonths + '개월) 중 납입분만 공제 적용</div>';
+      }
+
+      // Insurance savings warning
+      if (item.savingsWarning) {
+        inputsHTML += '<div class="insurance-warning">' + item.savingsWarning + '</div>';
+      }
+
       if (item.type === 'toggle' || item.type === 'auto' || item.type === 'auto_count') {
         // No extra inputs
       } else if (item.type === 'input') {
@@ -3172,6 +3364,9 @@ function renderDeductions() {
             inputsHTML += '<div class="input-row"><label>' + inp.label + '</label>' +
               '<input class="input-field" type="text" inputmode="numeric" placeholder="' + inp.placeholder + '" data-item="' + item.id + '" data-key="' + inp.key + '" value="' + (cv ? Number(cv).toLocaleString() : '') + '">' +
               '<span class="input-unit">' + inp.unit + '</span></div>';
+            if (inp.note) {
+              inputsHTML += '<div class="insurance-info-note">' + inp.note + '</div>';
+            }
           });
         }
         if (item.selectInputs) {
@@ -3236,6 +3431,23 @@ function renderDeductions() {
         inputsHTML += '<div style="margin-top:12px;"><button class="product-card-cta" onclick="showToast(\'서비스 준비 중입니다\'); event.stopPropagation();" style="display:flex; width:100%; justify-content:center;">대출 금리 비교하기</button></div>';
       }
 
+      // Goal tag (목표 설정)
+      if (item.type !== 'auto' && item.type !== 'auto_count') {
+        var hasGoal = S.goals[item.id] !== undefined;
+        inputsHTML += '<div style="margin-top:10px;">' +
+          '<span class="goal-tag' + (hasGoal ? ' active' : '') + '" onclick="toggleGoal(\'' + item.id + '\'); event.stopPropagation();">올해 목표</span>';
+        if (hasGoal) {
+          var goalAmt = S.goals[item.id] || 0;
+          inputsHTML += '<div class="goal-input-wrap show">' +
+            '<div class="input-row"><label>목표 금액</label>' +
+            '<input class="input-field" type="text" inputmode="numeric" placeholder="0" id="goal-input-' + item.id + '" value="' + (goalAmt ? Number(goalAmt).toLocaleString() : '') + '" onchange="updateGoal(\'' + item.id + '\', this.value.replace(/[^0-9]/g,\'\'))" oninput="var v=this.value.replace(/[^0-9]/g,\'\');this.value=v?Number(v).toLocaleString():\'\';updateGoal(\'' + item.id + '\',v)">' +
+            '<span class="input-unit">만원</span></div>' +
+            '<div class="goal-preview" id="goal-preview-' + item.id + '"></div>' +
+            '</div>';
+        }
+        inputsHTML += '</div>';
+      }
+
       div.innerHTML = topHTML + inputsHTML;
       body.appendChild(div);
     });
@@ -3262,6 +3474,11 @@ function renderDeductions() {
   container.addEventListener('change', function(e) { handleDeductionChange(e); });
 
   updateTotalSaving();
+
+  // Update goal previews
+  Object.keys(S.goals).forEach(function(itemId) {
+    setTimeout(function() { updateGoalPreview(itemId); }, 100);
+  });
 }
 
 function handleDeductionChange(e) {
@@ -3488,10 +3705,31 @@ function loadSettings() {
     else if (S.livingType === 'parents') housingDisplay += ' · 부모님과';
   }
   document.getElementById('setHousingDisplay').textContent = housingDisplay;
+  document.getElementById('setHouseheadDisplay').textContent = S.isHousehead ? '세대주' : '세대원';
   var depText = '없음';
   if (S.depType === 'parents') depText = '부모님 ' + S.depParentCount + '명' + (S.depSeniorCount > 0 ? ' (경로우대 ' + S.depSeniorCount + '명)' : '');
   else if (S.depType === 'other') depText = S.depOtherCount + '명';
   document.getElementById('setDepDisplay').textContent = depText;
+
+  // Househead impact
+  renderHouseheadImpact();
+
+  // Multi-workplace
+  var multiToggle = document.getElementById('multiWorkplaceToggle');
+  if (multiToggle) multiToggle.classList.toggle('on', S.hasMultiWorkplace);
+  var multiDetail = document.getElementById('multiWorkplaceDetail');
+  if (multiDetail) multiDetail.style.display = S.hasMultiWorkplace ? 'block' : 'none';
+  if (S.hasMultiWorkplace) renderWorkplaces();
+
+  // Prev receipt section visibility
+  var prevSection = document.getElementById('prevReceiptSection');
+  if (prevSection) prevSection.style.display = (S.hasMultiWorkplace || S.isMidCareer) ? 'block' : 'none';
+  var prevToggle = document.getElementById('prevReceiptToggle');
+  if (prevToggle) prevToggle.classList.toggle('on', S.hasPrevWithholdingReceipt);
+  var prevDetail = document.getElementById('prevReceiptDetail');
+  if (prevDetail) prevDetail.style.display = S.hasPrevWithholdingReceipt ? 'block' : 'none';
+  var prevWithheldEl = document.getElementById('setPrevWithheld');
+  if (prevWithheldEl) prevWithheldEl.value = S.prevWithheld > 0 ? S.prevWithheld.toLocaleString() : '';
 }
 
 function setRate(r) {
@@ -3510,6 +3748,13 @@ function saveSettings() {
   var spSv = document.getElementById('setSpouseSalary').value.replace(/[^0-9]/g, '');
   S.spouseSalary = spSv ? Number(spSv) : 0;
   S.car = document.getElementById('setCar').value;
+
+  // 전 직장 원천징수영수증
+  var prevWithheldEl = document.getElementById('setPrevWithheld');
+  if (prevWithheldEl) {
+    var pwVal = prevWithheldEl.value.replace(/[^0-9]/g, '');
+    S.prevWithheld = pwVal ? Number(pwVal) : 0;
+  }
 
   // 중도퇴사/입사
   calcWorkMonths();
@@ -3567,6 +3812,9 @@ function toggleMidCareer() {
     S.workEndDate = '';
   }
   calcWorkMonths();
+  // Show prev receipt section when mid-career or multi-workplace
+  var prevSection = document.getElementById('prevReceiptSection');
+  if (prevSection) prevSection.style.display = (S.hasMultiWorkplace || S.isMidCareer) ? 'block' : 'none';
 }
 
 function calcWorkMonths() {
@@ -3729,7 +3977,7 @@ function selectAuth(provider) {
   // Simulate auth (1.5s)
   setTimeout(function() {
     // Fill virtual data
-    S.deductions['card'] = { on: true, values: { credit: 800, debit: 300, cash: 50, market: 0, transport: 0 } };
+    S.deductions['card'] = { on: true, values: { credit: 800, debit: 300, cash: 50, market: 0, transport: 0, culture: 0, movie: 0 } };
     S.deductions['medical'] = { on: true, values: { general: 120, nanim: 0, glasses: 0, postpartum: 0 } };
     S.deductions['insurance'] = { on: true, values: { general: 80, disabled: 0 } };
     S.deductions['pension'] = { on: true, values: { pension_saving: 400, irp: 0 } };
@@ -3835,6 +4083,250 @@ function renderProductCards() {
 }
 
 // ===========================
+// MULTI-WORKPLACE (복수 근무처)
+// ===========================
+function toggleMultiWorkplace() {
+  S.hasMultiWorkplace = !S.hasMultiWorkplace;
+  var toggle = document.getElementById('multiWorkplaceToggle');
+  toggle.classList.toggle('on', S.hasMultiWorkplace);
+  var detail = document.getElementById('multiWorkplaceDetail');
+  detail.style.display = S.hasMultiWorkplace ? 'block' : 'none';
+  // Show prev receipt section when mid-career or multi-workplace
+  var prevSection = document.getElementById('prevReceiptSection');
+  if (prevSection) prevSection.style.display = (S.hasMultiWorkplace || S.isMidCareer) ? 'block' : 'none';
+  if (S.hasMultiWorkplace && S.workplaces.length === 0) {
+    addWorkplace();
+    addWorkplace();
+  }
+  renderWorkplaces();
+}
+
+function addWorkplace() {
+  S.workplaces.push({ name: '', startDate: '', endDate: '', salary: 0, withheld: 0, prevRefund: 0 });
+  renderWorkplaces();
+}
+
+function removeWorkplace(idx) {
+  S.workplaces.splice(idx, 1);
+  renderWorkplaces();
+}
+
+function renderWorkplaces() {
+  var container = document.getElementById('workplaceList');
+  if (!container) return;
+  container.innerHTML = '';
+  S.workplaces.forEach(function(wp, idx) {
+    var card = document.createElement('div');
+    card.className = 'workplace-card';
+    var label = idx === 0 ? '주근무지' : '종근무지 ' + idx;
+    card.innerHTML =
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+        '<div class="workplace-card-title">' + label + '</div>' +
+        (idx > 0 ? '<button class="workplace-remove-btn" onclick="removeWorkplace(' + idx + ')">삭제</button>' : '') +
+      '</div>' +
+      '<div class="input-row"><label>회사명</label>' +
+        '<input class="input-field" type="text" placeholder="회사명" data-wp="' + idx + '" data-wpkey="name" value="' + (wp.name || '') + '" style="text-align:left;max-width:160px;font-size:14px;font-weight:500;"></div>' +
+      '<div class="input-row"><label>근무 시작</label>' +
+        '<input class="settings-input" type="date" data-wp="' + idx + '" data-wpkey="startDate" value="' + (wp.startDate || '') + '" style="width:150px;"></div>' +
+      '<div class="input-row"><label>근무 종료</label>' +
+        '<input class="settings-input" type="date" data-wp="' + idx + '" data-wpkey="endDate" value="' + (wp.endDate || '') + '" style="width:150px;"></div>' +
+      '<div class="input-row"><label>총급여</label>' +
+        '<input class="input-field" type="text" inputmode="numeric" placeholder="0" data-wp="' + idx + '" data-wpkey="salary" value="' + (wp.salary ? Number(wp.salary).toLocaleString() : '') + '">' +
+        '<span class="input-unit">만원</span></div>' +
+      '<div class="input-row"><label>기납부세액</label>' +
+        '<input class="input-field" type="text" inputmode="numeric" placeholder="0" data-wp="' + idx + '" data-wpkey="withheld" value="' + (wp.withheld ? Number(wp.withheld).toLocaleString() : '') + '">' +
+        '<span class="input-unit">만원</span></div>';
+    container.appendChild(card);
+  });
+  // Event listeners
+  container.querySelectorAll('input').forEach(function(inp) {
+    inp.addEventListener('input', function() {
+      var idx = parseInt(this.getAttribute('data-wp'));
+      var key = this.getAttribute('data-wpkey');
+      if (key === 'name') {
+        S.workplaces[idx].name = this.value;
+      } else if (key === 'startDate' || key === 'endDate') {
+        S.workplaces[idx][key] = this.value;
+      } else {
+        var raw = this.value.replace(/[^0-9]/g, '');
+        this.value = raw ? Number(raw).toLocaleString() : '';
+        S.workplaces[idx][key] = Number(raw) || 0;
+      }
+      updateTotalWithheld();
+    });
+    inp.addEventListener('change', function() {
+      var idx = parseInt(this.getAttribute('data-wp'));
+      var key = this.getAttribute('data-wpkey');
+      if (key === 'startDate' || key === 'endDate') {
+        S.workplaces[idx][key] = this.value;
+      }
+      updateTotalWithheld();
+    });
+  });
+  updateTotalWithheld();
+}
+
+function updateTotalWithheld() {
+  var total = 0;
+  S.workplaces.forEach(function(wp) { total += (wp.withheld || 0); });
+  var display = document.getElementById('totalWithheldDisplay');
+  if (display) display.textContent = fmt(total) + '만원';
+}
+
+// ===========================
+// PREV WITHHOLDING RECEIPT (전 직장 원천징수영수증)
+// ===========================
+function togglePrevReceipt() {
+  S.hasPrevWithholdingReceipt = !S.hasPrevWithholdingReceipt;
+  var toggle = document.getElementById('prevReceiptToggle');
+  toggle.classList.toggle('on', S.hasPrevWithholdingReceipt);
+  var detail = document.getElementById('prevReceiptDetail');
+  detail.style.display = S.hasPrevWithholdingReceipt ? 'block' : 'none';
+}
+
+// ===========================
+// HOUSEHEAD IMPACT (세대주 변경 영향)
+// ===========================
+function renderHouseheadImpact() {
+  var area = document.getElementById('househeadImpactArea');
+  if (!area) return;
+  area.innerHTML = '';
+  if (S.salary <= 0) return;
+
+  var affectedItems = ['주택청약', '월세 세액공제', '주택자금공제(전세대출)', '주택자금공제(주담대)'];
+  var annual = S.salary * 10000;
+
+  // Calculate refund with current househead state
+  var currentFt = calcFinalTax(annual);
+  var currentWh = calcWithheld(annual);
+  var currentRefund = currentWh.annual - currentFt.finalTax;
+
+  // Temporarily flip househead and recalculate
+  var originalHousehead = S.isHousehead;
+  S.isHousehead = !S.isHousehead;
+  var altFt = calcFinalTax(annual);
+  var altWh = calcWithheld(annual);
+  var altRefund = altWh.annual - altFt.finalTax;
+  S.isHousehead = originalHousehead; // restore
+
+  var diff = Math.round(Math.abs(currentRefund - altRefund) / 10000);
+
+  if (diff > 0) {
+    var html = '<div class="househead-impact">' +
+      '<div class="househead-impact-title">세대주 변경 시 영향</div>' +
+      '<div class="househead-impact-items">영향받는 항목: ' + affectedItems.join(', ') + '</div>' +
+      '<div class="househead-impact-diff">세대주를 변경하면 약 ' + fmt(diff) + '만원 차이가 납니다</div>' +
+      '</div>';
+    area.innerHTML = html;
+  }
+}
+
+// ===========================
+// GOAL SETTING (목표 설정)
+// ===========================
+function toggleGoal(itemId) {
+  if (S.goals[itemId]) {
+    delete S.goals[itemId];
+  } else {
+    S.goals[itemId] = 0;
+  }
+  renderDeductions();
+}
+
+function updateGoal(itemId, value) {
+  S.goals[itemId] = Number(value) || 0;
+  updateGoalPreview(itemId);
+}
+
+function updateGoalPreview(itemId) {
+  var preview = document.getElementById('goal-preview-' + itemId);
+  if (!preview) return;
+  var goalVal = S.goals[itemId] || 0;
+  if (goalVal <= 0) { preview.textContent = ''; return; }
+
+  // Calculate extra saving if goal is reached
+  var item = ALL_DEDUCTION_ITEMS.find(function(i) { return i.id === itemId; });
+  if (!item) return;
+
+  // Temporarily set the goal value
+  var origValues = S.deductions[itemId] ? JSON.parse(JSON.stringify(S.deductions[itemId])) : null;
+  if (!S.deductions[itemId]) S.deductions[itemId] = { on: true, values: {} };
+  else S.deductions[itemId].on = true;
+
+  // Set goal value based on item type
+  if (item.type === 'input' && item.inputKey) {
+    S.deductions[itemId].values[item.inputKey] = goalVal;
+  } else if (item.id === 'pension') {
+    S.deductions[itemId].values['pension_saving'] = Math.min(goalVal, 600);
+    S.deductions[itemId].values['irp'] = Math.max(goalVal - 600, 0);
+  }
+
+  var goalSaving = calcItemSaving(item);
+
+  // Restore
+  if (origValues) S.deductions[itemId] = origValues;
+  else delete S.deductions[itemId];
+
+  if (goalSaving > 0) {
+    preview.textContent = '목표 달성 시 예상 환급세액: +' + fmtMan(goalSaving) + '만원';
+  } else {
+    preview.textContent = '';
+  }
+}
+
+function renderGoalComparison() {
+  var section = document.getElementById('goalComparison');
+  if (!section) return;
+  var hasGoals = Object.keys(S.goals).length > 0 && Object.keys(S.goals).some(function(k) { return S.goals[k] > 0; });
+  if (!hasGoals || S.salary <= 0) { section.style.display = 'none'; return; }
+
+  var annual = S.salary * 10000;
+  var currentWh = calcWithheld(annual);
+  var currentFt = calcFinalTax(annual);
+  var currentRefund = Math.round((currentWh.annual - currentFt.finalTax) / 10000);
+
+  // Save current deductions, apply goals, recalculate
+  var origDed = JSON.parse(JSON.stringify(S.deductions));
+  Object.keys(S.goals).forEach(function(itemId) {
+    var goalVal = S.goals[itemId];
+    if (goalVal <= 0) return;
+    var item = ALL_DEDUCTION_ITEMS.find(function(i) { return i.id === itemId; });
+    if (!item) return;
+    if (!S.deductions[itemId]) S.deductions[itemId] = { on: true, values: {} };
+    else S.deductions[itemId].on = true;
+    if (item.type === 'input' && item.inputKey) {
+      S.deductions[itemId].values[item.inputKey] = goalVal;
+    } else if (item.id === 'pension') {
+      S.deductions[itemId].values['pension_saving'] = Math.min(goalVal, 600);
+      S.deductions[itemId].values['irp'] = Math.max(goalVal - 600, 0);
+    }
+  });
+  var goalFt = calcFinalTax(annual);
+  var goalRefund = Math.round((currentWh.annual - goalFt.finalTax) / 10000);
+  S.deductions = origDed; // Restore
+
+  section.style.display = 'flex';
+  document.getElementById('goalCurrentRefund').textContent = (currentRefund >= 0 ? '+' : '') + fmt(currentRefund) + '만원';
+  document.getElementById('goalTargetRefund').textContent = (goalRefund >= 0 ? '+' : '') + fmt(goalRefund) + '만원';
+}
+
+// ===========================
+// WORK PERIOD PRORATION ITEMS
+// ===========================
+// 근로제공기간 기준 공제 항목 vs 전액 적용 항목
+var PRORATION_ITEMS = ['card', 'housing', 'loan', 'jeonse_loan', 'insurance'];
+var FULL_PERIOD_ITEMS = ['dependents', 'dep_senior', 'dep_disabled', 'dep_single', 'dep_woman', 'medical', 'education', 'donation'];
+
+function isProrationItem(itemId) {
+  return PRORATION_ITEMS.indexOf(itemId) >= 0;
+}
+
+function getProrateRatio() {
+  if (!S.isMidCareer) return 1;
+  return S.workMonths / 12;
+}
+
+// ===========================
 // MARKETING TOGGLE
 // ===========================
 var marketingOptIn = false;
@@ -3865,6 +4357,9 @@ function saveToLocalStorage() {
       depSeniorCount: S.depSeniorCount, depOtherCount: S.depOtherCount,
       spouseSalary: S.spouseSalary, car: S.car,
       isMidCareer: S.isMidCareer, workStartDate: S.workStartDate, workEndDate: S.workEndDate, workMonths: S.workMonths,
+      hasMultiWorkplace: S.hasMultiWorkplace, workplaces: S.workplaces,
+      hasPrevWithholdingReceipt: S.hasPrevWithholdingReceipt, prevWithheld: S.prevWithheld,
+      goals: S.goals,
       deductions: S.deductions, marketingOptIn: marketingOptIn
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -3900,6 +4395,11 @@ function loadFromLocalStorage() {
     S.workStartDate = data.workStartDate || '';
     S.workEndDate = data.workEndDate || '';
     S.workMonths = data.workMonths || 12;
+    S.hasMultiWorkplace = !!data.hasMultiWorkplace;
+    S.workplaces = data.workplaces || [];
+    S.hasPrevWithholdingReceipt = !!data.hasPrevWithholdingReceipt;
+    S.prevWithheld = data.prevWithheld || 0;
+    S.goals = data.goals || {};
     S.deductions = data.deductions || {};
     marketingOptIn = !!data.marketingOptIn;
     return true;
@@ -3977,8 +4477,9 @@ spouseSalaryInput.addEventListener('keydown', function(e) {
 });
 
 // Settings input formatting
-['setSalary', 'setSpouseSalary'].forEach(function(id) {
-  document.getElementById(id).addEventListener('input', function() {
+['setSalary', 'setSpouseSalary', 'setPrevWithheld'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('input', function() {
     var v = this.value.replace(/[^0-9]/g, '');
     this.value = v ? Number(v).toLocaleString() : '';
   });
