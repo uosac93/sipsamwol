@@ -1333,7 +1333,7 @@ var ALL_DEDUCTION_ITEMS = [
     priority: 2, profileFilter: function() { return true; } },
 
   // === 세액공제 ===
-  { id: 'medical', name: '의료비', cat: 'tax_credit', desc: '총급여 3% 초과분 (15~30%)', condition: '', type: 'medical_detail',
+  { id: 'medical', name: '의료비', cat: 'tax_credit', desc: '총급여 3% 초과분 (15~20%)', condition: '', type: 'medical_detail',
     syncable: true, priority: 7, profileFilter: function() { return true; } },
   { id: 'pension', name: '연금저축/IRP', cat: 'tax_credit', desc: '합산 900만원 한도', condition: '', type: 'multi_input',
     inputs: [
@@ -1349,7 +1349,7 @@ var ALL_DEDUCTION_ITEMS = [
     syncable: true, priority: 6, profileFilter: function() { return true; } },
   { id: 'education', name: '교육비', cat: 'tax_credit', desc: '15%', condition: '', type: 'education_detail',
     priority: 7, profileFilter: function() { return true; } },
-  { id: 'donation', name: '기부금 (법정/지정)', cat: 'tax_credit', desc: '1,000만 이하 15%, 초과 30%', condition: '', type: 'multi_input',
+  { id: 'donation', name: '기부금 (법정/지정)', cat: 'tax_credit', desc: '1,000만 이하 15%, 초과 30%, 3,000만 초과 35%', condition: '', type: 'multi_input',
     inputs: [
       { key: 'legal', label: '법정기부금', placeholder: '0', unit: '만원' },
       { key: 'non_religious', label: '지정기부금 (비종교)', placeholder: '0', unit: '만원' },
@@ -1359,7 +1359,7 @@ var ALL_DEDUCTION_ITEMS = [
   { id: 'political', name: '정치자금 기부금', cat: 'tax_credit', desc: '10만원까지 전액 환급', condition: '정당/후원회 기부금', type: 'input', inputLabel: '기부금액', inputKey: 'amount', unit: '만원',
     linkUrl: 'https://www.give.go.kr', linkText: '정치후원금센터 바로가기',
     priority: 8, profileFilter: function() { return true; } },
-  { id: 'hometown', name: '고향사랑 기부금', cat: 'tax_credit', desc: '10만원까지 100%, 초과 16.5%, 500만원 한도', condition: '주민등록 거주지 외 지자체', type: 'input', inputLabel: '기부금액', inputKey: 'amount', unit: '만원',
+  { id: 'hometown', name: '고향사랑 기부금', cat: 'tax_credit', desc: '10만원까지 100%, 초과 16.5%, 2,000만원 한도 (2025 개정)', condition: '주민등록 거주지 외 지자체', type: 'input', inputLabel: '기부금액', inputKey: 'amount', unit: '만원',
     linkUrl: 'https://www.ilovegohyang.go.kr', linkText: '고향사랑e음에서 기부하기',
     priority: 8, profileFilter: function() { return true; } },
   { id: 'rent', name: '월세 세액공제', cat: 'tax_credit', desc: '15~17%, 연 1,000만원 한도 (월 납입액 입력)', condition: '총급여 8,000만원 이하, 무주택 세대주', type: 'input', inputLabel: '월세 (월)', inputKey: 'amount', unit: '만원',
@@ -1648,7 +1648,7 @@ function calcFinalTax(annualSalary) {
   var housingDed = 0;
   if (dOn('housing') && totalPay <= 70000000 && S.housingCount === 0 && S.isHousehead) {
     var hAmt = dVal('housing', 'amount') * 10000;
-    housingDed = Math.min(Math.min(hAmt, 7500000) * 0.40, 3000000); // 2024 개정: 300만원 한도
+    housingDed = Math.min(hAmt * 0.40, 3000000); // 납입액의 40%, 2024 개정: 연 300만원 한도
   }
 
   // 주택담보대출 (1주택 + 주담대 보유 시에만 적용)
@@ -1899,7 +1899,7 @@ function calcItemSaving(item) {
     case 'housing': {
       if (!dOn('housing') || totalPay>70000000 || S.housingCount!==0 || !S.isHousehead) return 0;
       var ha = dVal('housing','amount')*10000;
-      return Math.round(Math.min(Math.min(ha,7500000)*0.40,3000000)*mRateLocal);
+      return Math.round(Math.min(ha*0.40,3000000)*mRateLocal);
     }
     case 'loan': {
       if (!dOn('loan') || S.housingCount!==1 || !S.hasHomeLoan) return 0;
@@ -2686,7 +2686,7 @@ function renderItemInput() {
     bodyHTML += '<div id="itemInputFields" style="display:none;"><div class="multi-input-group">' +
       '<div class="multi-input-item"><label>일반 의료비</label><div class="multi-input-row"><input class="item-input-field" type="text" inputmode="numeric" placeholder="0" data-item="medical" data-key="general"><span class="multi-input-unit">만원</span></div><div class="item-input-note">15% 세액공제, 700만원 한도</div></div>' +
       '<div class="multi-input-item"><label>본인/65세이상/장애인 의료비</label><div class="multi-input-row"><input class="item-input-field" type="text" inputmode="numeric" placeholder="0" data-item="medical" data-key="self_senior_disabled"><span class="multi-input-unit">만원</span></div><div class="item-input-note">15% 세액공제, 한도 없음</div></div>' +
-      '<div class="multi-input-item"><label>난임시술비</label><div class="multi-input-row"><input class="item-input-field" type="text" inputmode="numeric" placeholder="0" data-item="medical" data-key="nanim"><span class="multi-input-unit">만원</span></div><div class="item-input-note">30% 세액공제, 한도 없음</div></div>' +
+      '<div class="multi-input-item"><label>난임시술비</label><div class="multi-input-row"><input class="item-input-field" type="text" inputmode="numeric" placeholder="0" data-item="medical" data-key="nanim"><span class="multi-input-unit">만원</span></div><div class="item-input-note">20% 세액공제, 한도 없음</div></div>' +
       '<div class="multi-input-item"><label>미숙아/선천성이상아 의료비</label><div class="multi-input-row"><input class="item-input-field" type="text" inputmode="numeric" placeholder="0" data-item="medical" data-key="premature"><span class="multi-input-unit">만원</span></div><div class="item-input-note">20% 세액공제, 한도 없음</div></div>' +
       '<div class="multi-input-item"><label>안경/콘택트렌즈</label><div class="multi-input-row"><input class="item-input-field" type="text" inputmode="numeric" placeholder="0" data-item="medical" data-key="glasses"><span class="multi-input-unit">만원</span></div><div class="item-input-note">1인당 50만원 한도</div></div>' +
       '<div class="multi-input-item"><label>산후조리원</label><div class="multi-input-row"><input class="item-input-field" type="text" inputmode="numeric" placeholder="0" data-item="medical" data-key="postpartum"><span class="multi-input-unit">만원</span></div><div class="item-input-note">총급여 7천만 이하, 1회 200만원 한도</div></div>' +
@@ -3196,7 +3196,7 @@ function renderDeductions() {
       } else if (item.type === 'medical_detail') {
         ['general','self_senior_disabled','nanim','premature','glasses','postpartum'].forEach(function(key) {
           var labels = {general:'일반 의료비',self_senior_disabled:'본인/65세이상/장애인',nanim:'난임시술비',premature:'미숙아/선천성이상아',glasses:'안경/콘택트렌즈',postpartum:'산후조리원'};
-          var notes = {general:'15%, 700만원 한도',self_senior_disabled:'15%, 한도 없음',nanim:'30%, 한도 없음',premature:'20%, 한도 없음',glasses:'1인당 50만원 한도',postpartum:'총급여 7천만 이하, 200만원'};
+          var notes = {general:'15%, 700만원 한도',self_senior_disabled:'15%, 한도 없음',nanim:'20%, 한도 없음',premature:'20%, 한도 없음',glasses:'1인당 50만원 한도',postpartum:'총급여 7천만 이하, 200만원'};
           var cv = dOn('medical') ? (dVal('medical', key) || '') : '';
           inputsHTML += '<div class="input-row"><label>' + labels[key] + '</label>' +
             '<input class="input-field" type="text" inputmode="numeric" placeholder="0" data-item="medical" data-key="' + key + '" value="' + (cv ? Number(cv).toLocaleString() : '') + '">' +
