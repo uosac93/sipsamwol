@@ -366,7 +366,7 @@ input[type="text"], input[type="number"], input[type="date"], select, textarea {
 }
 .bs-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
 .bs-close {
-  width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
   border: none; background: var(--card); border-radius: 50%; cursor: pointer;
   color: var(--text2); transition: background 0.15s;
 }
@@ -1150,10 +1150,10 @@ var dedMoreExpanded = false;
 // ===========================
 var ALL_DEDUCTION_ITEMS = [
   { id: 'social_insurance', name: '4대보험료', cat: 'special_income', desc: '국민연금/건강보험/고용보험 자동 공제', condition: '급여에서 자동 차감, 별도 입력 불필요', type: 'auto', priority: 10, profileFilter: function() { return true; } },
-  { id: 'meal', name: '식대', cat: 'nontax', desc: '월 20만원 비과세', condition: '대부분 근로자 해당', type: 'toggle', priority: 9, profileFilter: function() { return true; } },
-  { id: 'childcare', name: '육아보육수당', cat: 'nontax', desc: '만 6세 이하 자녀 1인당 월 20만원 비과세', condition: '', type: 'auto_count', priority: 4,
+  { id: 'meal', name: '식대', cat: 'nontax', desc: '월 20만원 비과세 (변경 불가)', condition: '대부분 근로자 해당', type: 'toggle', priority: 9, profileFilter: function() { return true; } },
+  { id: 'childcare', name: '보육수당', cat: 'nontax', desc: '만 6세 이하 자녀, 인당 월 20만원 (2024년 인상)', condition: '', type: 'auto_count', priority: 4,
     profileFilter: function() { return S.hasChildren && S.childAges.some(function(a){return a<=6;}); } },
-  { id: 'carallow', name: '자가운전보조금', cat: 'nontax', desc: '본인 명의 또는 배우자 공동명의 차량, 월 20만원 비과세', condition: '배우자와 공동명의만 인정됩니다', type: 'toggle', priority: 3,
+  { id: 'carallow', name: '자가운전보조금', cat: 'nontax', desc: '본인 명의 차량 필요 (배우자 공동명의 포함)', condition: '월 20만원 비과세', type: 'toggle', priority: 3,
     profileFilter: function() { return S.car === 'own' || S.car === 'joint_spouse'; } },
   { id: 'birth_support', name: '출산지원금', cat: 'nontax', desc: '전액 비과세 (한도 없음)', condition: '출생 후 2년 이내 사용자 지급분', type: 'input', inputLabel: '수령액', inputKey: 'amount', unit: '만원', priority: 2,
     profileFilter: function() { return S.hasChildren && S.childAges.some(function(a){return a<=2;}); } },
