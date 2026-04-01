@@ -1482,7 +1482,7 @@ function calcFinalTax(annualSalary) {
   if (dOn('dep_disabled')) personal += (dVal('dep_disabled', 'count') || 0) * 2000000;
   // 한부모공제와 부녀자공제는 중복 적용 불가 (한부모 우선, 소득세법 §51의3)
   if (dOn('dep_single')) personal += 1000000;
-  else if (dOn('dep_woman')) personal += 500000;
+  else if (dOn('dep_woman') && earnedIncome <= 30000000) personal += 500000;
 
   var socialIns = calcSocialInsForTax(totalPay);
 
@@ -1517,7 +1517,7 @@ function calcFinalTax(annualSalary) {
       basicDed = Math.min(basicDed, cardLimit);
 
       // 추가한도: 전통시장 + 대중교통 합산 300만원
-      var addDed = marketOver * 0.40 + transportOver * 0.80; // 대중교통 80% (조특법 §126의2, 2025년 한시 유지)
+      var addDed = marketOver * 0.40 + transportOver * 0.40; // 대중교통 40% (2025 귀속, 80% 한시인상 종료)
       addDed = Math.min(addDed, 3000000);
 
       cardDeduction = basicDed + addDed;
@@ -1531,9 +1531,9 @@ function calcFinalTax(annualSalary) {
     housingDed = Math.min(Math.min(hAmt, 6000000) * 0.40, 2400000);
   }
 
-  // 주택담보대출
+  // 주택담보대출 (1주택 + 주담대 보유 시에만 적용)
   var loanDed = 0;
-  if (dOn('loan')) {
+  if (dOn('loan') && S.housingCount === 1 && S.hasHomeLoan) {
     var lAmt = dVal('loan', 'amount') * 10000;
     loanDed = Math.min(lAmt, getLoanLimit());
   }
@@ -1711,7 +1711,7 @@ function calcItemSaving(item) {
       var bd = (cc-uc)*0.15+(dc-ud)*0.30+(cr-ucr)*0.30;
       var cl = totalPay<=70000000?3000000:(totalPay<=120000000?2500000:2000000);
       bd = Math.min(bd, cl);
-      var ad = (mk-um)*0.40+(tp-ut)*0.80; ad = Math.min(ad, 3000000);
+      var ad = (mk-um)*0.40+(tp-ut)*0.40; ad = Math.min(ad, 3000000);
       return Math.round((bd+ad)*mRateLocal);
     }
     case 'housing': {
@@ -1733,7 +1733,7 @@ function calcItemSaving(item) {
     case 'dep_senior': return dOn('dep_senior') ? Math.round((dVal('dep_senior','count')||0)*1000000*mRateLocal) : 0;
     case 'dep_disabled': return dOn('dep_disabled') ? Math.round((dVal('dep_disabled','count')||0)*2000000*mRateLocal) : 0;
     case 'dep_single': return dOn('dep_single') ? Math.round(1000000*mRateLocal) : 0;
-    case 'dep_woman': return (dOn('dep_woman') && !dOn('dep_single')) ? Math.round(500000*mRateLocal) : 0; // 한부모 중복배제
+    case 'dep_woman': return (dOn('dep_woman') && !dOn('dep_single') && earnedIncome <= 30000000) ? Math.round(500000*mRateLocal) : 0; // 한부모 중복배제, 종합소득금액 3천만 이하
     // === 세액공제: 공제액 × 1.1 (지방소득세 포함) ===
     case 'medical': {
       if (!dOn('medical')) return 0;
@@ -1797,7 +1797,8 @@ function calcItemSaving(item) {
       if (!dOn('political')) return 0;
       var pa = dVal('political','amount')*10000;
       if (pa<=100000) return Math.round(pa*(100/110)*1.1);
-      return Math.round((100000*(100/110)+(pa-100000)*0.15)*1.1);
+      if (pa<=30000000) return Math.round((100000*(100/110)+(pa-100000)*0.15)*1.1);
+      return Math.round((100000*(100/110)+(30000000-100000)*0.15+(pa-30000000)*0.25)*1.1);
     }
     case 'marriage_credit': return dOn('marriage_credit') ? Math.round(500000*1.1) : 0;
     default: return 0;
@@ -2225,6 +2226,7 @@ function finishProfile() {
     S.deductions['dependents'] = { on: true, values: { count: S.depOtherCount } };
   }
 
+  saveToLocalStorage();
   renderMatchedItems();
   goScreen('screen-matched');
 }
@@ -2550,6 +2552,7 @@ function goToMain() {
   if (!S.deductions['social_insurance']) S.deductions['social_insurance'] = { on: true, values: {} };
 
   homeRenderedOnce = false;
+  saveToLocalStorage();
   document.querySelectorAll('.screen').forEach(function(el) { el.classList.remove('active'); });
   document.getElementById('mainTabBar').style.display = 'flex';
   switchTab('tab-home');
@@ -2559,6 +2562,7 @@ function goToMainWithAllItems() {
   if (!S.deductions['meal']) S.deductions['meal'] = { on: true, values: {} };
   if (!S.deductions['social_insurance']) S.deductions['social_insurance'] = { on: true, values: {} };
   homeRenderedOnce = false;
+  saveToLocalStorage();
   document.querySelectorAll('.screen').forEach(function(el) { el.classList.remove('active'); });
   document.getElementById('mainTabBar').style.display = 'flex';
   switchTab('tab-deduction');
@@ -2580,6 +2584,15 @@ function renderHome() {
   var isRefund = refund >= 0;
   document.getElementById('refundLabel').textContent = isRefund ? '예상 환급세액' : '예상 추가납부세액';
   document.getElementById('refundSign').textContent = isRefund ? '+' : '-';
+
+  // 추가납부 시 홈 타이틀 동적 변경
+  var homeTitleEl = document.querySelector('.home-title');
+  if (homeTitleEl) {
+    homeTitleEl.innerHTML = isRefund
+      ? '올해 연말정산,<br><span class="accent">더 받을 수 있어요.</span>'
+      : '올해 연말정산,<br><span class="accent" style="color:var(--red);">추가 납부가 예상돼요.</span>';
+  }
+
   var refundEl = document.getElementById('refundValue');
   var displayEl = document.getElementById('refundDisplay');
   displayEl.className = 'refund-amount' + (isRefund ? '' : ' negative');
@@ -2707,6 +2720,7 @@ function prefillPrevYear() {
 // ===========================
 function saveDeductions() {
   homeRenderedOnce = false;
+  saveToLocalStorage();
   switchTab('tab-home');
   showToast('저장되었습니다');
 }
@@ -2873,6 +2887,16 @@ function renderDeductions() {
       }
 
       inputsHTML += '</div>';
+
+      // 카드 공제 항목: "내게 맞는 카드 보기" 버튼
+      if (item.id === 'card') {
+        inputsHTML += '<div style="margin-top:12px;"><button class="product-card-cta" onclick="showToast(\'서비스 준비 중입니다\'); event.stopPropagation();" style="width:100%; text-align:center;">내게 맞는 카드 보기</button></div>';
+      }
+      // 대출 공제 항목: "대출 금리 비교하기" 버튼
+      if (item.id === 'loan' || item.id === 'jeonse_loan') {
+        inputsHTML += '<div style="margin-top:12px;"><button class="product-card-cta" onclick="showToast(\'서비스 준비 중입니다\'); event.stopPropagation();" style="width:100%; text-align:center;">대출 금리 비교하기</button></div>';
+      }
+
       div.innerHTML = topHTML + inputsHTML;
       body.appendChild(div);
     });
@@ -3132,8 +3156,32 @@ function saveSettings() {
   var spSv = document.getElementById('setSpouseSalary').value.replace(/[^0-9]/g, '');
   S.spouseSalary = spSv ? Number(spSv) : 0;
   S.car = document.getElementById('setCar').value;
+
+  // 프로필 재설정 시 공제 항목 필터 갱신
+  refreshDeductionFilters();
+
   homeRenderedOnce = false;
+  saveToLocalStorage();
   switchTab('tab-home');
+}
+
+function refreshDeductionFilters() {
+  var matchedIds = {};
+  getMatchedItems().forEach(function(item) { matchedIds[item.id] = true; });
+  Object.keys(S.deductions).forEach(function(id) {
+    if (!matchedIds[id] && S.deductions[id] && S.deductions[id].on) {
+      S.deductions[id].on = false;
+    }
+  });
+  if (S.hasChildren && S.childAges.some(function(a){return a<=6;})) {
+    S.deductions['childcare'] = { on: true, values: { childCount: S.childAges.filter(function(a){return a<=6;}).length } };
+  }
+  if (S.depType === 'parents' && S.depParentCount > 0) {
+    S.deductions['dependents'] = { on: true, values: { count: S.depParentCount } };
+    if (S.depSeniorCount > 0) S.deductions['dep_senior'] = { on: true, values: { count: S.depSeniorCount } };
+  } else if (S.depType === 'other' && S.depOtherCount > 0) {
+    S.deductions['dependents'] = { on: true, values: { count: S.depOtherCount } };
+  }
 }
 
 // 차량 소유 select 변경 시 안내 표시
@@ -3279,6 +3327,7 @@ function selectAuth(provider) {
     S.deductions['pension'] = { on: true, values: { pension_saving: 400, irp: 0 } };
 
     closeAuthSheet();
+    saveToLocalStorage();
     renderDeductions();
     showToast('홈택스 자료를 불러왔습니다');
   }, 1500);
@@ -3378,6 +3427,61 @@ function toggleMarketing() {
   var toggle = document.getElementById('marketingToggle');
   toggle.classList.toggle('on', marketingOptIn);
   showToast(marketingOptIn ? '맞춤 절세 알림을 받습니다' : '맞춤 절세 알림을 해제했습니다');
+}
+
+
+// ===========================
+// LOCAL STORAGE
+// ===========================
+var STORAGE_KEY = 'sipsamwol_data';
+
+function saveToLocalStorage() {
+  try {
+    var data = {
+      salary: S.salary, rate: S.rate, married: S.married,
+      hasChildren: S.hasChildren, childCount: S.childCount,
+      childAges: S.childAges, childBirthYears: S.childBirthYears || [],
+      housing: S.housing, housingCount: S.housingCount,
+      isHousehead: S.isHousehead, livingType: S.livingType,
+      hasHomeLoan: S.hasHomeLoan, hasJeonseLoan: S.hasJeonseLoan,
+      depType: S.depType, depParentCount: S.depParentCount,
+      depSeniorCount: S.depSeniorCount, depOtherCount: S.depOtherCount,
+      spouseSalary: S.spouseSalary, car: S.car,
+      deductions: S.deductions, marketingOptIn: marketingOptIn
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function loadFromLocalStorage() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    var data = JSON.parse(raw);
+    if (!data || !data.salary || data.salary <= 0) return false;
+    S.salary = data.salary || 0;
+    S.rate = data.rate || 100;
+    S.married = !!data.married;
+    S.hasChildren = !!data.hasChildren;
+    S.childCount = data.childCount || 0;
+    S.childAges = data.childAges || [];
+    S.childBirthYears = data.childBirthYears || [];
+    S.housing = data.housing || '';
+    S.housingCount = (data.housingCount !== undefined) ? data.housingCount : -1;
+    S.isHousehead = !!data.isHousehead;
+    S.livingType = data.livingType || '';
+    S.hasHomeLoan = !!data.hasHomeLoan;
+    S.hasJeonseLoan = !!data.hasJeonseLoan;
+    S.depType = data.depType || 'none';
+    S.depParentCount = data.depParentCount || 0;
+    S.depSeniorCount = data.depSeniorCount || 0;
+    S.depOtherCount = data.depOtherCount || 0;
+    S.spouseSalary = data.spouseSalary || 0;
+    S.car = data.car || 'none';
+    S.deductions = data.deductions || {};
+    marketingOptIn = !!data.marketingOptIn;
+    return true;
+  } catch(e) { return false; }
 }
 
 // ===========================
@@ -3511,6 +3615,19 @@ document.addEventListener('touchend', function(e) {
     setTimeout(function() { card.style.transform = ''; }, 100);
   }
 }, { passive: true });
+
+
+// localStorage에서 복원 후 홈 화면으로 바로 이동
+(function() {
+  if (loadFromLocalStorage()) {
+    var toggle = document.getElementById('marketingToggle');
+    if (toggle) toggle.classList.toggle('on', marketingOptIn);
+    homeRenderedOnce = false;
+    document.querySelectorAll('.screen').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('mainTabBar').style.display = 'flex';
+    switchTab('tab-home');
+  }
+})();
 </script>
 </body>
 </html>
