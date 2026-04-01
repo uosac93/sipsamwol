@@ -1404,11 +1404,13 @@ function getOptionalItems(items) {
 // ===========================
 
 function earnedIncomeDeduction(totalPay) {
-  if (totalPay <= 5000000) return totalPay * 0.7;
-  if (totalPay <= 15000000) return 3500000 + (totalPay - 5000000) * 0.4;
-  if (totalPay <= 45000000) return 7500000 + (totalPay - 15000000) * 0.15;
-  if (totalPay <= 100000000) return 12000000 + (totalPay - 45000000) * 0.05;
-  return 14750000 + (totalPay - 100000000) * 0.02;
+  var ded;
+  if (totalPay <= 5000000) ded = totalPay * 0.7;
+  else if (totalPay <= 15000000) ded = 3500000 + (totalPay - 5000000) * 0.4;
+  else if (totalPay <= 45000000) ded = 7500000 + (totalPay - 15000000) * 0.15;
+  else if (totalPay <= 100000000) ded = 12000000 + (totalPay - 45000000) * 0.05;
+  else ded = 14750000 + (totalPay - 100000000) * 0.02;
+  return Math.min(ded, 20000000); // 공제한도 2,000만원
 }
 
 function incomeTax(taxable) {
@@ -1442,8 +1444,8 @@ function earnedIncomeTaxCredit(computed, totalPay) {
   var limit;
   if (totalPay <= 33000000) limit = 740000;
   else if (totalPay <= 70000000) limit = Math.max(740000 - (totalPay - 33000000) * 0.008, 660000);
-  else if (totalPay <= 120000000) limit = Math.max(660000 - (totalPay - 70000000) * 0.005, 500000);
-  else limit = Math.max(500000 - (totalPay - 120000000) * 0.005, 200000);
+  else if (totalPay <= 120000000) limit = Math.max(660000 - (totalPay - 70000000) * 0.5, 500000);
+  else limit = Math.max(500000 - (totalPay - 120000000) * 0.5, 200000);
   return Math.min(credit, limit);
 }
 
@@ -1459,14 +1461,15 @@ function dOn(itemId) {
 }
 
 function calcInsurance(monthlyPay) {
+  var wm = S.isMidCareer ? S.workMonths : 12;
   var pensionBase = Math.max(Math.min(monthlyPay, 5900000), 370000);
   var pension = Math.round(pensionBase * 0.045);
   var health = Math.round(monthlyPay * 0.03545);
   var longterm = Math.round(health * 0.1295);
   var employ = Math.round(monthlyPay * 0.009);
   return {
-    pension: pension * 12, health: health * 12, longterm: longterm * 12,
-    employ: employ * 12, total: (pension + health + longterm + employ) * 12
+    pension: pension * wm, health: health * wm, longterm: longterm * wm,
+    employ: employ * wm, total: (pension + health + longterm + employ) * wm
   };
 }
 
@@ -1519,12 +1522,13 @@ function calcNonTaxableForFinal() {
 }
 
 function calcSocialInsForTax(totalPay) {
-  var monthlyPay = totalPay / 12;
+  var wm = S.isMidCareer ? S.workMonths : 12;
+  var monthlyPay = totalPay / wm;
   var pensionBase = Math.max(Math.min(monthlyPay, 5900000), 370000);
-  var pension = Math.round(pensionBase * 0.045) * 12;
-  var health = Math.round(monthlyPay * 0.03545) * 12;
-  var longterm = Math.round(Math.round(monthlyPay * 0.03545) * 0.1295) * 12;
-  var employ = Math.round(monthlyPay * 0.009) * 12;
+  var pension = Math.round(pensionBase * 0.045) * wm;
+  var health = Math.round(monthlyPay * 0.03545) * wm;
+  var longterm = Math.round(Math.round(monthlyPay * 0.03545) * 0.1295) * wm;
+  var employ = Math.round(monthlyPay * 0.009) * wm;
   return pension + health + longterm + employ;
 }
 
@@ -1708,9 +1712,9 @@ function calcFinalTax(annualSalary) {
     var medThreshold = totalPay * 0.03;
     var medExcess = Math.max(medTotal - medThreshold, 0);
     if (medExcess > 0) {
-      // 한도 없는 항목 우선 배분: 난임(30%), 미숙아(20%), 본인/65세이상/장애인(15%)
+      // 한도 없는 항목 우선 배분: 난임(20%), 미숙아(20%), 본인/65세이상/장애인(15%)
       var nanimAmt = Math.min(medNanim, medExcess);
-      var nanimCredit = nanimAmt * 0.30;
+      var nanimCredit = nanimAmt * 0.20;
       var remainExcess = Math.max(medExcess - nanimAmt, 0);
       var prematureAmt = Math.min(medPremature, remainExcess);
       var prematureCredit = prematureAmt * 0.20;
@@ -1771,9 +1775,17 @@ function calcFinalTax(annualSalary) {
     donLegal = Math.min(donLegal, legalLimit);
     donReligious = Math.min(donReligious, religiousLimit);
     donNonReligious = Math.min(donNonReligious, nonReligiousLimit);
-    var donTotal = donLegal + donReligious + donNonReligious;
-    if (donTotal <= 10000000) donCredit = donTotal * 0.15;
-    else donCredit = 1500000 + (donTotal - 10000000) * 0.30;
+    // 법정+지정비종교: 1천만 이하 15%, 1천만~3천만 30%, 3천만 초과 35% (2024 개정)
+    var donHighRate = donLegal + donNonReligious;
+    var donHighCredit = 0;
+    if (donHighRate <= 10000000) donHighCredit = donHighRate * 0.15;
+    else if (donHighRate <= 30000000) donHighCredit = 1500000 + (donHighRate - 10000000) * 0.30;
+    else donHighCredit = 1500000 + 6000000 + (donHighRate - 30000000) * 0.35;
+    // 종교: 1천만 이하 15%, 1천만 초과 30% (35% 없음)
+    var donRelCredit = 0;
+    if (donReligious <= 10000000) donRelCredit = donReligious * 0.15;
+    else donRelCredit = 1500000 + (donReligious - 10000000) * 0.30;
+    donCredit = donHighCredit + donRelCredit;
   }
 
   // 보장성보험료
@@ -1807,7 +1819,7 @@ function calcFinalTax(annualSalary) {
   // 고향사랑 기부금
   var hometownCredit = 0;
   if (dOn('hometown')) {
-    var htAmt = Math.min(dVal('hometown', 'amount') * 10000, 5000000); // 500만원 한도
+    var htAmt = Math.min(dVal('hometown', 'amount') * 10000, 20000000); // 2,000만원 한도 (2025 개정)
     if (htAmt <= 100000) hometownCredit = htAmt; // 10만원 이하 100%
     else hometownCredit = 100000 + (htAmt - 100000) * 0.165; // 초과 16.5%
   }
@@ -1817,7 +1829,9 @@ function calcFinalTax(annualSalary) {
   if (dOn('sme_tax_reduction')) {
     var smeType = (S.deductions['sme_tax_reduction'] && S.deductions['sme_tax_reduction'].values) ? S.deductions['sme_tax_reduction'].values['type'] : 'youth';
     var smeRate = (smeType === 'youth') ? 0.90 : 0.70;
-    smeReduction = Math.min(computed * smeRate, 2000000); // 연 200만원 한도
+    // 월할 적용: 중도퇴사 시 감면기간 중 근무월수 비례
+    var smeMonths = S.isMidCareer ? S.workMonths : 12;
+    smeReduction = Math.min(computed * smeRate * (smeMonths / 12), 2000000); // 연 200만원 한도, 월할 적용
   }
 
   // 표준세액공제 vs 특별세액공제
@@ -1915,7 +1929,7 @@ function calcItemSaving(item) {
       var medExc = Math.max(medTot - totalPay*0.03, 0);
       if (medExc <= 0) return 0;
       var nanAmt = Math.min(medNan, medExc);
-      var nanCr = nanAmt * 0.30;
+      var nanCr = nanAmt * 0.20;
       var remExc = Math.max(medExc - nanAmt, 0);
       var premAmt = Math.min(medPrem, remExc);
       var premCr = premAmt * 0.20;
@@ -1955,9 +1969,14 @@ function calcItemSaving(item) {
       var dl = Math.min(dVal('donation','legal')*10000, earnedIncome);
       var dr = Math.min(dVal('donation','religious')*10000, earnedIncome*0.10);
       var dn = Math.min(dVal('donation','non_religious')*10000, earnedIncome*0.30);
-      var dt = dl+dr+dn;
-      if (dt<=10000000) return Math.round(dt*0.15*1.1);
-      return Math.round((1500000+(dt-10000000)*0.30)*1.1);
+      // 법정+지정비종교: 1천만 이하 15%, 1천만~3천만 30%, 3천만 초과 35%
+      var dhR = dl+dn, dhC = 0;
+      if (dhR<=10000000) dhC=dhR*0.15;
+      else if (dhR<=30000000) dhC=1500000+(dhR-10000000)*0.30;
+      else dhC=1500000+6000000+(dhR-30000000)*0.35;
+      // 종교: 1천만 이하 15%, 초과 30%
+      var drC = dr<=10000000 ? dr*0.15 : 1500000+(dr-10000000)*0.30;
+      return Math.round((dhC+drC)*1.1);
     }
     case 'insurance': {
       if (!dOn('insurance')) return 0;
@@ -1982,7 +2001,7 @@ function calcItemSaving(item) {
     case 'marriage_credit': return dOn('marriage_credit') ? Math.round(500000*1.1) : 0;
     case 'hometown': {
       if (!dOn('hometown')) return 0;
-      var htA = Math.min(dVal('hometown','amount')*10000, 5000000);
+      var htA = Math.min(dVal('hometown','amount')*10000, 20000000);
       var htCr = 0;
       if (htA <= 100000) htCr = htA;
       else htCr = 100000 + (htA - 100000) * 0.165;
@@ -2911,7 +2930,8 @@ function renderHome() {
   // 4대보험
   var nonTax = calcNonTaxableForFinal();
   var totalPay = Math.max(annual - nonTax, 0);
-  var monthlyPay = totalPay / 12;
+  var insWm = S.isMidCareer ? S.workMonths : 12;
+  var monthlyPay = totalPay / insWm;
   var ins = calcInsurance(monthlyPay);
   document.getElementById('insTotal').textContent = fmtMan(ins.total) + '만원';
   document.getElementById('insPension').textContent = fmtMan(ins.pension) + '만원';
