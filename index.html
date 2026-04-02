@@ -37,11 +37,11 @@ body {
 
 /* === Screens === */
 .screen { display: none; min-height: 100vh; }
-.screen.active { display: flex; flex-direction: column; animation: fadeSlideUp 0.35s cubic-bezier(0.16,1,0.3,1); }
+.screen.active { display: flex; flex-direction: column; animation: fadeSlideUp 0.4s cubic-bezier(0.16,1,0.3,1); }
 
 /* === Tabs === */
 .tab-content { display: none; min-height: 100vh; padding-bottom: 100px; }
-.tab-content.active { display: block; animation: fadeSlideUp 0.35s cubic-bezier(0.16,1,0.3,1); }
+.tab-content.active { display: block; animation: fadeSlideUp 0.3s cubic-bezier(0.16,1,0.3,1); }
 
 .tab-bar {
   position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
@@ -113,6 +113,9 @@ body {
   transition: transform 0.15s, opacity 0.2s;
 }
 .primary-btn:disabled { opacity: 0.4; pointer-events: none; }
+.primary-btn.outline {
+  background: #fff; color: var(--accent); border: 2px solid var(--accent);
+}
 .primary-btn:active { transform: scale(0.97); }
 
 /* === Profile Choice Buttons === */
@@ -124,7 +127,7 @@ body {
   transition: all 0.2s; min-height: 56px;
 }
 .choice-btn:active { transform: scale(0.97); }
-.choice-btn.selected { border-color: var(--accent); background: #EFF6FF; color: var(--accent); }
+.choice-btn.selected { border-color: var(--accent); background: #EFF6FF; color: var(--accent); animation: choicePulse 0.35s cubic-bezier(0.16,1,0.3,1); }
 .choice-btn-sub { font-size: 13px; font-weight: 400; color: var(--text3); margin-top: 4px; }
 
 /* Child detail (expand under "있어요") */
@@ -188,19 +191,71 @@ body {
 }
 .section-label.must { color: var(--accent); }
 .matched-card {
-  margin: 0 24px 10px; padding: 20px; background: var(--card); border-radius: 16px;
-  cursor: pointer; transition: transform 0.15s, background 0.15s; position: relative;
+  margin: 0 0 1px; padding: 14px 0; background: none; border-radius: 0;
+  border-bottom: 1px solid var(--line); cursor: default; position: relative;
 }
-.matched-card:active { transform: scale(0.98); background: #ECEDEF; }
-.matched-card-top { display: flex; justify-content: space-between; align-items: flex-start; }
-.matched-card-name { font-size: 16px; font-weight: 700; color: var(--text); }
-.matched-card-saving { font-size: 16px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
-.matched-card-saving.conditional { color: var(--text3); font-weight: 600; }
-.matched-card-desc { font-size: 13px; color: var(--text3); margin-top: 4px; line-height: 1.4; }
+.matched-card:last-child { border-bottom: none; }
+.matched-card:active { transform: none; background: none; }
+.matched-card-top { display: flex; justify-content: space-between; align-items: center; }
+.matched-card-name { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+.matched-card-saving { font-size: 12px; font-weight: 600; color: var(--text2); letter-spacing: -0.2px; flex-shrink: 0; }
+.matched-card-saving.conditional { color: var(--text3); font-weight: 500; font-size: 13px; }
+.matched-card-desc { display: none; }
+.matched-card.selectable { cursor: pointer; transition: opacity 0.25s cubic-bezier(0.16,1,0.3,1); }
+.matched-card.selectable:active { transform: none; }
+.matched-card.selectable.just-toggled { animation: cardPop 0.3s cubic-bezier(0.16,1,0.3,1); }
+.matched-card.selectable .matched-card-top { display: flex; align-items: center; gap: 10px; }
+.matched-card-check {
+  width: 20px; height: 20px; border-radius: 5px; border: 1.5px solid var(--text4);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: all 0.2s;
+}
+.matched-card-check svg { opacity: 0; transition: opacity 0.2s; width: 12px; height: 12px; }
+.matched-card.selectable.selected .matched-card-check {
+  background: var(--accent); border-color: var(--accent);
+}
+.matched-card.selectable.selected .matched-card-check svg { opacity: 1; }
+.matched-card.selectable:not(.selected) { opacity: 0.35; }
+.matched-card.selectable:not(.selected) .matched-card-saving { color: var(--text4); }
 .matched-card-badge {
   position: absolute; top: -6px; right: 12px; font-size: 10px; font-weight: 800;
-  background: var(--accent); color: #fff; padding: 3px 8px; border-radius: 100px;
+  background: var(--text3); color: #fff; padding: 3px 8px; border-radius: 100px;
 }
+
+/* Matched screen refund card */
+.matched-refund-card {
+  margin: 20px 24px 0; padding: 28px 24px; border-radius: 16px;
+  background: linear-gradient(135deg, #f8f9ff 0%, #eef3ff 100%);
+  animation: fadeSlideUp 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.matched-refund-label { font-size: 13px; color: var(--text2); }
+.matched-refund-hero { font-size: 52px; font-weight: 800; letter-spacing: -2.5px; color: var(--text); line-height: 1; margin: 12px 0; }
+.matched-refund-hero-unit { font-size: 22px; font-weight: 600; color: var(--text3); margin-left: 4px; }
+.matched-refund-sub {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; color: var(--text2);
+}
+.matched-refund-saving { font-weight: 700; color: var(--green); }
+.matched-refund-bottom {
+  font-size: 12px; color: var(--text2); margin-top: 16px;
+  padding-top: 12px; border-top: 1px solid var(--line);
+}
+
+/* Matched categories */
+.matched-categories { margin-top: 20px; }
+.matched-cat-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 24px; cursor: pointer; transition: background 0.15s;
+}
+.matched-cat-header:active { background: var(--card); }
+.matched-cat-left { display: flex; align-items: center; gap: 6px; }
+.matched-cat-title { font-size: 14px; font-weight: 700; color: var(--text2); letter-spacing: -0.02em; }
+.matched-cat-count { font-size: 12px; font-weight: 600; color: var(--text3); }
+.matched-cat-saving { font-size: 16px; font-weight: 800; color: var(--green); letter-spacing: -0.5px; }
+.matched-cat-arrow { font-size: 12px; color: var(--text4); margin-left: 4px; transition: transform 0.2s; }
+.matched-cat-header.open .matched-cat-arrow { transform: rotate(180deg); }
+.matched-cat-body { max-height: 0; overflow: hidden; padding: 0 24px; transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1), padding 0.35s ease; }
+.matched-cat-header.open + .matched-cat-body { max-height: 800px; padding: 0 24px 8px; }
 
 .matched-actions { padding: 20px 24px 40px; }
 .matched-actions .primary-btn { margin-top: 0; }
@@ -222,7 +277,7 @@ body {
 .item-progress-dot.done { background: var(--accent); }
 .item-progress-dot.current { background: var(--accent); width: 24px; border-radius: 4px; }
 .item-question { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.35; margin-bottom: 8px; text-align: left; }
-.item-hint { font-size: 13px; color: var(--text3); margin-bottom: 32px; line-height: 1.5; }
+.item-hint { font-size: 13px; color: var(--text2); margin-bottom: 32px; line-height: 1.5; }
 .item-input-area { flex: 1; }
 .item-input-label { font-size: 14px; font-weight: 600; color: var(--text2); margin-bottom: 8px; }
 .item-input-field {
@@ -232,7 +287,21 @@ body {
 }
 .item-input-field:focus { border-color: var(--accent); }
 .item-input-field::placeholder { color: var(--text4); font-weight: 400; }
-.item-input-note { font-size: 12px; color: var(--text4); margin-top: 4px; line-height: 1.4; }
+.item-input-note { font-size: 12px; color: var(--text2); margin-top: 4px; line-height: 1.4; }
+.item-sync-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 14px; border: 1.5px solid var(--accent); border-radius: 12px;
+  background: var(--accent-light); font-size: 15px; font-weight: 600; color: var(--accent);
+  font-family: inherit; cursor: pointer; margin-bottom: 16px; transition: all 0.2s;
+}
+.item-sync-btn:active { transform: scale(0.97); background: rgba(49,130,246,0.15); }
+.item-sync-divider {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+}
+.item-sync-divider::before, .item-sync-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+.item-sync-divider span { font-size: 13px; color: var(--text3); white-space: nowrap; }
 .item-input-bar { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
 .item-bar-track { flex: 1; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
 .item-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.3s; }
@@ -367,8 +436,8 @@ body {
 .deduction-item-toggle.on svg { opacity: 1; }
 .deduction-item-info { flex: 1; min-width: 0; }
 .deduction-item-name { font-size: 15px; font-weight: 600; color: var(--text); cursor: pointer; }
-.deduction-item-desc { font-size: 12px; color: var(--text3); margin-top: 2px; line-height: 1.4; }
-.deduction-item-condition { font-size: 11px; color: var(--text4); margin-top: 3px; line-height: 1.3; }
+.deduction-item-desc { font-size: 13px; color: var(--text2); margin-top: 2px; line-height: 1.4; }
+.deduction-item-condition { font-size: 12px; color: var(--text3); margin-top: 3px; line-height: 1.3; }
 .deduction-item-saving { font-size: 15px; font-weight: 800; color: var(--green); flex-shrink: 0; letter-spacing: -0.5px; margin-left: auto; }
 
 .deduction-item-inputs { margin-top: 12px; padding-left: 34px; display: none; overflow: hidden; }
@@ -568,7 +637,47 @@ body {
 .spouse-salary-input:focus { border-color: var(--accent); }
 .spouse-salary-input::placeholder { color: var(--text4); font-weight: 400; }
 .spouse-salary-unit { font-size: 14px; color: var(--text3); flex-shrink: 0; white-space: nowrap; }
-.spouse-salary-hint { font-size: 12px; color: var(--text4); margin-top: 6px; line-height: 1.4; }
+.spouse-salary-hint { font-size: 13px; color: var(--text2); margin-top: 6px; line-height: 1.4; }
+.skip-btn {
+  width: 100%; height: 44px; border: none; border-radius: 12px; background: none;
+  font-size: 15px; font-weight: 600; color: var(--text3); font-family: inherit; cursor: pointer;
+}
+.skip-btn:active { opacity: 0.5; }
+
+/* === Workplace === */
+.workplace-detail { margin-top: 16px; animation: fadeSlideUp 0.3s ease; }
+.workplace-total-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px; background: var(--accent-light); border-radius: 10px;
+  font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 12px;
+}
+.workplace-input-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.workplace-input-row label {
+  font-size: 14px; font-weight: 600; color: var(--text2); min-width: 64px;
+}
+.workplace-input-row input {
+  flex: 1; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 10px;
+  font-size: 16px; font-weight: 600; text-align: right; outline: none;
+  font-family: inherit; color: var(--text); transition: border-color 0.2s; min-height: 44px;
+}
+.workplace-input-row input:focus { border-color: var(--accent); }
+.workplace-input-unit { font-size: 14px; color: var(--text3); }
+.workplace-add-btn {
+  width: 100%; padding: 12px; border: 2px dashed var(--line); border-radius: 10px;
+  background: none; font-size: 14px; font-weight: 600; color: var(--text3);
+  cursor: pointer; font-family: inherit; margin: 8px 0; transition: all 0.2s;
+}
+.workplace-add-btn:active { background: var(--card); }
+.workplace-remaining {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px; background: var(--card); border-radius: 10px;
+  font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 8px;
+}
+.workplace-remaining .positive { color: var(--accent); }
+.workplace-remaining .zero { color: var(--green); }
+.workplace-remaining .negative { color: var(--red); }
 
 /* === Bottom Sheet / Auth Modal === */
 .bottomsheet-overlay {
@@ -672,6 +781,22 @@ body {
 @keyframes fadeSlideLeft { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes countPop { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
 @keyframes itemPop { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+@keyframes cardPop { 0% { transform: scale(1); } 40% { transform: scale(0.96); } 100% { transform: scale(1); } }
+@keyframes choicePulse { 0% { transform: scale(1); } 40% { transform: scale(1.03); } 100% { transform: scale(1); } }
+@keyframes staggerIn { to { opacity: 1; transform: translateY(0); } }
+
+/* Staggered entrance for matched category items */
+.matched-cat-body .matched-card {
+  opacity: 0; transform: translateY(8px);
+  animation: staggerIn 0.3s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.matched-cat-body .matched-card:nth-child(1) { animation-delay: 0.05s; }
+.matched-cat-body .matched-card:nth-child(2) { animation-delay: 0.1s; }
+.matched-cat-body .matched-card:nth-child(3) { animation-delay: 0.15s; }
+.matched-cat-body .matched-card:nth-child(4) { animation-delay: 0.2s; }
+.matched-cat-body .matched-card:nth-child(5) { animation-delay: 0.25s; }
+
+#remainingAmount { transition: color 0.3s ease; }
 </style>
 </head>
 <body>
@@ -693,18 +818,74 @@ body {
 </div>
 
 <!-- ============================================ -->
-<!-- SCREEN 2: PROFILE Q1 - Marriage              -->
+<!-- SCREEN: WORKPLACE                            -->
 <!-- ============================================ -->
-<div id="screen-q1" class="screen">
+<div id="screen-workplace" class="screen">
   <div class="onboarding-screen">
     <div class="onboarding-top-bar">
       <button class="back-btn" onclick="goScreen('screen-salary')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
-      <span class="step-indicator">1/4</span>
+      <span class="step-indicator">1/6</span>
+    </div>
+    <div class="onboarding-title">올해 근무처가<br>2곳 이상인가요?</div>
+    <div class="onboarding-sub">이직이나 겸직이 있으면 알려주세요</div>
+    <div class="choice-list">
+      <button class="choice-btn" onclick="answerWorkplace(false)">아니요, 1곳이에요</button>
+      <button class="choice-btn" onclick="answerWorkplace(true)">네, 2곳 이상이에요</button>
+    </div>
+    <div class="workplace-detail" id="workplaceDetail" style="display:none;">
+      <div class="detail-label">근무처별 급여를 입력해주세요</div>
+      <div class="workplace-total-bar">
+        <span>총 급여</span>
+        <span id="workplaceTotalDisplay">0만원</span>
+      </div>
+      <div id="workplaceInputs"></div>
+      <button class="workplace-add-btn" id="workplaceAddBtn" onclick="addWorkplace()">+ 근무처 추가</button>
+      <div class="workplace-remaining" id="workplaceRemaining">
+        <span>잔여</span>
+        <span id="remainingAmount">0만원</span>
+      </div>
+      <button class="primary-btn" id="workplaceNextBtn" onclick="saveWorkplacesAndNext()" disabled style="margin-top:16px;">다음</button>
+      <button class="skip-btn" onclick="skipWorkplaces()" style="margin-top:8px;">건너뛰기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SCREEN: GENDER                               -->
+<!-- ============================================ -->
+<!-- SCREEN: GENDER -->
+<div id="screen-gender" class="screen">
+  <div class="onboarding-screen">
+    <div class="onboarding-top-bar">
+      <button class="back-btn" onclick="goScreen('screen-workplace')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span class="step-indicator">2/6</span>
+    </div>
+    <div class="onboarding-title">성별이<br>어떻게 되세요?</div>
+    <div class="onboarding-sub">부녀자공제 등 성별 기준 공제 판단에 필요해요</div>
+    <div class="choice-list">
+      <button class="choice-btn" onclick="answerGender('male')">남성</button>
+      <button class="choice-btn" onclick="answerGender('female')">여성</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SCREEN 2: PROFILE Q1 - Marriage              -->
+<!-- ============================================ -->
+<div id="screen-q1" class="screen">
+  <div class="onboarding-screen">
+    <div class="onboarding-top-bar">
+      <button class="back-btn" onclick="goScreen('screen-gender')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span class="step-indicator">3/6</span>
     </div>
     <div class="onboarding-title">결혼하셨어요?</div>
-    <div class="onboarding-sub">배우자 공제와 결혼세액공제 판단에 필요해요</div>
+    <div class="onboarding-sub">혼인신고 기준이에요. 배우자공제(150만원)와 결혼세액공제에 필요해요</div>
     <div class="choice-list">
       <button class="choice-btn" onclick="answerMarriage(false)">아직이에요</button>
       <button class="choice-btn" onclick="answerMarriage(true)">네, 했어요</button>
@@ -715,8 +896,9 @@ body {
         <input class="spouse-salary-input" id="spouseSalaryInput" type="text" inputmode="numeric" placeholder="0">
         <span class="spouse-salary-unit">만원</span>
       </div>
-      <div class="spouse-salary-hint">배우자 소득이 없으면 0을 입력하세요. 맞벌이 최적화에 활용돼요.</div>
+      <div class="spouse-salary-hint">맞벌이 최적화에 활용돼요. 몰라도 넘어갈 수 있어요.</div>
       <button class="primary-btn" id="spouseNextBtn" onclick="saveSpouseSalaryAndNext()" style="margin-top:16px;">다음</button>
+      <button class="skip-btn" onclick="skipSpouseSalary()" style="margin-top:8px;">건너뛰기</button>
     </div>
   </div>
 </div>
@@ -850,34 +1032,28 @@ body {
     <div class="onboarding-sub">같이 안 살아도 괜찮아요</div>
     <div class="choice-list">
       <button class="choice-btn" onclick="answerDependents('none')">없어요</button>
-      <button class="choice-btn" id="depParentBtn" onclick="answerDependents('parents')">부모님 (만 60세 이상)</button>
+      <button class="choice-btn" id="depParentBtn" onclick="answerDependents('parents')">부모님</button>
       <button class="choice-btn" id="depOtherBtn" onclick="answerDependents('other')">조부모님 / 형제자매 / 기타</button>
     </div>
     <div class="dependent-detail" id="depDetail">
       <div id="depParentDetail" style="display:none;">
-        <div class="detail-label">부양 부모님 수</div>
-        <div class="chip-group">
-          <button class="chip" data-pcount="1" onclick="selectParentCount(1)">1명</button>
-          <button class="chip" data-pcount="2" onclick="selectParentCount(2)">2명</button>
+        <div class="detail-label">부모님 출생연도를 입력해주세요</div>
+        <div class="dep-birth-hint" style="font-size:12px;color:var(--text2);margin-bottom:12px;">만 60세 이상 + 연소득 100만원 이하면 공제 대상이에요</div>
+        <div class="age-input-group" id="parentBirthInputs">
+          <div class="age-input-row"><label>아버지</label><input class="age-input" type="text" inputmode="numeric" placeholder="1960" id="parentBirth1"><span class="age-unit">년생</span></div>
+          <div class="age-input-row"><label>어머니</label><input class="age-input" type="text" inputmode="numeric" placeholder="1963" id="parentBirth2"><span class="age-unit">년생</span></div>
         </div>
-        <div style="margin-top:16px;">
-          <div class="detail-label">만 70세 이상 (경로우대) 인원</div>
-          <div class="chip-group">
-            <button class="chip" data-senior="0" onclick="selectSenior(0)">없음</button>
-            <button class="chip" data-senior="1" onclick="selectSenior(1)">1명</button>
-            <button class="chip" data-senior="2" onclick="selectSenior(2)">2명</button>
-          </div>
-        </div>
+        <div class="dep-auto-result" id="parentAutoResult" style="margin-top:12px;font-size:13px;color:var(--accent);font-weight:600;min-height:20px;"></div>
       </div>
       <div id="depOtherDetail" style="display:none;">
-        <div class="detail-label">부양가족 인원 (부모님 제외)</div>
-        <div class="chip-group">
-          <button class="chip" data-ocount="1" onclick="selectOtherCount(1)">1명</button>
-          <button class="chip" data-ocount="2" onclick="selectOtherCount(2)">2명</button>
-          <button class="chip" data-ocount="3" onclick="selectOtherCount(3)">3명+</button>
-        </div>
+        <div class="detail-label">부양가족 출생연도와 인원</div>
+        <div class="dep-birth-hint" style="font-size:12px;color:var(--text2);margin-bottom:12px;">만 20세 이하 또는 만 60세 이상, 연소득 100만원 이하</div>
+        <div class="age-input-group" id="otherDepInputs"></div>
+        <button class="workplace-add-btn" onclick="addOtherDep()" style="margin-top:8px;">+ 부양가족 추가</button>
+        <div class="dep-auto-result" id="otherDepResult" style="margin-top:12px;font-size:13px;color:var(--accent);font-weight:600;min-height:20px;"></div>
       </div>
       <button class="primary-btn" id="depNextBtn" onclick="validateDepAndFinish()" style="margin-top:20px;">다음</button>
+      <button class="skip-btn" onclick="skipDependents()" style="margin-top:8px;">건너뛰기</button>
     </div>
   </div>
 </div>
@@ -891,14 +1067,28 @@ body {
       <button class="back-btn" onclick="goScreen('screen-q4')" style="margin-bottom:8px;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
-      <div class="matched-title" id="matchedTitle">해당되는<br>절세 항목이에요</div>
+      <div class="matched-title" id="matchedTitle">예상 환급세액</div>
       <div class="matched-sub" id="matchedSubtitle"></div>
     </div>
-    <div id="matchedMustSection"></div>
-    <div id="matchedOptionalSection"></div>
+
+    <!-- 환급세액 카드 -->
+    <div class="matched-refund-card" id="matchedRefundCard">
+      <div class="matched-refund-label">예상 환급세액</div>
+      <div class="matched-refund-hero" id="matchedRefundAmount">+0<span class="matched-refund-hero-unit">만원</span></div>
+      <div class="matched-refund-sub">
+        <span>추가 절세 가능</span>
+        <span class="matched-refund-saving" id="maxSavingDisplay">~0만원</span>
+      </div>
+      <div class="matched-refund-bottom" id="matchedRefundDetail"></div>
+    </div>
+
+    <!-- 카테고리별 절세 항목 -->
+    <div class="matched-categories" id="matchedCategories"></div>
+
     <div class="matched-actions">
-      <button class="primary-btn" onclick="startItemInput()">하나씩 입력하기</button>
-      <div class="all-items-link" onclick="goToMainWithAllItems()">전체 항목 보기 ></div>
+      <button class="primary-btn" onclick="openAuthSheet()">간편인증으로 불러오기</button>
+      <button class="primary-btn outline" onclick="startItemInput()" style="margin-top:10px;">직접 입력하기</button>
+      <div class="all-items-link" onclick="goToMainWithAllItems()">나중에 할게요 ></div>
     </div>
   </div>
 </div>
@@ -1174,6 +1364,9 @@ body {
 var S = {
   salary: 0,
   rate: 100,
+  gender: '',
+  multipleWorkplaces: false,
+  workplaces: [],
   // Profile
   married: false,
   hasChildren: false,
@@ -1282,9 +1475,9 @@ var ALL_DEDUCTION_ITEMS = [
     priority: 9, profileFilter: function() { return S.housingCount === 0 && S.livingType === 'rent'; } },
   { id: 'child_credit', name: '자녀세액공제', cat: 'tax_credit', desc: '만 8세 이상 자녀', condition: '프로필에서 자동 계산', type: 'auto',
     priority: 9, profileFilter: function() { return S.hasChildren && S.childAges.some(function(a){return a>=8;}); } },
-  { id: 'political', name: '정치자금 기부금', cat: 'tax_credit', desc: '10만원까지 전액 환급', condition: '정당/후원회 기부금', type: 'input', inputLabel: '기부금액', inputKey: 'amount', unit: '만원',
-    priority: 8, profileFilter: function() { return true; } },
-  { id: 'marriage_credit', name: '결혼세액공제', cat: 'tax_credit', desc: '50만원 (2024~2026 혼인신고)', condition: '생애 1회', type: 'toggle',
+  { id: 'hometown', name: '고향사랑기부금', cat: 'tax_credit', desc: '10만원까지 전액 환급 + 답례품 30%', condition: '주소지 외 지자체 기부 (연 2,000만원 한도)', type: 'input', inputLabel: '기부금액', inputKey: 'amount', unit: '만원',
+    priority: 9, profileFilter: function() { return true; } },
+  { id: 'marriage_credit', name: '결혼세액공제', cat: 'tax_credit', desc: '혼인신고한 해에 50만원 공제', condition: '2024~2026년 중 혼인신고한 연도에 1회 적용', type: 'toggle',
     priority: 8, profileFilter: function() { return S.married; } }
 ];
 
@@ -1634,13 +1827,13 @@ function calcFinalTax(annualSalary) {
   else if (eligibleChildren === 2) childCredit = 350000;
   else if (eligibleChildren >= 3) childCredit = 350000 + (eligibleChildren - 2) * 300000;
 
-  // 정치자금 기부금
-  var politicalCredit = 0;
-  if (dOn('political')) {
-    var polAmt = dVal('political', 'amount') * 10000;
-    if (polAmt <= 100000) politicalCredit = polAmt * (100/110);
-    else if (polAmt <= 30000000) politicalCredit = 100000 * (100/110) + (polAmt - 100000) * 0.15;
-    else politicalCredit = 100000 * (100/110) + (30000000 - 100000) * 0.15 + (polAmt - 30000000) * 0.25;
+  // 고향사랑기부금
+  var hometownCredit = 0;
+  if (dOn('hometown')) {
+    var htAmt = dVal('hometown', 'amount') * 10000;
+    if (htAmt <= 100000) hometownCredit = htAmt;
+    else if (htAmt <= 20000000) hometownCredit = 100000 + (htAmt - 100000) * 0.165;
+    else hometownCredit = 100000 + (20000000 - 100000) * 0.165;
   }
 
   // 결혼세액공제
@@ -1657,7 +1850,7 @@ function calcFinalTax(annualSalary) {
     standardTaxCredit = 130000;
   }
 
-  var totalCredit = earnedCredit + specialTaxCredits + pensionCredit + rentCredit + childCredit + standardTaxCredit + politicalCredit + marriageCredit;
+  var totalCredit = earnedCredit + specialTaxCredits + pensionCredit + rentCredit + childCredit + standardTaxCredit + hometownCredit + marriageCredit;
   var incomeTaxFinal = Math.max(Math.round(computed - totalCredit), 0);
   var localTax = Math.round(incomeTaxFinal * 0.1); // 지방소득세 10%
   var finalTax = incomeTaxFinal + localTax;
@@ -1788,11 +1981,11 @@ function calcItemSaving(item) {
       if (ec2>=3) return Math.round((350000+(ec2-2)*300000)*1.1);
       return 0;
     }
-    case 'political': {
-      if (!dOn('political')) return 0;
-      var pa = dVal('political','amount')*10000;
-      if (pa<=100000) return Math.round(pa*(100/110)*1.1);
-      return Math.round((100000*(100/110)+(pa-100000)*0.15)*1.1);
+    case 'hometown': {
+      if (!dOn('hometown')) return 0;
+      var ha = dVal('hometown','amount')*10000;
+      if (ha <= 100000) return Math.round(ha * 1.1);
+      else return Math.round((100000 + (Math.min(ha, 20000000) - 100000) * 0.165) * 1.1);
     }
     case 'marriage_credit': return dOn('marriage_credit') ? Math.round(500000*1.1) : 0;
     default: return 0;
@@ -1840,7 +2033,7 @@ function estimateSaving(item) {
       if (ec3===1) return Math.round(150000*1.1); if(ec3===2) return Math.round(350000*1.1);
       if (ec3>=3) return Math.round((350000+(ec3-2)*300000)*1.1); return 0;
     }
-    case 'political': return Math.round(100000 * (100/110) * 1.1);
+    case 'hometown': return Math.round((100000 + 30000) * 1.1); // 10만원 환급 + 답례품 3만원
     case 'marriage_credit': return Math.round(500000 * 1.1);
     case 'dependents': return Math.round((S.depParentCount + S.depOtherCount) * 1500000 * mRateLocal);
     case 'dep_senior': return Math.round(S.depSeniorCount * 1000000 * mRateLocal);
@@ -1886,25 +2079,26 @@ function goScreen(id) {
     document.getElementById('startBtn').disabled = false;
   }
   // Update step indicators for unmarried flow (skip Q2)
+  // workplace(1/N) -> 성별(2/N) -> 결혼(3/N) -> [자녀] -> 주택 -> 부양
   var housingStepIds = ['q3StepIndicator','q3bStepIndicator','q3cStepIndicator','q3dStepIndicator'];
   if (!S.married) {
-    // 미혼: 연봉 -> 결혼(1/3) -> 주택(2/3) -> 부양(3/3)
+    // 미혼: 근무처(1/6) -> 성별(2/6) -> 결혼(3/6) -> 주택(4/5) -> 부양(5/5)
     housingStepIds.forEach(function(sid) {
       var el = document.getElementById(sid);
-      if (el) el.textContent = '2/3';
+      if (el) el.textContent = '4/5';
     });
     var q4s = document.getElementById('q4StepIndicator');
-    if (q4s) q4s.textContent = '3/3';
+    if (q4s) q4s.textContent = '5/5';
   } else {
-    // 기혼: 연봉 -> 결혼+배우자급여(1/4) -> 자녀(2/4) -> 주택(3/4) -> 부양(4/4)
+    // 기혼: 근무처(1/6) -> 성별(2/6) -> 결혼+배우자급여(3/6) -> 자녀(4/6) -> 주택(5/6) -> 부양(6/6)
     var q2r = document.getElementById('q2StepIndicator');
-    if (q2r) q2r.textContent = '2/4';
+    if (q2r) q2r.textContent = '4/6';
     housingStepIds.forEach(function(sid) {
       var el = document.getElementById(sid);
-      if (el) el.textContent = '3/4';
+      if (el) el.textContent = '5/6';
     });
     var q4r = document.getElementById('q4StepIndicator');
-    if (q4r) q4r.textContent = '4/4';
+    if (q4r) q4r.textContent = '6/6';
   }
 }
 
@@ -1926,6 +2120,105 @@ function switchTab(tabId) {
 // ===========================
 // PROFILE ANSWERS
 // ===========================
+// === Workplace ===
+function answerWorkplace(multiple) {
+  var btns = document.querySelectorAll('#screen-workplace .choice-list > .choice-btn');
+  btns[0].classList.toggle('selected', !multiple);
+  btns[1].classList.toggle('selected', multiple);
+
+  S.multipleWorkplaces = multiple;
+
+  if (!multiple) {
+    S.workplaces = [{ name: '현 직장', salary: S.salary }];
+    setTimeout(function() { goScreen('screen-gender'); }, 300);
+  } else {
+    document.getElementById('workplaceDetail').style.display = 'block';
+    document.getElementById('workplaceTotalDisplay').textContent = fmt(S.salary) + '만원';
+    // Initialize with 2 workplaces
+    S.workplaces = [];
+    var container = document.getElementById('workplaceInputs');
+    container.innerHTML = '';
+    addWorkplace();
+    addWorkplace();
+    updateWorkplaceRemaining();
+  }
+}
+
+function addWorkplace() {
+  var container = document.getElementById('workplaceInputs');
+  var idx = container.children.length;
+  if (idx >= 5) return; // max 5
+  var row = document.createElement('div');
+  row.className = 'workplace-input-row';
+  row.innerHTML = '<label>근무처 ' + (idx + 1) + '</label>' +
+    '<input type="text" inputmode="numeric" placeholder="0" data-wp-idx="' + idx + '">' +
+    '<span class="workplace-input-unit">만원</span>';
+  container.appendChild(row);
+
+  row.querySelector('input').addEventListener('input', function(e) {
+    var raw = e.target.value.replace(/[^0-9]/g, '');
+    if (raw) e.target.value = Number(raw).toLocaleString();
+    else e.target.value = '';
+    updateWorkplaceRemaining();
+  });
+
+  if (idx >= 4) document.getElementById('workplaceAddBtn').style.display = 'none';
+}
+
+function updateWorkplaceRemaining() {
+  var inputs = document.querySelectorAll('#workplaceInputs input');
+  var total = 0;
+  inputs.forEach(function(inp) {
+    var v = inp.value.replace(/[^0-9]/g, '');
+    if (v) total += Number(v);
+  });
+  var remaining = S.salary - total;
+  var amountEl = document.getElementById('remainingAmount');
+  amountEl.textContent = fmt(Math.abs(remaining)) + '만원';
+  amountEl.className = '';
+
+  if (remaining > 0) {
+    amountEl.classList.add('positive');
+    document.getElementById('workplaceRemaining').querySelector('span').textContent = '잔여';
+  } else if (remaining === 0) {
+    amountEl.classList.add('zero');
+    amountEl.textContent = '배분 완료';
+    document.getElementById('workplaceRemaining').querySelector('span').textContent = '';
+  } else {
+    amountEl.classList.add('negative');
+    document.getElementById('workplaceRemaining').querySelector('span').textContent = '초과';
+  }
+
+  // Enable next button when remaining is 0
+  document.getElementById('workplaceNextBtn').disabled = (remaining !== 0);
+}
+
+function saveWorkplacesAndNext() {
+  var inputs = document.querySelectorAll('#workplaceInputs input');
+  S.workplaces = [];
+  inputs.forEach(function(inp, i) {
+    var v = inp.value.replace(/[^0-9]/g, '');
+    if (v && Number(v) > 0) {
+      S.workplaces.push({ name: '근무처 ' + (i+1), salary: Number(v) });
+    }
+  });
+  goScreen('screen-gender');
+}
+
+function skipWorkplaces() {
+  S.multipleWorkplaces = false;
+  S.workplaces = [{ name: '현 직장', salary: S.salary }];
+  goScreen('screen-gender');
+}
+
+function answerGender(val) {
+  S.gender = val;
+  var btns = document.querySelectorAll('#screen-gender .choice-list > .choice-btn');
+  btns[0].classList.toggle('selected', val === 'male');
+  btns[1].classList.toggle('selected', val === 'female');
+  setTimeout(function() { goScreen('screen-q1'); }, 300);
+}
+
 function answerMarriage(val) {
   S.married = val;
   // Highlight
@@ -1950,6 +2243,11 @@ function answerMarriage(val) {
 function saveSpouseSalaryAndNext() {
   var v = document.getElementById('spouseSalaryInput').value.replace(/[^0-9]/g, '');
   S.spouseSalary = v ? Number(v) : 0;
+  goScreen('screen-q2');
+}
+
+function skipSpouseSalary() {
+  S.spouseSalary = 0;
   goScreen('screen-q2');
 }
 
@@ -2149,43 +2447,102 @@ function answerDependents(val) {
     detail.classList.add('show');
     document.getElementById('depParentDetail').style.display = val === 'parents' ? 'block' : 'none';
     document.getElementById('depOtherDetail').style.display = val === 'other' ? 'block' : 'none';
+    if (val === 'parents') {
+      document.getElementById('parentBirth1').addEventListener('input', updateParentAges);
+      document.getElementById('parentBirth2').addEventListener('input', updateParentAges);
+    }
+    if (val === 'other') {
+      var otherContainer = document.getElementById('otherDepInputs');
+      if (otherContainer.children.length === 0) { addOtherDep(); }
+    }
   }
 }
 
-function selectParentCount(n) {
-  S.depParentCount = n;
-  document.querySelectorAll('[data-pcount]').forEach(function(c) {
-    c.classList.toggle('selected', parseInt(c.getAttribute('data-pcount')) === n);
+function updateParentAges() {
+  var baseYear = 2026;
+  var birth1 = document.getElementById('parentBirth1').value.replace(/[^0-9]/g, '');
+  var birth2 = document.getElementById('parentBirth2').value.replace(/[^0-9]/g, '');
+  var parentCount = 0;
+  var seniorCount = 0;
+  var resultTexts = [];
+
+  [birth1, birth2].forEach(function(b, i) {
+    if (!b || b.length !== 4) return;
+    var age = baseYear - Number(b);
+    var label = i === 0 ? '아버지' : '어머니';
+    if (age >= 60) {
+      parentCount++;
+      resultTexts.push(label + ' 만 ' + age + '세 → 기본공제 대상');
+      if (age >= 70) {
+        seniorCount++;
+        resultTexts[resultTexts.length - 1] = label + ' 만 ' + age + '세 → 기본공제 + 경로우대';
+      }
+    } else {
+      resultTexts.push(label + ' 만 ' + age + '세 → 만 60세 미만 (대상 아님)');
+    }
   });
+
+  S.depParentCount = parentCount;
+  S.depSeniorCount = seniorCount;
+  document.getElementById('parentAutoResult').innerHTML = resultTexts.join('<br>');
 }
 
-function selectSenior(n) {
-  if (n > S.depParentCount) {
-    alert('경로우대 인원은 부양 부모님 수를 초과할 수 없어요.');
-    return;
-  }
-  S.depSeniorCount = n;
-  document.querySelectorAll('[data-senior]').forEach(function(c) {
-    c.classList.toggle('selected', parseInt(c.getAttribute('data-senior')) === n);
-  });
+function addOtherDep() {
+  var container = document.getElementById('otherDepInputs');
+  var idx = container.children.length;
+  if (idx >= 5) return;
+  var row = document.createElement('div');
+  row.className = 'age-input-row';
+  row.innerHTML = '<label>' + (idx + 1) + '번째</label><input class="age-input" type="text" inputmode="numeric" placeholder="1990" data-other-dep-idx="' + idx + '"><span class="age-unit">년생</span>';
+  container.appendChild(row);
+  row.querySelector('input').addEventListener('input', updateOtherDepAges);
 }
 
-function selectOtherCount(n) {
-  S.depOtherCount = n;
-  document.querySelectorAll('[data-ocount]').forEach(function(c) {
-    c.classList.toggle('selected', parseInt(c.getAttribute('data-ocount')) === n);
+function updateOtherDepAges() {
+  var baseYear = 2026;
+  var inputs = document.querySelectorAll('#otherDepInputs .age-input');
+  var count = 0;
+  var resultTexts = [];
+  inputs.forEach(function(inp, i) {
+    var b = inp.value.replace(/[^0-9]/g, '');
+    if (!b || b.length !== 4) return;
+    var age = baseYear - Number(b);
+    if (age <= 20 || age >= 60) {
+      count++;
+      var reason = age <= 20 ? '만 ' + age + '세 (20세 이하)' : '만 ' + age + '세 (60세 이상)';
+      resultTexts.push((i + 1) + '번째 ' + reason + ' → 공제 대상');
+    } else {
+      resultTexts.push((i + 1) + '번째 만 ' + age + '세 → 나이 조건 미충족');
+    }
   });
+  S.depOtherCount = count;
+  document.getElementById('otherDepResult').innerHTML = resultTexts.join('<br>');
 }
 
 function validateDepAndFinish() {
-  if (S.depType === 'parents' && S.depParentCount <= 0) {
-    alert('부양 부모님 인원을 선택해주세요.');
-    return;
+  if (S.depType === 'parents') {
+    var b1 = document.getElementById('parentBirth1').value.replace(/[^0-9]/g, '');
+    var b2 = document.getElementById('parentBirth2').value.replace(/[^0-9]/g, '');
+    if (!b1 && !b2) {
+      alert('부모님 출생연도를 하나 이상 입력해주세요.');
+      return;
+    }
   }
-  if (S.depType === 'other' && S.depOtherCount <= 0) {
-    alert('부양가족 인원을 선택해주세요.');
-    return;
+  if (S.depType === 'other') {
+    var otherInputs = document.querySelectorAll('#otherDepInputs .age-input');
+    var hasAny = false;
+    otherInputs.forEach(function(inp) { if (inp.value.replace(/[^0-9]/g, '').length === 4) hasAny = true; });
+    if (!hasAny) {
+      alert('부양가족 출생연도를 하나 이상 입력해주세요.');
+      return;
+    }
   }
+  finishProfile();
+}
+
+function skipDependents() {
+  S.depType = 'none';
+  S.depParentCount = 0; S.depSeniorCount = 0; S.depOtherCount = 0;
   finishProfile();
 }
 
@@ -2211,6 +2568,17 @@ function finishProfile() {
     S.deductions['dependents'] = { on: true, values: { count: S.depOtherCount } };
   }
 
+  // Auto-apply 부녀자공제 (기혼 여성 + 종합소득 3천만 이하 ≈ 총급여 4147만 이하)
+  if (S.gender === 'female' && S.married && S.salary <= 4147) {
+    S.deductions['dep_woman'] = { on: true, values: {} };
+  }
+  // Auto-apply 한부모공제 (배우자 없이 자녀 있음, 성별 무관, 부녀자와 중복 시 한부모 우선)
+  if (!S.married && S.hasChildren) {
+    S.deductions['dep_single'] = { on: true, values: {} };
+    // 한부모와 부녀자 중복 불가, 한부모 우선
+    if (S.deductions['dep_woman']) delete S.deductions['dep_woman'];
+  }
+
   renderMatchedItems();
   goScreen('screen-matched');
 }
@@ -2220,48 +2588,138 @@ function finishProfile() {
 // ===========================
 var matchedItems = [];
 
+function animateNumber(el, target, duration, prefix, suffix) {
+  prefix = prefix || '';
+  suffix = suffix || '';
+  duration = duration || 800;
+  var start = 0;
+  var startTime = null;
+  if (target === 0) { el.innerHTML = prefix + fmt(0) + suffix; return; }
+  function step(timestamp) {
+    if (!startTime) startTime = timestamp;
+    var progress = Math.min((timestamp - startTime) / duration, 1);
+    var eased = 1 - Math.pow(1 - progress, 3);
+    var current = Math.round(start + (target - start) * eased);
+    el.innerHTML = prefix + fmt(current) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
 function renderMatchedItems() {
   matchedItems = getMatchedItems();
-  var mustItems = getMustItems(matchedItems);
-  var optionalItems = getOptionalItems(matchedItems);
 
   document.getElementById('matchedSubtitle').textContent =
-    '연봉 ' + fmt(S.salary) + '만원 기준 · ' + matchedItems.length + '개 항목';
+    '연봉 ' + fmt(S.salary) + '만원 기준';
 
-  var mustSection = document.getElementById('matchedMustSection');
-  var optSection = document.getElementById('matchedOptionalSection');
-  mustSection.innerHTML = '';
-  optSection.innerHTML = '';
+  // 예상 환급액
+  var quickEstimate = calcQuickRefundEstimate();
+  var refundEl = document.getElementById('matchedRefundAmount');
+  var prefix = quickEstimate >= 0 ? '+' : '';
+  animateNumber(refundEl, quickEstimate, 800, prefix, '<span class="matched-refund-hero-unit">만원</span>');
 
-  if (mustItems.length > 0) {
-    mustSection.innerHTML = '<div class="section-label must">꼭 챙기세요</div>';
-    mustItems.forEach(function(item) {
-      var est = estimateSaving(item);
-      var savingText = est > 0 ? '~' + fmtMan(est) + '만원' : '조건부';
-      var card = document.createElement('div');
-      card.className = 'matched-card';
-      card.innerHTML =
-        '<div class="matched-card-top"><div class="matched-card-name">' + item.name + '</div>' +
-        '<div class="matched-card-saving' + (est > 0 ? '' : ' conditional') + '">' + savingText + '</div></div>' +
-        '<div class="matched-card-desc">' + item.desc + '</div>';
-      mustSection.appendChild(card);
+  // 추가 절세 가능액
+  var maxSaving = 0;
+  matchedItems.forEach(function(item) { maxSaving += estimateSaving(item); });
+  document.getElementById('maxSavingDisplay').textContent = '~' + fmtMan(maxSaving) + '만원';
+
+  document.getElementById('matchedRefundDetail').textContent =
+    matchedItems.length + '개 절세 항목이 해당돼요';
+
+  // Group items into categories
+  var catDefs = [
+    { id: 'basic', title: '기본 공제', ids: ['card', 'medical', 'pension', 'insurance', 'hometown'] },
+    { id: 'family', title: '가족 공제', ids: ['dependents', 'child_credit', 'dep_senior', 'dep_disabled', 'dep_single', 'dep_woman'] },
+    { id: 'housing', title: '주거 공제', ids: ['rent', 'housing', 'loan', 'jeonse_loan'] },
+    { id: 'etc', title: '기타 공제', ids: ['education', 'donation', 'marriage_credit', 'birth_support'] }
+  ];
+
+  var container = document.getElementById('matchedCategories');
+  container.innerHTML = '';
+
+  catDefs.forEach(function(cat) {
+    var catItems = matchedItems.filter(function(item) {
+      return cat.ids.indexOf(item.id) >= 0;
     });
-  }
+    if (catItems.length === 0) return;
 
-  if (optionalItems.length > 0) {
-    optSection.innerHTML = '<div class="section-label">해당되면 챙기세요</div>';
-    optionalItems.forEach(function(item) {
+    var totalSaving = 0;
+    catItems.forEach(function(item) { totalSaving += estimateSaving(item); });
+    var savingText = totalSaving > 0 ? '~' + fmtMan(totalSaving) + '만원' : '';
+
+    var header = document.createElement('div');
+    header.className = 'matched-cat-header';
+    header.innerHTML =
+      '<div class="matched-cat-left">' +
+        '<span class="matched-cat-title">' + cat.title + '</span>' +
+        '<span class="matched-cat-count">' + catItems.length + '개</span>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;">' +
+        (savingText ? '<span class="matched-cat-saving">' + savingText + '</span>' : '') +
+        '<span class="matched-cat-arrow">&#9662;</span>' +
+      '</div>';
+
+    var body = document.createElement('div');
+    body.className = 'matched-cat-body';
+
+    catItems.forEach(function(item) {
       var est = estimateSaving(item);
-      var savingText = est > 0 ? '~' + fmtMan(est) + '만원' : '조건부';
+      var estText = est > 0 ? '~' + fmtMan(est) + '만원' : '조건부';
       var card = document.createElement('div');
-      card.className = 'matched-card';
+      card.className = 'matched-card selectable selected';
+      card.setAttribute('data-matched-id', item.id);
+      card.setAttribute('data-saving', est);
       card.innerHTML =
-        '<div class="matched-card-top"><div class="matched-card-name">' + item.name + '</div>' +
-        '<div class="matched-card-saving' + (est > 0 ? '' : ' conditional') + '">' + savingText + '</div></div>' +
+        '<div class="matched-card-top">' +
+          '<div class="matched-card-check"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+          '<div class="matched-card-name">' + item.name + '</div>' +
+          '<div class="matched-card-saving' + (est > 0 ? '' : ' conditional') + '">' + estText + '</div>' +
+        '</div>' +
         '<div class="matched-card-desc">' + item.desc + '</div>';
-      optSection.appendChild(card);
+      card.onclick = function(e) {
+        card.classList.toggle('selected');
+        card.classList.remove('just-toggled');
+        void card.offsetWidth;
+        card.classList.add('just-toggled');
+        updateMatchedSaving();
+      };
+      body.appendChild(card);
     });
-  }
+
+    header.onclick = function() {
+      header.classList.toggle('open');
+    };
+
+    container.appendChild(header);
+    container.appendChild(body);
+  });
+
+  // Auto-open first category
+  var firstHeader = container.querySelector('.matched-cat-header');
+  if (firstHeader) firstHeader.classList.add('open');
+}
+
+function updateMatchedSaving() {
+  var total = 0;
+  var count = 0;
+  document.querySelectorAll('.matched-card.selectable.selected').forEach(function(card) {
+    total += parseInt(card.getAttribute('data-saving') || '0');
+    count++;
+  });
+  document.getElementById('maxSavingDisplay').textContent = '~' + fmtMan(total) + '만원';
+  document.getElementById('matchedRefundDetail').textContent =
+    count + '개 선택 · 항목을 채우면 이만큼 절세할 수 있어요';
+}
+
+function calcQuickRefundEstimate() {
+  // Simple estimate: withheld tax - final tax (based on profile only, no deductions yet)
+  var annual = S.salary * 10000;
+  if (annual <= 0) return 0;
+  var wh = calcWithheld(annual);
+  var ft = calcFinalTax(annual);
+  var refund = wh.annual - ft.finalTax;
+  if (Math.abs(refund) < 5000) refund = 0;
+  return Math.round(refund / 10000);
 }
 
 // ===========================
@@ -2271,9 +2729,13 @@ var inputItems = [];
 var currentInputIdx = 0;
 
 function startItemInput() {
-  // Filter to inputtable items (skip auto/toggle-only)
+  // Only input items that were selected in matched screen
+  var selectedIds = [];
+  document.querySelectorAll('.matched-card.selectable.selected').forEach(function(card) {
+    selectedIds.push(card.getAttribute('data-matched-id'));
+  });
   inputItems = matchedItems.filter(function(item) {
-    return item.type !== 'auto' && item.type !== 'auto_count';
+    return item.type !== 'auto' && item.type !== 'auto_count' && selectedIds.indexOf(item.id) >= 0;
   });
   currentInputIdx = 0;
   renderItemInput();
@@ -2319,22 +2781,24 @@ function renderItemInput() {
       '<button class="choice-btn" onclick="answerItemNo()">아니요</button>' +
       '</div>';
   } else if (item.type === 'input') {
+    var syncBtnHtml = item.syncable ? '<button class="item-sync-btn" onclick="openAuthSheet()"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4"/></svg>간편인증으로 불러오기</button><div class="item-sync-divider"><span>또는 직접 입력</span></div>' : '';
     bodyHTML += '<div class="choice-list" style="margin-bottom:20px;">' +
       '<button class="choice-btn" id="itemYesBtn" onclick="showItemInputFields(\'' + item.id + '\')">네, 있어요</button>' +
       '<button class="choice-btn" onclick="answerItemNo()">아니요</button>' +
       '</div>';
-    bodyHTML += '<div id="itemInputFields" style="display:none;">' +
+    bodyHTML += '<div id="itemInputFields" style="display:none;">' + syncBtnHtml +
       '<div class="item-input-label">' + (item.inputLabel || '금액') + '</div>' +
       '<div class="multi-input-row">' +
       '<input class="item-input-field" type="text" inputmode="numeric" placeholder="0" data-item="' + item.id + '" data-key="' + item.inputKey + '">' +
       '<span class="multi-input-unit">' + (item.unit || '만원') + '</span></div>' +
       '<div class="item-bottom"><button class="primary-btn" onclick="saveItemAndNext(\'' + item.id + '\')">다음</button></div></div>';
   } else if (item.type === 'multi_input') {
+    var syncBtnHtml2 = item.syncable ? '<button class="item-sync-btn" onclick="openAuthSheet()"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4"/></svg>간편인증으로 불러오기</button><div class="item-sync-divider"><span>또는 직접 입력</span></div>' : '';
     bodyHTML += '<div class="choice-list" style="margin-bottom:20px;">' +
       '<button class="choice-btn" id="itemYesBtn" onclick="showItemInputFields(\'' + item.id + '\')">네, 있어요</button>' +
       '<button class="choice-btn" onclick="answerItemNo()">아니요</button>' +
       '</div>';
-    bodyHTML += '<div id="itemInputFields" style="display:none;"><div class="multi-input-group">';
+    bodyHTML += '<div id="itemInputFields" style="display:none;">' + syncBtnHtml2 + '<div class="multi-input-group">';
     if (item.inputs) {
       item.inputs.forEach(function(inp) {
         bodyHTML += '<div class="multi-input-item"><label>' + inp.label + '</label>' +
@@ -2428,7 +2892,7 @@ function getItemQuestion(item) {
     'medical': '올해 의료비\n쓴 적 있으세요?',
     'education': '올해 교육비\n낸 적 있으세요?',
     'donation': '올해 기부금\n낸 적 있으세요?',
-    'political': '정치자금 기부를\n하셨어요?',
+    'hometown': '고향사랑기부금을\n하셨어요?',
     'marriage_credit': '2024~2026년에\n혼인신고 하셨어요?',
     'dependents': '부양가족이\n있으세요?',
     'dep_senior': '만 70세 이상\n경로우대 대상이 있으세요?',
@@ -2449,7 +2913,7 @@ function getItemHint(item) {
     'rent': '무주택 세대주, 총급여 8,000만원 이하일 때 가능해요',
     'medical': '병원비, 약값, 안경 등 다 포함이에요',
     'insurance': '저축성보험은 해당 안 돼요, 보장성보험만 가능해요',
-    'political': '10만원까지 사실상 전액 돌려받아요. 가장 확실한 절세!',
+    'hometown': '10만원 기부하면 전액 환급 + 답례품 3만원! 가장 확실한 절세',
     'housing': '무주택 세대주, 총급여 7천만원 이하일 때 가능해요',
     'jeonse_loan': '원리금 상환액의 40%, 연 400만원 한도예요',
     'loan': '기준시가 6억 이하 주택, 상환기간/방식에 따라 한도가 달라요',
@@ -2801,7 +3265,7 @@ function renderDeductions() {
   var items = getMatchedItems();
 
   // Layer 1: 기본 항목
-  var basicIds = ['card', 'medical', 'pension', 'insurance', 'rent', 'dependents', 'child_credit'];
+  var basicIds = ['card', 'medical', 'pension', 'insurance', 'rent', 'dependents', 'child_credit', 'hometown'];
   var basicItems = [];
   var extraItems = [];
 
@@ -3157,12 +3621,12 @@ function renderRecommendCards() {
     }
   }
 
-  // 정치자금 기부금 추천
-  if (!dOn('political')) {
+  // 고향사랑기부금 추천
+  if (!dOn('hometown')) {
     recommendations.push({
-      tag: '가장 확실한 절세',
-      text: '정치자금 10만원 기부하면 거의 전액 돌려받아요',
-      sub: '10만원 기부 시 약 10만원 환급 (소득세+지방소득세)',
+      tag: '고향사랑기부금',
+      text: '고향사랑기부금 10만원이면 전액 환급 + 답례품까지',
+      sub: '10만원 기부 시 전액 환급 + 답례품 3만원 (연 2,000만원 한도)',
       action: function() { switchTab('tab-deduction'); }
     });
   }
@@ -3297,12 +3761,12 @@ function renderProductCards() {
     });
   }
 
-  // 정치자금 기부금 공제 미설정
-  if (!dOn('political') || dVal('political', 'amount') === 0) {
+  // 고향사랑기부금 공제 미설정
+  if (!dOn('hometown') || dVal('hometown', 'amount') === 0) {
     items.push({
-      tag: '정치자금 기부금',
-      text: '정치자금 10만원 기부하면 거의 전액 돌려받아요',
-      sub: '10만원 기부 시 약 10만원 환급 (소득세+지방소득세)'
+      tag: '고향사랑기부금',
+      text: '고향사랑기부금 10만원이면 전액 환급 + 답례품까지',
+      sub: '10만원 기부 시 전액 환급 + 답례품 3만원 (연 2,000만원 한도)'
     });
   }
 
@@ -3380,7 +3844,7 @@ salaryInput.addEventListener('keydown', function(e) {
       salaryInput.blur();
       S.salary = Number(v);
       startBtn.disabled = false;
-      goScreen('screen-q1');
+      goScreen('screen-workplace');
     }
   }
 });
@@ -3389,7 +3853,7 @@ startBtn.addEventListener('click', function() {
   var v = salaryInput.value.replace(/[^0-9]/g, '');
   if (!v || Number(v) <= 0) return;
   S.salary = Number(v);
-  goScreen('screen-q1');
+  goScreen('screen-workplace');
 });
 
 // 연봉 빠른 선택 칩
