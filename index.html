@@ -466,21 +466,45 @@ body {
 .count-value { font-size: 18px; font-weight: 700; color: var(--text); min-width: 24px; text-align: center; }
 
 /* === Optimization === */
-.opt-header { padding: 56px 24px 20px; }
+.opt-header { padding: 56px 24px 16px; }
 .opt-title { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.3; margin-bottom: 4px; text-align: left; }
-.opt-sub { font-size: 13px; color: var(--text4); }
+.opt-sub { font-size: 14px; color: var(--text2); line-height: 1.5; }
 
-.opt-card { margin: 0 24px 16px; padding: 20px; background: var(--card); border-radius: 16px; }
-.opt-card-q { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 10px; line-height: 1.4; }
-.opt-card-a { font-size: 14px; color: var(--text2); line-height: 1.6; }
-.opt-card-a strong { color: var(--accent); font-weight: 700; }
-.opt-card-result {
-  margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line);
-  font-size: 13px; color: var(--green); font-weight: 700;
+.opt-section { margin: 24px 24px 0; }
+.opt-section-title { font-size: 13px; font-weight: 700; color: var(--text3); letter-spacing: 0.5px; margin-bottom: 12px; }
+
+.opt-card {
+  padding: 20px; background: #fff; border-radius: 16px; margin-bottom: 12px;
+  border: 1.5px solid var(--line); transition: all 0.2s;
 }
+.opt-card:active { transform: scale(0.98); }
+.opt-card-icon { font-size: 28px; margin-bottom: 8px; }
+.opt-card-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.opt-card-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+.opt-card-tag {
+  display: inline-block; padding: 4px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 700; margin-top: 10px;
+}
+.opt-card-tag.immediate { background: #E8F5E9; color: #2E7D32; }
+.opt-card-tag.annual { background: #FFF3E0; color: #E65100; }
+.opt-card-tag.family { background: #E3F2FD; color: #1565C0; }
+
 .opt-card-empty {
-  margin: 0 24px; padding: 40px 20px; text-align: left; color: var(--text4); font-size: 14px; line-height: 1.6;
+  padding: 60px 24px; text-align: center; font-size: 15px;
+  color: var(--text3); line-height: 1.6;
 }
+
+.opt-dual-card {
+  padding: 20px; background: linear-gradient(135deg, #f8f9ff 0%, #eef3ff 100%);
+  border-radius: 16px; margin-bottom: 12px;
+}
+.opt-dual-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.opt-dual-result {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; color: var(--text2); margin-bottom: 4px;
+}
+.opt-dual-winner { font-weight: 700; color: var(--accent); }
+.opt-dual-detail { font-size: 12px; color: var(--text3); margin-top: 8px; line-height: 1.4; }
 
 /* === Settings === */
 .settings-header { padding: 56px 24px 20px; }
@@ -1227,8 +1251,8 @@ body {
 <!-- ============================================ -->
 <div id="tab-optimize" class="tab-content">
   <div class="opt-header">
-    <div class="opt-title">최적화 추천</div>
-    <div class="opt-sub" id="optSubText">맞벌이라면 최적 배분 전략을 알려드려요</div>
+    <div class="opt-title">절세 전략</div>
+    <div class="opt-sub" id="optSubText"></div>
   </div>
   <div id="optimizeContent"></div>
 </div>
@@ -1349,7 +1373,7 @@ body {
   </button>
   <button class="tab-btn" data-tab="tab-optimize" onclick="switchTab('tab-optimize')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-    <span>최적화</span>
+    <span>전략</span>
   </button>
   <button class="tab-btn" data-tab="tab-settings" onclick="switchTab('tab-settings')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -3452,57 +3476,190 @@ function renderOptimize() {
   var container = document.getElementById('optimizeContent');
   container.innerHTML = '';
 
-  if (!S.married) {
-    container.innerHTML = '<div class="opt-card-empty">기혼인 경우에만<br>최적화 추천을 받을 수 있어요.</div>';
-    return;
+  document.getElementById('optSubText').textContent =
+    '연봉 ' + fmt(S.salary) + '만원 기준 맞춤 절세 전략';
+
+  // === Section 1: 지금 바로 할 수 있는 것 ===
+  var sec1 = document.createElement('div');
+  sec1.className = 'opt-section';
+  sec1.innerHTML = '<div class="opt-section-title">지금 바로 할 수 있는 것</div>';
+
+  var immediateItems = [];
+
+  // 고향사랑기부금
+  if (!dOn('hometown') || dVal('hometown', 'amount') === 0) {
+    immediateItems.push({
+      icon: '🏠',
+      title: '고향사랑기부금 10만원 기부하기',
+      desc: '전액 환급 + 답례품 3만원. 실질 이득 13만원',
+      tag: 'immediate'
+    });
   }
-  if (S.spouseSalary <= 0) {
-    container.innerHTML = '<div class="opt-card-empty">배우자 총급여를 입력하면<br>최적화 추천을 받을 수 있어요.<br><br>설정 탭에서 배우자 연봉을 입력해주세요.</div>';
-    return;
+
+  // 연금저축/IRP
+  var pensionVal = dOn('pension') ? ((dVal('pension', 'pension_saving') || 0) + (dVal('pension', 'irp') || 0)) : 0;
+  if (pensionVal < 900) {
+    var remaining = 900 - pensionVal;
+    immediateItems.push({
+      icon: '💰',
+      title: '연금저축/IRP ' + fmt(remaining) + '만원 더 넣기',
+      desc: '연 900만원까지 세액공제. ' + fmt(remaining) + '만원 추가 시 약 ' + fmt(Math.round(remaining * 0.165)) + '만원 절세',
+      tag: 'annual'
+    });
   }
 
-  var myAnnual = S.salary * 10000;
-  var spouseAnnual = S.spouseSalary * 10000;
-  var myNonTax = calcNonTaxable();
-  var myTotalPay = Math.max(myAnnual - myNonTax, 0);
-  var spTotalPay = Math.max(spouseAnnual - myNonTax, 0);
+  // 카드 전략
+  var myThreshold25 = Math.round(S.salary * 10000 * 0.25 / 10000);
+  immediateItems.push({
+    icon: '💳',
+    title: '총급여 25% = ' + fmt(myThreshold25) + '만원까지는 신용카드',
+    desc: '기준선 넘긴 후 체크카드/현금영수증으로 전환하면 공제율 2배(30%)',
+    tag: 'immediate'
+  });
 
-  // 의료비
-  var card1 = document.createElement('div');
-  card1.className = 'opt-card';
-  var medicalWinner = myTotalPay <= spTotalPay ? '본인' : '배우자';
-  var myThreshold = Math.round(myTotalPay * 0.03 / 10000);
-  var spThreshold = Math.round(spTotalPay * 0.03 / 10000);
-  card1.innerHTML =
-    '<div class="opt-card-q">의료비를 누구한테 몰아줘야 할까?</div>' +
-    '<div class="opt-card-a"><strong>' + medicalWinner + '</strong> 쪽으로 몰아주는 게 유리해요.<br>총급여가 낮은 쪽이 3% 기준선이 낮아져 공제받는 금액이 커져요.</div>' +
-    '<div class="opt-card-result">본인 3% 기준선: ' + myThreshold + '만원 / 배우자: ' + spThreshold + '만원</div>';
-  container.appendChild(card1);
+  // 보험료
+  if (!dOn('insurance') || ((dVal('insurance', 'general') || 0) < 100)) {
+    immediateItems.push({
+      icon: '🛡️',
+      title: '보장성보험 100만원 한도 채우기',
+      desc: '연 100만원까지 12% 세액공제 = 최대 12만원 절세',
+      tag: 'annual'
+    });
+  }
 
-  // 부양가족
-  var card2 = document.createElement('div');
-  card2.className = 'opt-card';
-  var myEid = earnedIncomeDeduction(myTotalPay);
-  var spEid = earnedIncomeDeduction(spTotalPay);
-  var myTaxable = Math.max(myTotalPay - myEid - 1500000, 0);
-  var spTaxable = Math.max(spTotalPay - spEid - 1500000, 0);
-  var myMR = marginalRate(myTaxable);
-  var spMR = marginalRate(spTaxable);
-  var famWinner = myMR >= spMR ? '본인' : '배우자';
-  card2.innerHTML =
-    '<div class="opt-card-q">부양가족은 누구한테 등록해야 할까?</div>' +
-    '<div class="opt-card-a"><strong>' + famWinner + '</strong> 쪽에 등록하는 게 유리해요.<br>세율이 높은 쪽에 등록하면 절세 효과가 더 커요.</div>' +
-    '<div class="opt-card-result">본인 한계세율: ' + Math.round(myMR * 100) + '% / 배우자: ' + Math.round(spMR * 100) + '%</div>';
-  container.appendChild(card2);
+  immediateItems.forEach(function(item) {
+    var card = document.createElement('div');
+    card.className = 'opt-card';
+    card.innerHTML =
+      '<div class="opt-card-icon">' + item.icon + '</div>' +
+      '<div class="opt-card-title">' + item.title + '</div>' +
+      '<div class="opt-card-desc">' + item.desc + '</div>' +
+      '<span class="opt-card-tag ' + item.tag + '">' +
+        (item.tag === 'immediate' ? '지금 바로' : item.tag === 'annual' ? '연말까지' : '가족') +
+      '</span>';
+    sec1.appendChild(card);
+  });
 
-  // 카드
-  var card3 = document.createElement('div');
-  card3.className = 'opt-card';
-  card3.innerHTML =
-    '<div class="opt-card-q">카드 공제는 어떻게?</div>' +
-    '<div class="opt-card-a">카드 소득공제는 카드 명의자 기준이에요. 각자 자기 카드로 결제한 금액만 공제됩니다.<br><br>' +
-    '<strong>총급여 25% 기준선이 낮은 쪽</strong>이 먼저 기준선을 넘기면 유리해요.</div>';
-  container.appendChild(card3);
+  if (immediateItems.length > 0) container.appendChild(sec1);
+
+  // === Section 2: 맞벌이 배분 전략 (기혼 + 배우자 소득 있을 때만) ===
+  if (S.married && S.spouseSalary > 0) {
+    var sec2 = document.createElement('div');
+    sec2.className = 'opt-section';
+    sec2.innerHTML = '<div class="opt-section-title">맞벌이 배분 전략</div>';
+
+    var myAnnual = S.salary * 10000;
+    var spouseAnnual = S.spouseSalary * 10000;
+    var myNonTax = calcNonTaxable();
+    var myTotalPay = Math.max(myAnnual - myNonTax, 0);
+    var spTotalPay = Math.max(spouseAnnual - myNonTax, 0);
+
+    // 의료비
+    var medicalWinner = myTotalPay <= spTotalPay ? '본인' : '배우자';
+    var myTh = Math.round(myTotalPay * 0.03 / 10000);
+    var spTh = Math.round(spTotalPay * 0.03 / 10000);
+    var dualCard1 = document.createElement('div');
+    dualCard1.className = 'opt-dual-card';
+    dualCard1.innerHTML =
+      '<div class="opt-dual-title">의료비 → 누구한테?</div>' +
+      '<div class="opt-dual-result"><span class="opt-dual-winner">' + medicalWinner + '</span> 쪽으로 몰아주세요</div>' +
+      '<div class="opt-dual-detail">3% 기준선 — 본인 ' + myTh + '만원 / 배우자 ' + spTh + '만원<br>기준선이 낮은 쪽이 유리</div>';
+    sec2.appendChild(dualCard1);
+
+    // 부양가족
+    var myEid = earnedIncomeDeduction(myTotalPay);
+    var spEid = earnedIncomeDeduction(spTotalPay);
+    var myTaxable = Math.max(myTotalPay - myEid - 1500000, 0);
+    var spTaxable = Math.max(spTotalPay - spEid - 1500000, 0);
+    var myMR = marginalRate(myTaxable);
+    var spMR = marginalRate(spTaxable);
+    var famWinner = myMR >= spMR ? '본인' : '배우자';
+    var dualCard2 = document.createElement('div');
+    dualCard2.className = 'opt-dual-card';
+    dualCard2.innerHTML =
+      '<div class="opt-dual-title">부양가족 → 누구한테?</div>' +
+      '<div class="opt-dual-result"><span class="opt-dual-winner">' + famWinner + '</span> 쪽에 등록하세요</div>' +
+      '<div class="opt-dual-detail">한계세율 — 본인 ' + Math.round(myMR * 100) + '% / 배우자 ' + Math.round(spMR * 100) + '%<br>세율 높은 쪽에 등록해야 절세 효과 큼</div>';
+    sec2.appendChild(dualCard2);
+
+    // 카드
+    var dualCard3 = document.createElement('div');
+    dualCard3.className = 'opt-dual-card';
+    dualCard3.innerHTML =
+      '<div class="opt-dual-title">카드 공제 → 각자 본인 카드</div>' +
+      '<div class="opt-dual-result">카드 명의자 기준이라 몰아줄 수 없어요</div>' +
+      '<div class="opt-dual-detail">각자 총급여 25% 기준선을 먼저 넘기는 게 핵심</div>';
+    sec2.appendChild(dualCard3);
+
+    container.appendChild(sec2);
+  }
+
+  // === Section 3: 놓치기 쉬운 항목 ===
+  var sec3 = document.createElement('div');
+  sec3.className = 'opt-section';
+  sec3.innerHTML = '<div class="opt-section-title">놓치기 쉬운 항목</div>';
+  var missedItems = [];
+
+  // 월세
+  if (S.housingCount === 0 && S.livingType === 'rent' && (!dOn('rent') || dVal('rent', 'amount') === 0)) {
+    missedItems.push({
+      icon: '🏡',
+      title: '월세 세액공제',
+      desc: '총급여 8천만원 이하 무주택자라면 월세의 15~17% 환급',
+      tag: 'immediate'
+    });
+  }
+
+  // 결혼세액공제
+  if (S.married && !dOn('marriage_credit')) {
+    missedItems.push({
+      icon: '💍',
+      title: '결혼세액공제 50만원',
+      desc: '2024~2026년 혼인신고 시 1회 적용. 잊지 마세요!',
+      tag: 'immediate'
+    });
+  }
+
+  // 교육비
+  if (S.hasChildren && !dOn('education')) {
+    missedItems.push({
+      icon: '📚',
+      title: '교육비 세액공제',
+      desc: '자녀 교육비 15% 세액공제. 학원비(취학 전)도 포함',
+      tag: 'annual'
+    });
+  }
+
+  // 기부금
+  if (!dOn('donation')) {
+    missedItems.push({
+      icon: '🤝',
+      title: '기부금 세액공제',
+      desc: '종교/비종교 기부금 15% (1천만원 초과 30%) 세액공제',
+      tag: 'annual'
+    });
+  }
+
+  if (missedItems.length > 0) {
+    missedItems.forEach(function(item) {
+      var card = document.createElement('div');
+      card.className = 'opt-card';
+      card.innerHTML =
+        '<div class="opt-card-icon">' + item.icon + '</div>' +
+        '<div class="opt-card-title">' + item.title + '</div>' +
+        '<div class="opt-card-desc">' + item.desc + '</div>' +
+        '<span class="opt-card-tag ' + item.tag + '">' +
+          (item.tag === 'immediate' ? '지금 바로' : '연말까지') +
+        '</span>';
+      sec3.appendChild(card);
+    });
+    container.appendChild(sec3);
+  }
+
+  // Empty state
+  if (container.children.length === 0) {
+    container.innerHTML = '<div class="opt-card-empty">절세 전략을 준비하고 있어요.<br>공제 탭에서 항목을 입력하면 맞춤 전략이 나타나요.</div>';
+  }
 }
 
 // ===========================
@@ -3655,9 +3812,9 @@ function renderRecommendCards() {
   // 맞벌이 최적화 추천
   if (S.married && S.spouseSalary > 0) {
     recommendations.push({
-      tag: '맞벌이 최적화',
+      tag: '맞벌이 전략',
       text: '배우자와 공제를 어떻게 나눌지 확인해보세요',
-      sub: '최적화 탭에서 비교 가능',
+      sub: '전략 탭에서 비교 가능',
       action: function() { switchTab('tab-optimize'); }
     });
   }
