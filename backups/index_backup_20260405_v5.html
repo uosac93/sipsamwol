@@ -110,11 +110,10 @@ body {
   width: 100%; height: 54px; border: none; border-radius: 16px;
   background: var(--accent); color: #fff; font-size: 17px; font-weight: 700;
   font-family: inherit; cursor: pointer; margin-top: 24px;
-  transition: transform 0.2s cubic-bezier(0.16,1,0.3,1), opacity 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 16px rgba(49,130,246,0.2);
+  transition: transform 0.15s, opacity 0.2s;
 }
-.primary-btn:disabled { opacity: 0.4; pointer-events: none; box-shadow: none; }
-.primary-btn:active { transform: scale(0.96); box-shadow: 0 2px 8px rgba(49,130,246,0.15); }
+.primary-btn:disabled { opacity: 0.4; pointer-events: none; }
+.primary-btn:active { transform: scale(0.97); }
 
 /* === Profile Choice Buttons === */
 .choice-list { display: flex; flex-direction: column; gap: 12px; }
@@ -683,18 +682,11 @@ body {
 .simple-detail-link:active { opacity: 0.5; }
 
 /* === Simple Result === */
-.simple-result-label { font-size: 14px; font-weight: 600; color: var(--text3); margin-bottom: 6px; }
+.simple-result-label { font-size: 15px; font-weight: 600; color: var(--text2); margin-bottom: 4px; }
 .simple-result-amount { font-size: 52px; font-weight: 800; letter-spacing: -2.5px; color: var(--text); }
 .simple-result-amount.negative { color: var(--red); }
-.simple-result-unit { font-size: 22px; font-weight: 700; margin-left: 6px; }
+.simple-result-unit { font-size: 22px; font-weight: 700; }
 .simple-result-sub { font-size: 13px; color: var(--text3); margin-top: 4px; }
-
-/* Stagger entrance (applied via JS) */
-.stagger-in { opacity: 0; transform: translateY(14px); }
-.stagger-in.show {
-  opacity: 1; transform: translateY(0);
-  transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1);
-}
 
 /* Goal */
 .goal-section {
@@ -735,28 +727,19 @@ body {
 
 /* === Consulting Cards === */
 .consulting-section { padding: 32px 24px 24px; }
-.consulting-title {
-  font-size: 20px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; color: var(--text);
-}
-.consulting-sub {
-  font-size: 14px; color: var(--text3); margin-bottom: 20px;
-}
+.consulting-title { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; color: var(--text); }
+.consulting-sub { font-size: 14px; color: var(--text3); margin-bottom: 20px; }
 
 /* Compare persons */
-.consulting-compare-wrap {
-  margin-bottom: 20px;
-}
-.consulting-compare-title {
-  font-size: 13px; font-weight: 700; color: var(--text3); letter-spacing: 0.3px;
-  margin-bottom: 10px;
-}
+.consulting-compare-wrap { margin-bottom: 20px; }
+.consulting-compare-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
 .consulting-compare-sub { display: none; }
 .compare-person {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
 }
 .compare-person-tag {
-  height: 30px; width: 56px; padding: 0; border-radius: 8px;
-  font-size: 13px; font-weight: 700; font-family: inherit;
+  height: 34px; min-width: 52px; padding: 0 10px; border-radius: 8px;
+  font-size: 12px; font-weight: 700; font-family: inherit;
   display: flex; align-items: center; justify-content: center;
   border: none; flex-shrink: 0;
 }
@@ -769,23 +752,19 @@ body {
   transition: border-color 0.2s;
 }
 .compare-person-input:focus { border-bottom-color: var(--accent); }
-.compare-person-input::placeholder { color: var(--text4); font-weight: 400; }
-.compare-person-unit { font-size: 13px; color: var(--text2); flex-shrink: 0; }
+.compare-person-unit { font-size: 12px; color: var(--text4); flex-shrink: 0; }
 .compare-person-remove {
-  width: 24px; height: 24px; border: none; background: none;
-  color: var(--text4); font-size: 13px; cursor: pointer;
+  width: 28px; height: 28px; border: none; background: none;
+  color: var(--text4); font-size: 16px; cursor: pointer;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.compare-person-remove:active { opacity: 0.5; }
 .compare-add-btn {
-  display: inline-flex; align-items: center; gap: 2px;
-  padding: 6px 0; border: none; background: none;
-  font-size: 13px; font-weight: 600; font-family: inherit;
-  color: var(--accent); cursor: pointer; transition: opacity 0.15s; margin-top: 2px;
-  outline: none;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  width: 100%; height: 36px; border: none; border-radius: 8px;
+  background: var(--card); font-size: 13px; font-weight: 600; font-family: inherit;
+  color: var(--text3); cursor: pointer; transition: all 0.15s; margin-top: 4px;
 }
-.compare-add-btn:active { opacity: 0.5; }
-.compare-add-btn:focus { outline: none; }
+.compare-add-btn:active { transform: scale(0.97); }
 
 /* Card list */
 .consulting-timeline { position: relative; padding-left: 18px; }
@@ -799,31 +778,30 @@ body {
   background: var(--bg); border-radius: 14px; padding: 0;
   margin-bottom: 8px; overflow: hidden;
   border: 1.5px solid var(--line);
-  transition: border-color 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease, transform 0.2s ease;
-  opacity: 0; animation: cardIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+  transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+  opacity: 0; animation: cardIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
 }
-.consulting-card:nth-child(1) { animation-delay: 0.04s; }
-.consulting-card:nth-child(2) { animation-delay: 0.10s; }
-.consulting-card:nth-child(3) { animation-delay: 0.16s; }
-.consulting-card:nth-child(4) { animation-delay: 0.22s; }
-.consulting-card:nth-child(5) { animation-delay: 0.28s; }
-.consulting-card:nth-child(6) { animation-delay: 0.34s; }
+.consulting-card:nth-child(1) { animation-delay: 0.02s; }
+.consulting-card:nth-child(2) { animation-delay: 0.06s; }
+.consulting-card:nth-child(3) { animation-delay: 0.10s; }
+.consulting-card:nth-child(4) { animation-delay: 0.14s; }
+.consulting-card:nth-child(5) { animation-delay: 0.18s; }
+.consulting-card:nth-child(6) { animation-delay: 0.22s; }
 @keyframes cardIn {
-  from { opacity: 0; transform: translateY(12px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .consulting-card.active {
   border-color: var(--accent);
   background: var(--bg);
-  box-shadow: 0 2px 12px rgba(49,130,246,0.08);
 }
 
 .consulting-card-header {
   display: flex; align-items: center; gap: 12px; padding: 15px 18px;
   cursor: pointer;
 }
-.consulting-card-header:active { opacity: 0.7; transform: scale(0.99); }
+.consulting-card-header:active { opacity: 0.5; }
 
 .consulting-card-check {
   width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid var(--text4);
@@ -846,29 +824,12 @@ body {
 /* Card body */
 .consulting-card-body {
   max-height: 0; overflow: hidden; opacity: 0;
-  transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease 0.05s, padding 0.3s ease;
+  transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease, padding 0.2s ease;
   padding: 0 18px;
 }
 .consulting-card.active .consulting-card-body {
-  max-height: 800px; opacity: 1; padding: 0 18px 18px;
-  animation: bodyReveal 0.4s cubic-bezier(0.16,1,0.3,1);
+  max-height: 700px; opacity: 1; padding: 0 18px 18px;
 }
-@keyframes bodyReveal {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Import button */
-.sim-import-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 14px; border-radius: 8px;
-  border: 1.5px solid var(--accent); background: var(--accent-light);
-  color: var(--accent); font-size: 13px; font-weight: 600;
-  font-family: inherit; cursor: pointer; transition: all 0.15s;
-  margin-bottom: 12px;
-}
-.sim-import-btn:active { transform: scale(0.96); background: rgba(49,130,246,0.15); }
-.sim-import-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 .consulting-card-desc {
   font-size: 13px; color: var(--text3); line-height: 1.6; margin-bottom: 14px;
 }
@@ -933,11 +894,6 @@ body {
 @keyframes fadeSlideLeft { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes countPop { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
 @keyframes itemPop { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
-@keyframes refundPop { 0% { transform: scale(1); } 40% { transform: scale(1.04); } 100% { transform: scale(1); } }
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
 </style>
 </head>
 <body>
@@ -1017,11 +973,11 @@ body {
     </div>
 
     <div style="padding: 80px 24px 0;">
-      <div class="simple-result-label stagger-in">간편 예상 환급세액</div>
-      <div class="simple-result-amount stagger-in" id="simpleRefundAmount">+0<span class="simple-result-unit">원</span></div>
-      <div class="simple-result-sub stagger-in" id="simpleRefundSub">부양가족 1명(본인) 기준 추정</div>
+      <div class="simple-result-label">간편 예상 환급세액</div>
+      <div class="simple-result-amount" id="simpleRefundAmount">+0<span class="simple-result-unit">만원</span></div>
+      <div class="simple-result-sub" id="simpleRefundSub">부양가족 1명(본인) 기준 추정</div>
 
-      <div class="simple-result-detail stagger-in" id="simpleResultDetail">
+      <div class="simple-result-detail" id="simpleResultDetail">
         <div class="simple-detail-row">
           <span>기납부세액 (추정)</span>
           <span id="simpleWithheld">0만원</span>
@@ -1032,7 +988,7 @@ body {
         </div>
       </div>
 
-      <div class="goal-section stagger-in" id="goalSection">
+      <div class="goal-section" id="goalSection">
         <div class="goal-header">
           <span class="goal-label">목표 환급액</span>
           <div class="goal-input-wrap">
@@ -1055,22 +1011,23 @@ body {
       <div class="consulting-sub">해당하는 항목을 체크하고 비교해보세요</div>
 
       <div class="consulting-compare-wrap" id="compareWrap">
-        <div class="consulting-compare-title">비교 대상</div>
+        <div class="consulting-compare-title">비교 대상 추가</div>
+        <div class="consulting-compare-sub">배우자·부모님 등 공제를 나눌 수 있는 가족의 연봉을 입력하세요</div>
         <div class="compare-person">
           <span class="compare-person-tag me">본인</span>
-          <input class="compare-person-input" type="text" value="" disabled style="cursor:default;" id="compareMyDisplay">
+          <input class="compare-person-input" type="text" value="" disabled style="background:var(--line);color:var(--text2);" id="compareMyDisplay">
           <span class="compare-person-unit">만원</span>
-          <div style="width:24px;"></div>
+          <div style="width:28px;"></div>
         </div>
         <div id="comparePersonList"></div>
-        <button class="compare-add-btn" onclick="addComparePerson()">+ 추가</button>
+        <button class="compare-add-btn" onclick="addComparePerson()">+ 비교 대상 추가</button>
       </div>
 
       <div id="consultingCards" class="consulting-timeline"></div>
     </div>
 
     <div style="padding: 0 24px 24px;">
-      <button class="primary-btn" onclick="openDetailModeSheet()">정확하게 계산하기</button>
+      <button class="primary-btn" onclick="goToDetailMode()">정확하게 계산하기</button>
       <div class="simple-detail-link" onclick="goToMainFromSimple()" style="margin-top:12px;">이대로 진행하기 ></div>
     </div>
   </div>
@@ -1780,7 +1737,7 @@ function calcSocialInsForTax(totalPay) {
   var pensionBase = Math.max(Math.min(monthlyPay, 6370000), 400000);
   var pension = Math.round(pensionBase * 0.0475) * 12;
   var health = Math.round(monthlyPay * 0.03595) * 12;
-  var longterm = Math.round(Math.round(monthlyPay * 0.03595) * 0.1314) * 12; // 장기요양 13.14% (2026 귀속)
+  var longterm = Math.round(Math.round(monthlyPay * 0.03595) * 0.1295) * 12;
   var employ = Math.round(monthlyPay * 0.009) * 12;
   return pension + health + longterm + employ;
 }
@@ -2360,16 +2317,15 @@ function updateGoalProgress() {
     return;
   }
   var result = calcSimpleRefund(S.salary, simpleFamily);
-  var refundWon = Math.round(result.refund);
-  var goalWon = goalAmount * 10000;
-  var pct = Math.min(Math.round((refundWon / goalWon) * 100), 100);
-  var remainingWon = goalWon - refundWon;
+  var refundMan = Math.round(result.refund / 10000);
+  var pct = Math.min(Math.round((refundMan / goalAmount) * 100), 100);
+  var remaining = goalAmount - refundMan;
 
   document.getElementById('goalBarFill').style.width = pct + '%';
   document.getElementById('goalPercent').textContent = pct + '%';
 
-  if (remainingWon > 0) {
-    document.getElementById('goalRemaining').textContent = '목표까지 ' + fmt(remainingWon) + '원 남았어요';
+  if (remaining > 0) {
+    document.getElementById('goalRemaining').textContent = '목표까지 ' + fmt(remaining) + '만원 남았어요';
   } else {
     document.getElementById('goalRemaining').textContent = '목표를 달성했어요!';
     document.getElementById('goalRemaining').style.color = 'var(--green)';
@@ -2392,35 +2348,21 @@ function goToSimpleResult() {
 
   var result = calcSimpleRefund(S.salary, simpleFamily);
 
-  // 환급액 표시 (원 단위, 카운트업 애니메이션)
-  var refundWon = Math.round(result.refund);
+  // 환급액 표시
+  var refundMan = Math.round(result.refund / 10000);
   var amountEl = document.getElementById('simpleRefundAmount');
-  var isPositive = refundWon >= 0;
-  var absWon = Math.abs(refundWon);
-  var sign = isPositive ? '+' : '-';
-  amountEl.className = 'simple-result-amount' + (isPositive ? '' : ' negative');
-  amountEl.innerHTML = sign + '0<span class="simple-result-unit">원</span>';
-
-  // 카운트업
-  var duration = 1200;
-  var startTime = null;
-  function animateRefund(ts) {
-    if (!startTime) startTime = ts;
-    var p = Math.min((ts - startTime) / duration, 1);
-    var ease = 1 - Math.pow(1 - p, 3); // easeOutCubic
-    var current = Math.floor(ease * absWon);
-    amountEl.innerHTML = sign + fmt(current) + '<span class="simple-result-unit">원</span>';
-    if (p < 1) {
-      requestAnimationFrame(animateRefund);
-    } else {
-      amountEl.innerHTML = sign + fmt(absWon) + '<span class="simple-result-unit">원</span>';
-      amountEl.style.animation = 'refundPop 0.35s cubic-bezier(0.16,1,0.3,1)';
-    }
+  if (refundMan >= 0) {
+    amountEl.textContent = '+' + fmt(refundMan);
+    amountEl.innerHTML += '<span class="simple-result-unit">만원</span>';
+    amountEl.classList.remove('negative');
+  } else {
+    amountEl.textContent = fmt(refundMan);
+    amountEl.innerHTML += '<span class="simple-result-unit">만원</span>';
+    amountEl.classList.add('negative');
   }
-  requestAnimationFrame(animateRefund);
 
-  document.getElementById('simpleWithheld').textContent = fmt(Math.round(result.withheld)) + '원';
-  document.getElementById('simpleFinalTax').textContent = fmt(Math.round(result.finalTax)) + '원';
+  document.getElementById('simpleWithheld').textContent = fmtMan(result.withheld) + '만원';
+  document.getElementById('simpleFinalTax').textContent = fmtMan(result.finalTax) + '만원';
 
   // 목표 프로그레스 업데이트
   updateGoalProgress();
@@ -2433,13 +2375,6 @@ function goToSimpleResult() {
   if (myDisplay) myDisplay.value = Number(S.salary).toLocaleString();
 
   goScreen('screen-simple-result');
-
-  // Stagger entrance animation
-  var staggerEls = document.querySelectorAll('#screen-simple-result .stagger-in');
-  staggerEls.forEach(function(el) { el.classList.remove('show'); });
-  staggerEls.forEach(function(el, i) {
-    setTimeout(function() { el.classList.add('show'); }, 80 + i * 60);
-  });
 }
 
 var simpleResultVisited = false;
@@ -2495,11 +2430,11 @@ function renderComparePersons() {
     var row = document.createElement('div');
     row.className = 'compare-person';
     row.innerHTML =
-      '<select class="compare-person-tag other" onchange="comparePersons[' + idx + '].name=this.value;syncCompareData();" style="cursor:pointer;-webkit-appearance:none;appearance:none;text-align:center;width:56px;">' +
+      '<select class="compare-person-tag other" onchange="comparePersons[' + idx + '].name=this.value;syncCompareData();" style="height:36px;min-width:70px;padding:0 6px;border:1.5px solid var(--line);border-radius:8px;font-size:12px;font-weight:700;font-family:inherit;background:var(--bg);color:var(--text);appearance:none;">' +
         '<option value="배우자"' + (p.name==='배우자'?' selected':'') + '>배우자</option>' +
         '<option value="부모님"' + (p.name==='부모님'?' selected':'') + '>부모님</option>' +
       '</select>' +
-      '<input class="compare-person-input" type="text" inputmode="numeric" placeholder="연봉 입력" value="' + (p.salary > 0 ? Number(p.salary).toLocaleString() : '') + '" oninput="onComparePersonInput(this,' + idx + ')">' +
+      '<input class="compare-person-input" type="text" inputmode="numeric" placeholder="연봉" value="' + (p.salary > 0 ? Number(p.salary).toLocaleString() : '') + '" oninput="onComparePersonInput(this,' + idx + ')">' +
       '<span class="compare-person-unit">만원</span>' +
       '<button class="compare-person-remove" onclick="removeComparePerson(' + idx + ')">✕</button>';
     container.appendChild(row);
@@ -2546,9 +2481,6 @@ function renderConsultingCards() {
       body: function() {
         var threshold25 = Math.round(me.totalPay * 0.25);
         return '<div class="consulting-card-desc">총급여 25% 문턱을 넘겨야 공제가 시작돼요. 넘기기 전엔 신용카드, 넘긴 후엔 체크카드가 유리해요.</div>' +
-          '<button class="sim-import-btn" onclick="openCardImport();event.stopPropagation();">' +
-            '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 11v2a1 1 0 001 1h10a1 1 0 001-1v-2M8 2v8M5 7l3 3 3-3"/></svg>' +
-            '사용액 불러오기</button>' +
           '<div class="sim-row"><span class="sim-label">올해 사용액</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="card_used" oninput="simCard()"><span class="sim-unit">만원</span></div>' +
           '<div id="simCardResult"><div class="sim-result"><div class="sim-result-title">25% 문턱</div>' +
           '<div class="sim-result-tip">문턱: <strong>' + fmtMan(threshold25) + '만원</strong> (월 ' + fmtMan(threshold25/12) + '만원)<br>' +
@@ -4343,109 +4275,6 @@ function toggleMarketing() {
   var toggle = document.getElementById('marketingToggle');
   toggle.classList.toggle('on', marketingOptIn);
   showToast(marketingOptIn ? '맞춤 절세 알림을 받습니다' : '맞춤 절세 알림을 해제했습니다');
-}
-
-// ===========================
-// CARD IMPORT (사용액 불러오기)
-// ===========================
-function openCardImport() {
-  document.getElementById('authSheetContent').innerHTML =
-    '<div class="bottomsheet-title">카드 사용액 불러오기</div>' +
-    '<div style="font-size:14px;color:var(--text2);margin-bottom:20px;line-height:1.6;">간편인증으로 홈택스에서 올해 카드 사용내역을 가져옵니다.</div>' +
-    '<div class="auth-buttons">' +
-      '<button class="auth-btn" onclick="importCardData(\'kakao\')"><div class="auth-btn-logo kakao">K</div>카카오톡</button>' +
-      '<button class="auth-btn" onclick="importCardData(\'pass\')"><div class="auth-btn-logo pass">P</div>PASS</button>' +
-      '<button class="auth-btn" onclick="importCardData(\'naver\')"><div class="auth-btn-logo naver">N</div>네이버</button>' +
-      '<button class="auth-btn" onclick="importCardData(\'toss\')"><div class="auth-btn-logo toss">T</div>토스</button>' +
-    '</div>';
-  document.getElementById('authOverlay').classList.add('show');
-  document.getElementById('authSheet').classList.add('show');
-}
-
-function importCardData(provider) {
-  var names = { kakao: '카카오톡', pass: 'PASS', naver: '네이버', toss: '토스' };
-  document.getElementById('authSheetContent').innerHTML =
-    '<div class="auth-loading">' +
-      '<div class="auth-spinner"></div>' +
-      '<div class="auth-loading-text">' + names[provider] + '(으)로 카드 사용내역 조회 중...</div>' +
-    '</div>';
-
-  setTimeout(function() {
-    // 시뮬레이션: 카드 사용액 자동입력
-    var month = new Date().getMonth() + 1;
-    var estimatedUsed = Math.round(S.salary * 0.4 * (month / 12)); // 연봉 대비 40% 추정, 경과 월 기준
-    var cardInput = document.querySelector('[data-sim="card_used"]');
-    if (cardInput) {
-      cardInput.value = Number(estimatedUsed).toLocaleString();
-      simCard();
-    }
-    closeAuthSheet();
-    showToast('카드 사용내역을 불러왔습니다');
-  }, 1500);
-}
-
-// ===========================
-// DETAIL MODE SHEET (정확하게 계산하기 진입)
-// ===========================
-function openDetailModeSheet() {
-  document.getElementById('authSheetContent').innerHTML =
-    '<div class="bottomsheet-title">상세 계산 방법 선택</div>' +
-    '<div style="font-size:14px;color:var(--text2);margin-bottom:20px;line-height:1.6;">전년도 연말정산 데이터를 불러오거나 직접 입력할 수 있어요.</div>' +
-    '<div class="auth-buttons">' +
-      '<button class="auth-btn" onclick="detailWithAuth()" style="border-color:var(--accent);background:var(--accent-light);">' +
-        '<div class="auth-btn-logo toss" style="background:var(--accent);">' +
-          '<svg viewBox="0 0 20 20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M10 2v6m0 4v6m-6-8h12"/></svg>' +
-        '</div>' +
-        '<div><div style="font-weight:700;">간편인증으로 불러오기</div><div style="font-size:12px;color:var(--text3);margin-top:2px;">전년도 공제 설정이 자동 반영돼요</div></div>' +
-      '</button>' +
-      '<button class="auth-btn" onclick="detailManual()">' +
-        '<div class="auth-btn-logo" style="background:var(--card);color:var(--text2);">' +
-          '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M3 17l4-4m4-4l4-4M7 3h10v10"/></svg>' +
-        '</div>' +
-        '<div><div style="font-weight:700;">직접 입력하기</div><div style="font-size:12px;color:var(--text3);margin-top:2px;">항목별로 하나씩 입력해요</div></div>' +
-      '</button>' +
-    '</div>';
-  document.getElementById('authOverlay').classList.add('show');
-  document.getElementById('authSheet').classList.add('show');
-}
-
-function detailWithAuth() {
-  closeAuthSheet();
-  // 간편인증 플로우 → 인증 후 상세모드 진입
-  document.getElementById('authSheetContent').innerHTML =
-    '<div class="bottomsheet-title">인증 방법을 선택하세요</div>' +
-    '<div class="auth-buttons">' +
-      '<button class="auth-btn" onclick="detailAuthProvider(\'kakao\')"><div class="auth-btn-logo kakao">K</div>카카오톡</button>' +
-      '<button class="auth-btn" onclick="detailAuthProvider(\'pass\')"><div class="auth-btn-logo pass">P</div>PASS</button>' +
-      '<button class="auth-btn" onclick="detailAuthProvider(\'naver\')"><div class="auth-btn-logo naver">N</div>네이버</button>' +
-      '<button class="auth-btn" onclick="detailAuthProvider(\'toss\')"><div class="auth-btn-logo toss">T</div>토스</button>' +
-    '</div>';
-  setTimeout(function() {
-    document.getElementById('authOverlay').classList.add('show');
-    document.getElementById('authSheet').classList.add('show');
-  }, 400);
-}
-
-function detailAuthProvider(provider) {
-  var names = { kakao: '카카오톡', pass: 'PASS', naver: '네이버', toss: '토스' };
-  document.getElementById('authSheetContent').innerHTML =
-    '<div class="auth-loading">' +
-      '<div class="auth-spinner"></div>' +
-      '<div class="auth-loading-text">' + names[provider] + '(으)로 연말정산 자료 조회 중...</div>' +
-    '</div>';
-
-  setTimeout(function() {
-    // 전년도 데이터 prefill
-    prefillPrevYear();
-    closeAuthSheet();
-    goToDetailMode();
-    showToast('전년도 공제 데이터를 반영했습니다');
-  }, 1800);
-}
-
-function detailManual() {
-  closeAuthSheet();
-  goToDetailMode();
 }
 
 // ===========================
