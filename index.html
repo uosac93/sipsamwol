@@ -326,25 +326,19 @@ body {
 .monthly-tip-text { font-size: 14px; line-height: 1.6; color: #3a3a3c; }
 
 /* === Deduction Tab === */
-.deduction-header { padding: 56px 24px 20px; }
-.deduction-title { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.3; margin-bottom: 4px; text-align: left; }
-.deduction-sub { font-size: 13px; color: var(--text4); }
-.deduction-total {
-  margin: 0 24px 20px; padding: 16px 20px;
-  background: linear-gradient(135deg, #f0fff4 0%, #f0f5ff 100%);
-  border-radius: 16px; display: flex; justify-content: space-between; align-items: center;
-}
-.deduction-total-label { font-size: 14px; color: var(--text2); }
-.deduction-total-value { font-size: 20px; font-weight: 800; color: var(--green); letter-spacing: -0.5px; }
 
-.accordion { margin: 0 24px 12px; border-radius: 16px; overflow: hidden; background: var(--card); }
+.accordion { margin: 0 24px 10px; border-radius: 20px; overflow: hidden; background: #fff; box-shadow: 0 1px 8px rgba(0,0,0,0.04), 0 0 1px rgba(0,0,0,0.06); }
+.accordion-header-icon {
+  width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  background: #F4F4F5; color: var(--text2);
+}
 .accordion-header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 18px 20px; cursor: pointer; user-select: none; transition: background 0.15s;
-  min-height: 56px;
+  min-height: 60px;
 }
-.accordion-header:active { background: #ECEDEF; }
-.accordion-header-left { display: flex; align-items: center; gap: 10px; }
+.accordion-header:active { background: #F8F9FA; }
+.accordion-header-left { display: flex; align-items: center; gap: 14px; }
 .accordion-header-title { font-size: 17px; font-weight: 700; color: var(--text); }
 .accordion-badge {
   font-size: 12px; font-weight: 700; color: var(--accent); background: var(--accent-light);
@@ -354,26 +348,8 @@ body {
 .accordion-arrow { font-size: 16px; color: var(--text3); transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); }
 .accordion.open .accordion-arrow { transform: rotate(180deg); }
 .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease 0.05s; opacity: 0; }
-.accordion.open .accordion-body { opacity: 1; transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease; padding-bottom: 4px; }
+.accordion.open .accordion-body { overflow: visible; opacity: 1; transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease; padding-bottom: 20px; }
 
-.deduction-item { padding: 16px 20px; border-top: 1px solid var(--line); }
-.deduction-item-top { display: flex; align-items: center; gap: 12px; }
-.deduction-item-toggle {
-  width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--text4);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  transition: all 0.2s; cursor: pointer; min-width: 26px;
-}
-.deduction-item-toggle.on { background: var(--accent); border-color: var(--accent); }
-.deduction-item-toggle svg { opacity: 0; transition: opacity 0.2s; }
-.deduction-item-toggle.on svg { opacity: 1; }
-.deduction-item-info { flex: 1; min-width: 0; }
-.deduction-item-name { font-size: 15px; font-weight: 600; color: var(--text); cursor: pointer; }
-.deduction-item-desc { font-size: 12px; color: var(--text3); margin-top: 2px; line-height: 1.4; }
-.deduction-item-condition { font-size: 12px; color: var(--text4); margin-top: 3px; line-height: 1.3; }
-.deduction-item-saving { font-size: 15px; font-weight: 800; color: var(--green); flex-shrink: 0; letter-spacing: -0.5px; margin-left: auto; }
-
-.deduction-item-inputs { margin-top: 12px; padding-left: 34px; display: none; overflow: hidden; }
-.deduction-item.active .deduction-item-inputs { display: block; }
 .input-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
 .input-row label { font-size: 13px; color: var(--text2); min-width: 80px; flex-shrink: 0; }
 .input-field {
@@ -398,22 +374,6 @@ body {
 .count-value { font-size: 18px; font-weight: 700; color: var(--text); min-width: 24px; text-align: center; }
 
 /* === Optimization === */
-.opt-header { padding: 56px 24px 20px; }
-.opt-title { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.3; margin-bottom: 4px; text-align: left; }
-.opt-sub { font-size: 13px; color: var(--text4); }
-
-.opt-card { margin: 0 24px 16px; padding: 20px; background: var(--card); border-radius: 16px; }
-.opt-card-q { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 10px; line-height: 1.4; }
-.opt-card-a { font-size: 14px; color: var(--text2); line-height: 1.6; }
-.opt-card-a strong { color: var(--accent); font-weight: 700; }
-.opt-card-result {
-  margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line);
-  font-size: 13px; color: var(--green); font-weight: 700;
-}
-.opt-card-empty {
-  margin: 0 24px; padding: 40px 20px; text-align: left; color: var(--text4); font-size: 14px; line-height: 1.6;
-}
-
 /* === Settings === */
 .settings-header { padding: 56px 24px 20px; }
 .settings-title { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; text-align: left; }
@@ -480,41 +440,9 @@ body {
 .toast.show { opacity: 1; }
 
 /* Sync Button */
-.sync-btn {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 6px 12px; font-size: 12px; font-weight: 600;
-  color: var(--accent); border: 1.5px solid var(--accent);
-  border-radius: 6px; background: transparent;
-  cursor: pointer; font-family: inherit;
-  transition: all 0.2s; margin-bottom: 8px;
-}
-.sync-btn:active { background: var(--accent-light); transform: scale(0.96); }
-.sync-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
 
-/* Deduction save button */
-.deduction-save-wrap {
-  padding: 20px 24px 40px;
-}
-.deduction-save-wrap .primary-btn {
-  margin-top: 0;
-}
-
-/* Prefill previous year button */
-.prefill-prev-wrap { margin: 0 24px 16px; }
-.prefill-prev-btn {
-  width: 100%; padding: 14px 0; font-size: 15px; font-weight: 600;
-  color: var(--text2); background: var(--bg); border: 1px solid var(--line);
-  border-radius: 16px; cursor: pointer; font-family: inherit;
-  transition: all 0.2s;
-}
-.prefill-prev-btn:active { background: #e8e8ea; transform: scale(0.98); }
-
-/* Accordion header saving */
 .accordion-header-right {
   display: flex; align-items: center; gap: 10px;
-}
-.accordion-header-saving {
-  font-size: 14px; font-weight: 700; color: var(--green); letter-spacing: -0.3px;
 }
 
 /* Recommendation Cards */
@@ -706,72 +634,71 @@ body {
 .simple-detail-row span:last-child { font-weight: 600; color: var(--text); }
 
 /* === Consulting Cards === */
-.consulting-section { padding: 32px 24px 24px; }
+.consulting-section { padding: 24px 0 24px; }
 .consulting-title {
-  font-size: 20px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; color: var(--text);
+  font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; color: var(--text);
+  padding: 0 24px;
 }
 .consulting-sub {
-  font-size: 14px; color: var(--text3); margin-bottom: 20px;
+  font-size: 14px; color: var(--text3); margin-bottom: 24px;
+  padding: 0 24px;
 }
 
 /* Compare persons */
 .consulting-compare-wrap {
-  margin-bottom: 20px;
+  margin: 0 0 20px; padding: 20px; background: #fff; border-radius: 16px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.04), 0 0 1px rgba(0,0,0,0.06);
 }
 .consulting-compare-title {
-  font-size: 13px; font-weight: 700; color: var(--text3); letter-spacing: 0.3px;
-  margin-bottom: 10px;
+  font-size: 13px; font-weight: 600; color: var(--text3);
+  margin-bottom: 14px;
 }
 .consulting-compare-sub { display: none; }
 .compare-person {
-  display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
 }
 .compare-person-tag {
-  height: 30px; width: 56px; padding: 0; border-radius: 8px;
+  height: 32px; min-width: 52px; padding: 0 10px; border-radius: 10px;
   font-size: 13px; font-weight: 700; font-family: inherit;
   display: flex; align-items: center; justify-content: center;
   border: none; flex-shrink: 0;
 }
 .compare-person-tag.me { background: var(--accent); color: #fff; }
-.compare-person-tag.other { background: var(--line); color: var(--text2); }
+.compare-person-tag.other { background: #F2F4F6; color: var(--text2); }
 .compare-person-input {
-  flex: 1; height: 34px; border: none; border-bottom: 1.5px solid var(--line);
+  flex: 1; height: 36px; border: none; border-bottom: 1.5px solid var(--line);
   padding: 0 4px; font-size: 15px; font-weight: 600; font-family: inherit;
   outline: none; background: transparent; color: var(--text);
-  transition: border-color 0.2s;
+  transition: border-color 0.2s; min-width: 0;
 }
 .compare-person-input:focus { border-bottom-color: var(--accent); }
 .compare-person-input::placeholder { color: var(--text4); font-weight: 400; }
-.compare-person-unit { font-size: 13px; color: var(--text2); flex-shrink: 0; }
+.compare-person-unit { font-size: 13px; color: var(--text3); flex-shrink: 0; width: 30px; text-align: right; }
 .compare-person-remove {
-  width: 44px; height: 44px; margin: -10px -10px -10px 0; border: none; background: none;
-  color: var(--text4); font-size: 13px; cursor: pointer;
+  width: 28px; height: 44px; margin: 0; border: none; background: none;
+  color: var(--text4); font-size: 14px; cursor: pointer;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
+.compare-person-spacer { width: 28px; flex-shrink: 0; }
 .compare-person-remove:active { opacity: 0.5; }
 .compare-add-btn {
-  display: inline-flex; align-items: center; gap: 2px;
-  padding: 6px 0; border: none; background: none;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 8px 0; border: none; background: none;
   font-size: 13px; font-weight: 600; font-family: inherit;
-  color: var(--accent); cursor: pointer; transition: opacity 0.15s; margin-top: 2px;
-  outline: none;
+  color: var(--accent); cursor: pointer; transition: opacity 0.15s; margin-top: 4px;
+  outline: none; min-height: 44px; position: relative; z-index: 5;
 }
 .compare-add-btn:active { opacity: 0.5; }
 .compare-add-btn:focus { outline: none; }
 
-/* Card list */
-.consulting-timeline { position: relative; padding-left: 18px; }
-.consulting-timeline::before {
-  content: ''; position: absolute; left: 4px; top: 20px; bottom: 20px;
-  width: 1.5px; background: linear-gradient(180deg, var(--accent) 0%, var(--line) 100%);
-}
 
 /* Card */
 .consulting-card {
-  background: var(--bg); border-radius: 14px; padding: 0;
-  margin-bottom: 8px; overflow: hidden;
-  border: 1.5px solid var(--line);
-  transition: border-color 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease, transform 0.2s ease;
+  background: #fff; border-radius: 14px; padding: 0;
+  margin: 4px 14px 6px; overflow: hidden;
+  border: none;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.04);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
   opacity: 0; animation: cardIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
 }
 .consulting-card:nth-child(1) { animation-delay: 0.04s; }
@@ -786,12 +713,12 @@ body {
 }
 
 .consulting-card.active {
-  border-color: rgba(49,130,246,0.3);
-  background: var(--bg);
+  box-shadow: 0 0 0 1.5px var(--accent), 0 2px 8px rgba(49,130,246,0.08);
+  background: #fff;
 }
 
 .consulting-card-header {
-  display: flex; align-items: center; gap: 12px; padding: 15px 18px;
+  display: flex; align-items: center; gap: 12px; padding: 16px 18px;
   cursor: pointer;
 }
 .consulting-card-header:active { opacity: 0.7; transform: scale(0.99); }
@@ -811,17 +738,16 @@ body {
 .consulting-card-check svg { width: 12px; height: 12px; opacity: 0; transition: opacity 0.15s; }
 .consulting-card.active .consulting-card-check svg { opacity: 1; }
 
-.consulting-card-num { display: none; }
 .consulting-card-title { font-size: 15px; font-weight: 600; color: var(--text); }
 
 /* Card body */
 .consulting-card-body {
   max-height: 0; overflow: hidden; opacity: 0;
   transition: max-height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease 0.05s, padding 0.3s ease;
-  padding: 0 18px;
+  padding: 0 20px;
 }
 .consulting-card.active .consulting-card-body {
-  max-height: 800px; opacity: 1; padding: 0 18px 18px;
+  max-height: 800px; opacity: 1; padding: 0 20px 12px;
   animation: bodyReveal 0.4s cubic-bezier(0.16,1,0.3,1);
 }
 @keyframes bodyReveal {
@@ -1016,84 +942,6 @@ body {
 
     <button class="primary-btn" id="simpleNextBtn" onclick="goToSimpleResult()">간편 결과 보기</button>
     <div class="simple-detail-link" onclick="goToDetailMode()">정확하게 계산하기 ></div>
-  </div>
-</div>
-
-<!-- ============================================ -->
-<!-- SCREEN: SIMPLE RESULT + CONSULTING CARDS     -->
-<!-- ============================================ -->
-<div id="screen-simple-result" class="screen">
-  <div style="flex:1; overflow-y:auto; padding-bottom:60px;">
-    <div class="onboarding-top-bar">
-      <button class="back-btn" onclick="goScreen('screen-simple')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-    </div>
-
-    <div style="padding: 80px 24px 0;">
-      <div class="stagger-in" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--card);border-radius:8px;margin-bottom:16px;cursor:pointer;" onclick="goScreen('screen-simple')">
-        <span style="font-size:13px;font-weight:600;color:var(--text);" id="simpleProfileSummary">연봉 0만원 · 1명</span>
-        <span style="font-size:11px;color:var(--text4);">수정</span>
-      </div>
-      <div class="simple-result-label stagger-in">간편 예상 환급세액</div>
-      <div class="simple-result-amount stagger-in" id="simpleRefundAmount">+0<span class="simple-result-unit">원</span></div>
-      <div class="simple-result-sub stagger-in" id="simpleRefundSub"></div>
-
-      <div class="simple-result-detail stagger-in" id="simpleResultDetail">
-        <div class="simple-detail-row">
-          <span>기납부세액 (추정)</span>
-          <span id="simpleWithheld">0만원</span>
-        </div>
-        <div class="simple-detail-row">
-          <span>결정세액 (추정)</span>
-          <span id="simpleFinalTax">0만원</span>
-        </div>
-      </div>
-
-      <div class="stagger-in" style="margin-top:24px;padding:20px;background:var(--card);border-radius:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <span style="font-size:14px;font-weight:700;color:var(--text);">절세 달성률</span>
-          <span style="font-size:14px;font-weight:800;color:var(--accent);" id="staticGoalPercent">0%</span>
-        </div>
-        <div style="height:8px;background:var(--line);border-radius:4px;overflow:hidden;">
-          <div id="staticGoalBar" style="height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent),#6DB3F8);width:0%;transition:width 0.6s cubic-bezier(0.16,1,0.3,1);"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;margin-top:8px;">
-          <span style="font-size:12px;color:var(--text3);">현재 <span id="staticCurrentRefund">0</span>원</span>
-          <span style="font-size:12px;color:var(--text3);">최대 <span id="staticMaxRefund">0</span>원</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="consulting-section">
-      <div class="consulting-title">맞춤 절세 컨설팅</div>
-      <div class="consulting-sub">해당하는 항목을 체크하고 비교해보세요</div>
-
-      <div class="consulting-compare-wrap" id="compareWrap">
-        <div class="consulting-compare-title">비교 대상</div>
-        <div class="compare-person">
-          <span class="compare-person-tag me">본인</span>
-          <input class="compare-person-input" type="text" value="" disabled style="cursor:default;" id="compareMyDisplay">
-          <span class="compare-person-unit">만원</span>
-          <div style="width:44px;"></div>
-        </div>
-        <div id="comparePersonList"></div>
-        <button class="compare-add-btn" onclick="addComparePerson()">+ 추가</button>
-      </div>
-
-      <div id="consultingCards" class="consulting-timeline"></div>
-    </div>
-
-    <div style="padding: 0 24px 40px;">
-      <div style="padding:20px;background:var(--card);border-radius:14px;margin-bottom:16px;">
-        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;">더 정확하게 알고 싶다면</div>
-        <div style="font-size:13px;color:var(--text3);line-height:1.5;margin-bottom:14px;">항목별 공제 입력으로 실제 환급액에 가까운 결과를 받아보세요</div>
-        <button class="primary-btn" onclick="openDetailModeSheet()" style="margin-top:0;">상세 계산하기</button>
-      </div>
-      <div style="text-align:center;">
-        <button onclick="resetAndStart()" style="border:none;background:none;font-family:inherit;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;padding:12px;">처음부터 다시하기</button>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -1373,21 +1221,6 @@ body {
   </div>
 </div>
 
-<!-- TAB: DEDUCTION (hidden, kept for detail mode) -->
-<div id="tab-deduction" class="tab-content" style="display:none !important;">
-  <div class="deduction-header">
-    <div class="deduction-title">공제 항목</div>
-    <div class="deduction-sub" id="deductionTabSub">프로필 기반 맞춤 항목이에요</div>
-  </div>
-  <div class="deduction-total">
-    <span class="deduction-total-label">총 예상 절세액</span>
-    <span class="deduction-total-value" id="totalSavingDisplay">+0만원</span>
-  </div>
-  <div id="deductionAccordions"></div>
-  <div class="deduction-save-wrap">
-    <button class="primary-btn" id="deductionSaveBtn" onclick="saveDeductions()">저장하기</button>
-  </div>
-</div>
 
 <!-- Bottom Sheet: Auth -->
 <div class="bottomsheet-overlay" id="authOverlay" onclick="closeAuthSheet()"></div>
@@ -1418,17 +1251,6 @@ body {
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
-
-<!-- ============================================ -->
-<!-- TAB: OPTIMIZE                                 -->
-<!-- ============================================ -->
-<div id="tab-optimize" class="tab-content" style="display:none !important;"
-  <div class="opt-header">
-    <div class="opt-title">최적화 추천</div>
-    <div class="opt-sub" id="optSubText">맞벌이라면 최적 배분 전략을 알려드려요</div>
-  </div>
-  <div id="optimizeContent"></div>
-</div>
 
 <!-- ============================================ -->
 <!-- TAB: SETTINGS                                 -->
@@ -1851,28 +1673,11 @@ function calcWithheld(annualSalary) {
   var totalPay = Math.max(annualSalary - nonTax, 0);
   if (totalPay <= 0) return { annual: 0, totalPay: 0 };
 
-  var eid = earnedIncomeDeduction(totalPay);
-  var earnedIncome = totalPay - eid;
-  var personal = 1500000;
-  if (S.married) personal += 1500000;
-  personal += S.childAges.length * 1500000;
-  var socialIns = calcSocialInsForTax(totalPay);
-  // 표준세액공제 13만원은 세액공제에서 이미 처리됨 (소득세법 §64)
-  var deductions = personal + socialIns;
-  var taxable = Math.max(earnedIncome - deductions, 0);
-  var computed = incomeTax(taxable);
-  var credit = earnedIncomeTaxCredit(computed, totalPay);
-  var standardTaxCredit = 130000;
-  var childCredit = 0;
-  var eligibleChildren = S.childAges.filter(function(a) { return a >= 8; }).length;
-  if (eligibleChildren === 1) childCredit = 250000;
-  else if (eligibleChildren === 2) childCredit = 550000;
-  else if (eligibleChildren >= 3) childCredit = 550000 + (eligibleChildren - 2) * 400000;
-
-  var annualTax = Math.max(computed - credit - childCredit - standardTaxCredit, 0);
-  var annualTaxWithLocal = annualTax + Math.round(annualTax * 0.1); // 지방소득세 10%
-  var monthlyTax = Math.round(annualTaxWithLocal / 12);
-  var adjusted = Math.round(monthlyTax * (S.rate / 100));
+  // 간이세액표 기준 부양가족 1명(본인) 원천징수
+  var monthlyPay = Math.round(totalPay / 12);
+  var monthlyTax = lookupWithholding(monthlyPay);
+  var withLocal = monthlyTax + Math.round(monthlyTax * 0.1);
+  var adjusted = Math.round(withLocal * (S.rate / 100));
   return { annual: adjusted * 12, totalPay: totalPay };
 }
 
@@ -2350,8 +2155,33 @@ function calcSimpleRefund(salary, familyCount) {
   // 4대보험
   var socialIns = calcSocialInsForTax(totalPay);
 
+  // 특별소득공제 추정 (간이세액표 산식과 동일하게 반영)
+  // 소득령 별표2: 공제대상가족 1명 기준
+  var specialDed = 0;
+  if (familyCount <= 1) {
+    if (totalPay <= 30000000) specialDed = 3100000 + totalPay * 0.04;
+    else if (totalPay <= 45000000) specialDed = 3100000 + totalPay * 0.04 - (totalPay - 30000000) * 0.05;
+    else if (totalPay <= 70000000) specialDed = 3100000 + totalPay * 0.015;
+    else if (totalPay <= 120000000) specialDed = 3100000 + totalPay * 0.005;
+    else specialDed = 3100000 + 120000000 * 0.005;
+  } else if (familyCount === 2) {
+    if (totalPay <= 30000000) specialDed = 3600000 + totalPay * 0.04;
+    else if (totalPay <= 45000000) specialDed = 3600000 + totalPay * 0.04 - (totalPay - 30000000) * 0.05;
+    else if (totalPay <= 70000000) specialDed = 3600000 + totalPay * 0.02;
+    else if (totalPay <= 120000000) specialDed = 3600000 + totalPay * 0.01;
+    else specialDed = 3600000 + 120000000 * 0.01;
+  } else {
+    if (totalPay <= 30000000) specialDed = 5000000 + totalPay * 0.07;
+    else if (totalPay <= 45000000) specialDed = 5000000 + totalPay * 0.07 - (totalPay - 30000000) * 0.05;
+    else if (totalPay <= 70000000) specialDed = 5000000 + totalPay * 0.05;
+    else if (totalPay <= 120000000) specialDed = 5000000 + totalPay * 0.03;
+    else specialDed = 5000000 + 120000000 * 0.03;
+    if (totalPay > 40000000) specialDed += (totalPay - 40000000) * 0.04;
+  }
+  specialDed = Math.round(specialDed);
+
   // 과세표준
-  var taxable = Math.max(earnedIncome - personal - socialIns, 0);
+  var taxable = Math.max(earnedIncome - personal - socialIns - specialDed, 0);
 
   // 산출세액
   var computed = incomeTax(taxable);
@@ -2359,7 +2189,7 @@ function calcSimpleRefund(salary, familyCount) {
   // 근로소득세액공제
   var earnedCredit = earnedIncomeTaxCredit(computed, totalPay);
 
-  // 표준세액공제 (간편모드에서는 특별공제 없으므로 13만원 적용)
+  // 표준세액공제는 특별세액공제와 택1이므로, 특별소득공제 반영 시 표준세액공제도 유지
   var standardCredit = 130000;
 
   // 결정세액 (소득세)
@@ -2377,28 +2207,120 @@ function calcSimpleRefund(salary, familyCount) {
   return { refund: refund, withheld: withheld, finalTax: finalTax };
 }
 
-function calcWithheldSimple(totalPay, familyCount) {
-  // 간이세액표 근사: 대부분의 회사는 부양가족 1명(본인만)으로 원천징수
-  // 연말정산 때 실제 부양가족 + 특별공제가 반영되면서 환급 발생
-  var eid = earnedIncomeDeduction(totalPay);
-  var earnedIncome = totalPay - eid;
-  var personal = 1 * 1500000; // 원천징수는 본인 1명 기준
-  var socialIns = calcSocialInsForTax(totalPay);
-  // 간이세액표는 국민연금만 반영 (건강보험 등은 미반영이 원칙이나 근사 처리)
-  var taxable = Math.max(earnedIncome - personal - socialIns, 0);
-  var computed = incomeTax(taxable);
-  var earnedCredit = earnedIncomeTaxCredit(computed, totalPay);
-  // 간이세액표는 표준세액공제 13만원을 반영하지 않고 원천징수
-  // (연말정산 시 표준세액공제 또는 특별세액공제가 적용되면서 환급 발생)
-  var annualTax = Math.max(computed - earnedCredit, 0);
-  var withLocal = annualTax + Math.round(annualTax * 0.1);
-  // 원천징수 비율 적용
-  var monthlyTax = Math.round(withLocal / 12);
-  var adjusted = Math.round(monthlyTax * (S.rate / 100));
-  return adjusted * 12;
+// 간이세액표 (2026.03.01 기준) 부양가족 1명 [월급여(천원)이상, 소득세(원)]
+var WITHHOLDING_TABLE = [
+[1060,1040],[1065,1110],[1070,1180],[1075,1250],[1080,1320],[1085,1390],[1090,1460],[1095,1530],
+[1100,1600],[1105,1670],[1110,1740],[1115,1810],[1120,1880],[1125,1950],[1130,2020],[1135,2090],
+[1140,2160],[1145,2230],[1150,2300],[1155,2370],[1160,2440],[1165,2500],[1170,2570],[1175,2640],
+[1180,2710],[1185,2780],[1190,2850],[1195,2920],[1200,2990],[1205,3060],[1210,3130],[1215,3200],
+[1220,3270],[1225,3340],[1230,3410],[1235,3480],[1240,3550],[1245,3620],[1250,3700],[1255,3810],
+[1260,3910],[1265,4010],[1270,4120],[1275,4220],[1280,4320],[1285,4430],[1290,4530],[1295,4630],
+[1300,4740],[1305,4840],[1310,4940],[1315,5050],[1320,5150],[1325,5250],[1330,5360],[1335,5460],
+[1340,5560],[1345,5670],[1350,5770],[1355,5870],[1360,5980],[1365,6080],[1370,6180],[1375,6290],
+[1380,6390],[1385,6490],[1390,6600],[1395,6700],[1400,6800],[1405,6910],[1410,7010],[1415,7110],
+[1420,7210],[1425,7320],[1430,7420],[1435,7520],[1440,7630],[1445,7730],[1450,7830],[1455,7940],
+[1460,8040],[1465,8140],[1470,8250],[1475,8350],[1480,8450],[1485,8560],[1490,8660],[1495,8760],
+[1500,8920],[1510,9120],[1520,9330],[1530,9540],[1540,9740],[1550,9950],[1560,10160],[1570,10360],
+[1580,10570],[1590,10780],[1600,10980],[1610,11190],[1620,11400],[1630,11600],[1640,11810],[1650,12020],
+[1660,12220],[1670,12430],[1680,12640],[1690,12840],[1700,13050],[1710,13260],[1720,13460],[1730,13670],
+[1740,13880],[1750,14080],[1760,14290],[1770,14500],[1780,14700],[1790,14910],[1800,15110],[1810,15320],
+[1820,15530],[1830,15730],[1840,15940],[1850,16150],[1860,16350],[1870,16560],[1880,16770],[1890,16970],
+[1900,17180],[1910,17390],[1920,17590],[1930,17800],[1940,18010],[1950,18210],[1960,18420],[1970,18630],
+[1980,18880],[1990,19200],[2000,19520],[2010,19850],[2020,20170],[2030,20490],[2040,20810],[2050,21130],
+[2060,21450],[2070,21770],[2080,22090],[2090,22420],[2100,22740],[2110,23060],[2120,23380],[2130,23700],
+[2140,24020],[2150,24340],[2160,24660],[2170,24990],[2180,25310],[2190,25630],[2200,25950],[2210,26270],
+[2220,26590],[2230,26910],[2240,27240],[2250,27560],[2260,27880],[2270,28200],[2280,28520],[2290,28840],
+[2300,29160],[2310,29480],[2320,29810],[2330,30130],[2340,30450],[2350,30770],[2360,31090],[2370,31410],
+[2380,31730],[2390,32050],[2400,32380],[2410,32700],[2420,33020],[2430,33340],[2440,33660],[2450,33980],
+[2460,34300],[2470,34630],[2480,34950],[2490,35270],[2500,35600],[2510,35940],[2520,36280],[2530,36630],
+[2540,36970],[2550,37310],[2560,37650],[2570,38000],[2580,38340],[2590,38830],[2600,39690],[2610,40540],
+[2620,41400],[2630,42260],[2640,43110],[2650,43970],[2660,44820],[2670,45680],[2680,46540],[2690,47390],
+[2700,48250],[2710,49100],[2720,49960],[2730,50810],[2740,51670],[2750,52530],[2760,53380],[2770,54240],
+[2780,55090],[2790,55950],[2800,56800],[2810,57660],[2820,58520],[2830,59370],[2840,60230],[2850,61080],
+[2860,61940],[2870,62790],[2880,63650],[2890,64510],[2900,65360],[2910,66220],[2920,67070],[2930,67930],
+[2940,68780],[2950,69640],[2960,70500],[2970,71350],[2980,72210],[2990,73060],[3000,74350],[3020,76060],
+[3040,77770],[3060,79480],[3080,81190],[3100,82900],[3120,84620],[3140,86330],[3160,88040],[3180,89750],
+[3200,91460],[3220,93170],[3240,95430],[3260,97880],[3280,100320],[3300,102770],[3320,105210],[3340,107660],
+[3360,110100],[3380,112550],[3400,114990],[3420,117440],[3440,119880],[3460,122330],[3480,124770],[3500,127220],
+[3520,129660],[3540,132110],[3560,134550],[3580,137000],[3600,139440],[3620,141890],[3640,144330],[3660,146780],
+[3680,149220],[3700,151670],[3720,154110],[3740,156560],[3760,163920],[3780,166590],[3800,169260],[3820,171930],
+[3840,174600],[3860,177270],[3880,179940],[3900,182610],[3920,185280],[3940,187950],[3960,190620],[3980,193290],
+[4000,195960],[4020,198630],[4040,201300],[4060,203970],[4080,206640],[4100,209310],[4120,211980],[4140,214650],
+[4160,217320],[4180,219990],[4200,222660],[4220,225330],[4240,228000],[4260,230670],[4280,233340],[4300,236010],
+[4320,238680],[4340,241350],[4360,244020],[4380,246690],[4400,249360],[4420,252030],[4440,254700],[4460,257370],
+[4480,260040],[4500,262840],[4520,265650],[4540,268450],[4560,271260],[4580,276560],[4600,279370],[4620,282170],
+[4640,284980],[4660,287780],[4680,290590],[4700,293390],[4720,296200],[4740,299000],[4760,301810],[4780,304610],
+[4800,307420],[4820,310220],[4840,313030],[4860,315830],[4880,318640],[4900,321440],[4920,324250],[4940,327050],
+[4960,329860],[4980,332660],[5000,335470],[5020,338270],[5040,341080],[5060,343880],[5080,346690],[5100,349490],
+[5120,352300],[5140,355100],[5160,357910],[5180,360710],[5200,363520],[5220,366320],[5240,369130],[5260,371930],
+[5280,374740],[5300,377540],[5320,380350],[5340,383150],[5360,385960],[5380,388760],[5400,391570],[5420,394370],
+[5440,397180],[5460,399980],[5480,402790],[5500,405590],[5520,408400],[5540,411200],[5560,414010],[5580,416810],
+[5600,419620],[5620,422420],[5640,425230],[5660,428030],[5680,430840],[5700,433640],[5720,436450],[5740,439250],
+[5760,442060],[5780,444860],[5800,447670],[5820,450470],[5840,470380],[5860,475720],[5880,478690],[5900,483220],
+[5920,487760],[5940,492300],[5960,496830],[5980,501370],[6000,505900],[6020,510440],[6040,514980],[6060,519510],
+[6080,524050],[6100,528580],[6120,533120],[6140,537660],[6160,542190],[6180,546730],[6200,551260],[6220,555800],
+[6240,560340],[6260,564870],[6280,569410],[6300,573940],[6320,578480],[6340,583020],[6360,587550],[6380,592090],
+[6400,596620],[6420,601160],[6440,605700],[6460,610230],[6480,614770],[6500,619300],[6520,623840],[6540,628380],
+[6560,632910],[6580,637450],[6600,641980],[6620,646520],[6640,651060],[6660,655590],[6680,660130],[6700,664660],
+[6720,669200],[6740,673740],[6760,678270],[6780,682810],[6800,687340],[6820,691880],[6840,696420],[6860,700950],
+[6880,705490],[6900,710020],[6920,714560],[6940,719100],[6960,723630],[6980,728170],[7000,732700],[7020,737240],
+[7040,741780],[7060,746310],[7080,750850],[7100,755380],[7120,759920],[7140,764460],[7160,768990],[7180,773530],
+[7200,778060],[7220,782600],[7240,787140],[7260,791670],[7280,796210],[7300,800740],[7320,805280],[7340,809820],
+[7360,814350],[7380,818890],[7400,823420],[7420,827960],[7440,832500],[7460,837030],[7480,841570],[7500,846100],
+[7520,850640],[7540,855180],[7560,859710],[7580,864250],[7600,868780],[7620,873320],[7640,877860],[7660,882390],
+[7680,886930],[7700,891460],[7720,896000],[7740,900540],[7760,905070],[7780,909610],[7800,914140],[7820,918680],
+[7840,923220],[7860,927750],[7880,932290],[7900,936820],[7920,941360],[7940,945900],[7960,950430],[7980,954970],
+[8000,959500],[8020,964040],[8040,968580],[8060,973110],[8080,977650],[8100,982180],[8120,986720],[8140,991260],
+[8160,995790],[8180,1000330],[8200,1004860],[8220,1009400],[8240,1013940],[8260,1018470],[8280,1023010],[8300,1027540],
+[8320,1032080],[8340,1036740],[8360,1041420],[8380,1046100],[8400,1050780],[8420,1055460],[8440,1060140],[8460,1064820],
+[8480,1069500],[8500,1074180],[8520,1078860],[8540,1083540],[8560,1088220],[8580,1092900],[8600,1097580],[8620,1102260],
+[8640,1106940],[8660,1111620],[8680,1116300],[8700,1120980],[8720,1125660],[8740,1130340],[8760,1135020],[8780,1139700],
+[8800,1144380],[8820,1149060],[8840,1153740],[8860,1158420],[8880,1163100],[8900,1167780],[8920,1172460],[8940,1177140],
+[8960,1181820],[8980,1186500],[9000,1191180],[9020,1195860],[9040,1200540],[9060,1205220],[9080,1209900],[9100,1214580],
+[9120,1219260],[9140,1223940],[9160,1228620],[9180,1233300],[9200,1237980],[9220,1244640],[9240,1251470],[9260,1258290],
+[9280,1265120],[9300,1271940],[9320,1278770],[9340,1285590],[9360,1292420],[9380,1299240],[9400,1306070],[9420,1312890],
+[9440,1319720],[9460,1326540],[9480,1333370],[9500,1340190],[9520,1347020],[9540,1353840],[9560,1360670],[9580,1367490],
+[9600,1374320],[9620,1381140],[9640,1387970],[9660,1394790],[9680,1401620],[9700,1408440],[9720,1415270],[9740,1422090],
+[9760,1428920],[9780,1435740],[9800,1442570],[9820,1449390],[9840,1456220],[9860,1463040],[9880,1469870],[9900,1476690],
+[9920,1483520],[9940,1490340],[9960,1497170],[9980,1503990]
+];
+// 10,000천원 세액
+var WITHHOLDING_10000 = 1507400;
+
+function lookupWithholding(monthlyPayKrw) {
+  // monthlyPayKrw: 월급여액(원, 비과세 제외)
+  var payK = Math.floor(monthlyPayKrw / 1000); // 천원 단위
+  if (payK < 770) return 0;
+  if (payK < 1060) return 0;
+  if (payK >= 10000) {
+    // 10,000천원 초과 구간
+    var excess = (payK - 10000) * 1000;
+    if (payK <= 14000) return WITHHOLDING_10000 + Math.round(excess * 0.98 * 0.35) + 25000;
+    if (payK <= 28000) return WITHHOLDING_10000 + 1397000 + Math.round((payK - 14000) * 1000 * 0.98 * 0.38);
+    if (payK <= 30000) return WITHHOLDING_10000 + 6610600 + Math.round((payK - 28000) * 1000 * 0.98 * 0.40);
+    if (payK <= 45000) return WITHHOLDING_10000 + 7394600 + Math.round((payK - 30000) * 1000 * 0.40);
+    if (payK <= 87000) return WITHHOLDING_10000 + 13394600 + Math.round((payK - 45000) * 1000 * 0.42);
+    return WITHHOLDING_10000 + 31034600 + Math.round((payK - 87000) * 1000 * 0.45);
+  }
+  // 테이블 lookup (이진탐색)
+  var lo = 0, hi = WITHHOLDING_TABLE.length - 1;
+  while (lo <= hi) {
+    var mid = (lo + hi) >> 1;
+    if (WITHHOLDING_TABLE[mid][0] <= payK) lo = mid + 1;
+    else hi = mid - 1;
+  }
+  return WITHHOLDING_TABLE[hi][1];
 }
 
-var goalAmount = 0; // kept for localStorage compat
+function calcWithheldSimple(totalPay, familyCount) {
+  // 간이세액표 기준 부양가족 1명(본인) 원천징수
+  var monthlyPay = Math.round(totalPay / 12);
+  var monthlyTax = lookupWithholding(monthlyPay);
+  var withLocal = monthlyTax + Math.round(monthlyTax * 0.1); // 지방소득세 10%
+  // 원천징수 비율 적용 (80%/100%/120%)
+  var adjusted = Math.round(withLocal * (S.rate / 100));
+  return adjusted * 12;
+}
 
 function goToSimpleResult() {
   simpleResultVisited = true;
@@ -2457,7 +2379,6 @@ function resetAndStart() {
   prevTax = 0;
   comparePersons = [];
   compareLabelIdx = 0;
-  goalAmount = 0;
   simpleResultVisited = false;
   try { localStorage.removeItem('sipsamwol_data'); } catch(e) {}
   document.getElementById('salaryInput').value = '';
@@ -2467,7 +2388,7 @@ function resetAndStart() {
   goScreen('screen-salary');
 }
 
-var consultSpouseSalary = 0; // backward compat
+var consultSpouseSalary = 0;
 var comparePersons = []; // [{name:'배우자', salary:4000}, ...]
 var compareLabels = ['배우자', '부모님'];
 var compareLabelIdx = 0;
@@ -2476,43 +2397,17 @@ function addComparePerson() {
   var label = compareLabels[Math.min(compareLabelIdx, compareLabels.length - 1)];
   compareLabelIdx++;
   comparePersons.push({ name: label, salary: 0 });
-  renderComparePersons();
+  renderConsultComparePersons();
 }
 
 function removeComparePerson(idx) {
   comparePersons.splice(idx, 1);
-  renderComparePersons();
+  renderConsultComparePersons();
   syncCompareData();
 }
 
-function renderComparePersons() {
-  var container = document.getElementById('comparePersonList');
-  if (!container) return;
-  container.innerHTML = '';
-  comparePersons.forEach(function(p, idx) {
-    var row = document.createElement('div');
-    row.className = 'compare-person';
-    row.innerHTML =
-      '<select class="compare-person-tag other" onchange="comparePersons[' + idx + '].name=this.value;syncCompareData();" style="cursor:pointer;-webkit-appearance:none;appearance:none;text-align:center;width:56px;">' +
-        '<option value="배우자"' + (p.name==='배우자'?' selected':'') + '>배우자</option>' +
-        '<option value="부모님"' + (p.name==='부모님'?' selected':'') + '>부모님</option>' +
-      '</select>' +
-      '<input class="compare-person-input" type="text" inputmode="numeric" placeholder="연봉 입력" value="' + (p.salary > 0 ? Number(p.salary).toLocaleString() : '') + '" oninput="onComparePersonInput(this,' + idx + ')">' +
-      '<span class="compare-person-unit">만원</span>' +
-      '<button class="compare-person-remove" onclick="removeComparePerson(' + idx + ')">✕</button>';
-    container.appendChild(row);
-  });
-}
-
-function onComparePersonInput(el, idx) {
-  var v = el.value.replace(/[^0-9]/g, '');
-  el.value = v ? Number(v).toLocaleString() : '';
-  comparePersons[idx].salary = v ? Number(v) : 0;
-  syncCompareData();
-}
 
 function syncCompareData() {
-  // backward compat: 첫번째 비교 대상을 consultSpouseSalary로
   consultSpouseSalary = comparePersons.length > 0 ? comparePersons[0].salary : 0;
   updateAllSimResults();
   updateGoalTracking();
@@ -2526,83 +2421,6 @@ function getPayAndRate(salaryMan) {
   return { totalPay: totalPay, mRate: marginalRate(taxable), mRateLocal: marginalRate(taxable) * 1.1 };
 }
 
-function renderConsultingCards() {
-  var container = document.getElementById('consultingCards');
-  container.innerHTML = '';
-
-  var me = getPayAndRate(S.salary);
-  var checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-
-  var cards = [
-    { id: 'c_dep', num: '01', title: '부양가족 공제, 누구한테 몰아줄까?',
-      body: function() {
-        return '<div class="consulting-card-desc">부모님·장인장모님 기본공제(1인당 150만원)는 세율이 높은 쪽이 유리해요. 장인장모님도 가능합니다.</div>' +
-          '<div class="sim-row"><span class="sim-label">부양가족</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="dep_count" oninput="simDep()"><span class="sim-unit">명</span></div>' +
-          '<div id="simDepResult"></div>';
-      }
-    },
-    { id: 'c_card', num: '02', title: '카드 공제 한도 트래킹',
-      body: function() {
-        var threshold25 = Math.round(me.totalPay * 0.25);
-        return '<div class="consulting-card-desc">총급여 25% 문턱을 넘겨야 공제가 시작돼요. 넘기기 전엔 신용카드, 넘긴 후엔 체크카드가 유리해요.</div>' +
-          '<button class="sim-import-btn" onclick="openCardImport();event.stopPropagation();">' +
-            '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 11v2a1 1 0 001 1h10a1 1 0 001-1v-2M8 2v8M5 7l3 3 3-3"/></svg>' +
-            '사용액 불러오기</button>' +
-          '<div class="sim-row"><span class="sim-label">올해 사용액</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="card_used" oninput="simCard()"><span class="sim-unit">만원</span></div>' +
-          '<div id="simCardResult"><div class="sim-result"><div class="sim-result-title">25% 문턱</div>' +
-          '<div class="sim-result-tip">문턱: <strong>' + fmtMan(threshold25) + '만원</strong> (월 ' + fmtMan(threshold25/12) + '만원)<br>' +
-          '문턱까지 신용카드로 채우고, 넘긴 후 체크카드·현금영수증으로 전환하세요</div></div></div>';
-      }
-    },
-    { id: 'c_house', num: '03', title: '주택 전략 (세대주 + 대출 + 월세)',
-      body: function() {
-        return '<div class="consulting-card-desc">주택청약·전세대출·월세·주담대 공제는 세대주만 가능해요. 부부 중 누가 세대주일지 비교해보세요.</div>' +
-          '<div class="sim-row"><span class="sim-label">주거 유형</span><select class="sim-select" data-sim="housing_type" onchange="updateHousingFields();simHouse()"><option value="none">선택</option><option value="own">자가 (주담대)</option><option value="jeonse">전세 (전세대출)</option><option value="rent">월세</option></select></div>' +
-          '<div class="sim-row" id="loanAmtRow" style="display:none;"><span class="sim-label" id="loanAmtLabel">이자상환액</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="loan_amt" oninput="simHouse()"><span class="sim-unit">만원/연</span></div>' +
-          '<div class="sim-row" id="rentAmtRow" style="display:none;"><span class="sim-label">월세액</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="rent_amt" oninput="simHouse()"><span class="sim-unit">만원/월</span></div>' +
-          '<div id="simHouseResult"></div>';
-      }
-    },
-    { id: 'c_child', num: '04', title: '자녀 기본공제, 누구한테?',
-      body: function() {
-        return '<div class="consulting-card-desc">자녀 기본공제를 받으면 교육비·의료비·보험료 공제가 함께 따라가요.</div>' +
-          '<div class="sim-row"><span class="sim-label">자녀 수</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="child_count" oninput="simChild()"><span class="sim-unit">명</span></div>' +
-          '<div class="sim-row"><span class="sim-label">교육비</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="child_edu" oninput="simChild()"><span class="sim-unit">만원/연</span></div>' +
-          '<div id="simChildResult"></div>';
-      }
-    },
-    { id: 'c_pension', num: '05', title: '연금저축/IRP, 누가 넣을까?',
-      body: function() {
-        return '<div class="consulting-card-desc">총급여 5,500만원 이하면 공제율 15%, 초과면 12%. 낮은 쪽이 먼저 넣는 게 유리할 수 있어요.</div>' +
-          '<div class="sim-row"><span class="sim-label">연금저축</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="pen_saving" oninput="simPension()"><span class="sim-unit">만원</span></div>' +
-          '<div class="sim-row"><span class="sim-label">IRP</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="pen_irp" oninput="simPension()"><span class="sim-unit">만원</span></div>' +
-          '<div id="simPensionResult"></div>';
-      }
-    },
-    { id: 'c_medical', num: '06', title: '의료비, 소득 낮은 쪽으로',
-      body: function() {
-        return '<div class="consulting-card-desc">의료비는 총급여 3% 초과분부터 15% 공제. 유일하게 소득 무관 배우자 의료비도 가져올 수 있어요.</div>' +
-          '<div class="sim-row"><span class="sim-label">의료비 총액</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="med_total" oninput="simMedical()"><span class="sim-unit">만원/연</span></div>' +
-          '<div id="simMedicalResult"></div>';
-      }
-    }
-  ];
-
-  cards.forEach(function(card, idx) {
-    var el = document.createElement('div');
-    el.className = 'consulting-card';
-    el.id = card.id;
-    el.setAttribute('data-idx', idx);
-    el.innerHTML =
-      '<div class="consulting-card-header" onclick="toggleConsultingCard(\'' + card.id + '\')">' +
-        '<div class="consulting-card-check">' + checkSvg + '</div>' +
-        '<div><div class="consulting-card-num">' + card.num + '</div>' +
-        '<div class="consulting-card-title">' + card.title + '</div></div>' +
-      '</div>' +
-      '<div class="consulting-card-body">' + card.body() + '</div>';
-    container.appendChild(el);
-  });
-}
 
 function toggleConsultingCard(id) {
   var el = document.getElementById(id);
@@ -2624,10 +2442,46 @@ function toggleConsultingCard(id) {
     if (parentBody) {
       var parentAcc = parentBody.closest('.accordion');
       if (parentAcc && parentAcc.classList.contains('open')) {
-        parentBody.style.maxHeight = parentBody.scrollHeight + 'px';
+        parentBody.style.maxHeight = parentBody.scrollHeight + 200 + 'px';
       }
     }
   }, 50);
+}
+
+function toggleAccordion(acc, body) {
+  if (acc.classList.contains('open')) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    body.offsetHeight;
+    body.style.maxHeight = '0px';
+    acc.classList.remove('open');
+  } else {
+    acc.classList.add('open');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    var onEnd = function() {
+      if (acc.classList.contains('open')) body.style.maxHeight = body.scrollHeight + 'px';
+      body.removeEventListener('transitionend', onEnd);
+    };
+    body.addEventListener('transitionend', onEnd);
+  }
+}
+
+function refreshAccordionHeight(el) {
+  if (!el) return;
+  var parentBody = el.closest('.accordion-body');
+  if (parentBody) {
+    var parentAcc = parentBody.closest('.accordion');
+    if (parentAcc && parentAcc.classList.contains('open')) {
+      parentBody.style.maxHeight = parentBody.scrollHeight + 200 + 'px';
+    }
+  }
+  // consulting card body도 갱신
+  var cardBody = el.closest('.consulting-card-body');
+  if (cardBody) {
+    var card = cardBody.closest('.consulting-card');
+    if (card && card.classList.contains('active')) {
+      cardBody.style.maxHeight = cardBody.scrollHeight + 200 + 'px';
+    }
+  }
 }
 
 function getSimVal(key) {
@@ -2689,14 +2543,21 @@ function renderCompare(containerId, meVal, otherVals, tip) {
 
 function simDep() {
   var count = getSimVal('dep_count');
-  if (count <= 0) { document.getElementById('simDepResult').innerHTML = ''; return; }
+  var seniorCount = getSimVal('dep_senior');
+  var disabledCount = getSimVal('dep_disabled');
+  if (count <= 0 && seniorCount <= 0 && disabledCount <= 0) { document.getElementById('simDepResult').innerHTML = ''; return; }
+  var basicDed = count * 1500000;
+  var seniorDed = seniorCount * 1000000;
+  var disabledDed = disabledCount * 2000000;
+  var totalDed = basicDed + seniorDed + disabledDed;
   var me = getPayAndRate(S.salary);
-  var meVal = Math.round(count * 1500000 * me.mRateLocal);
+  var meVal = Math.round(totalDed * me.mRateLocal);
   var others = comparePersons.filter(function(p){return p.salary > 0;}).map(function(p) {
     var info = getPayAndRate(p.salary);
-    return { name: p.name, val: Math.round(count * 1500000 * info.mRateLocal) };
+    return { name: p.name, val: Math.round(totalDed * info.mRateLocal) };
   });
   renderCompare('simDepResult', meVal, others, '세율이 높은 쪽이 공제 효과가 커요');
+  refreshAccordionHeight(document.getElementById('simDepResult'));
 }
 
 function simCard() {
@@ -2717,6 +2578,7 @@ function simCard() {
   }
   html += '</div>';
   container.innerHTML = html;
+  refreshAccordionHeight(container);
 }
 
 function updateHousingFields() {
@@ -2798,6 +2660,7 @@ function simHouse() {
     }
     html += '<div class="sim-result-tip">비교 대상을 추가하면 세대주 비교가 가능해요</div></div>';
     container.innerHTML = html;
+    refreshAccordionHeight(container);
   }
 }
 
@@ -2818,6 +2681,7 @@ function simChild() {
     return { name: p.name, val: basic + edu };
   });
   renderCompare('simChildResult', meVal, others, '기본공제는 세율 높은 쪽이 유리해요');
+  refreshAccordionHeight(document.getElementById('simChildResult'));
 }
 
 function simPension() {
@@ -2836,6 +2700,7 @@ function simPension() {
     return { name: p.name + ' (' + Math.round(rate*100) + '%)', val: Math.round(total * rate * 1.1) };
   });
   renderCompare('simPensionResult', meVal, others, '5,500만 이하면 공제율 15%로 더 유리');
+  refreshAccordionHeight(document.getElementById('simPensionResult'));
 }
 
 function simMedical() {
@@ -2852,6 +2717,7 @@ function simMedical() {
     return { name: p.name, val: Math.round(Math.min(excess, 7000000) * 0.15 * 1.1) };
   });
   renderCompare('simMedicalResult', meVal, others, '3% 문턱이 낮은 쪽이 유리해요');
+  refreshAccordionHeight(document.getElementById('simMedicalResult'));
 }
 
 function updateAllSimResults() {
@@ -2921,8 +2787,6 @@ function switchTab(tabId) {
   window.scrollTo(0, 0);
   if (tabId === 'tab-home') { renderSimpleHome(); }
   if (tabId === 'tab-consulting') renderConsulting();
-  if (tabId === 'tab-deduction') renderDeductions();
-  if (tabId === 'tab-optimize') renderOptimize();
   if (tabId === 'tab-settings') loadSettings();
 }
 
@@ -3670,403 +3534,12 @@ function showToast(msg) {
   setTimeout(function() { toast.classList.remove('show'); }, 1500);
 }
 
-function showSyncToast() {
-  showToast('토스 앱 연동 시 자동으로 불러옵니다');
-}
-
 function prefillPrevYear() {
-  // 카드 사용
   S.deductions['card'] = { on: true, values: { credit: 800, debit: 300, cash: 50, market: 0, transport: 0, culture: 0 } };
-  // 의료비
   S.deductions['medical'] = { on: true, values: { general: 120, nanim: 0, glasses: 0, postpartum: 0 } };
-  // 보장성보험료
   S.deductions['insurance'] = { on: true, values: { general: 80, disabled: 0 } };
-  // 연금저축
   S.deductions['pension'] = { on: true, values: { pension_saving: 400, irp: 0 } };
-
-  renderDeductions();
   showToast('전년도 예상 데이터로 반영했습니다. 실제 금액에 맞게 수정해주세요.');
-}
-
-// ===========================
-// SAVE DEDUCTIONS (공제 탭 저장하기)
-// ===========================
-function saveDeductions() {
-  homeRenderedOnce = false;
-  switchTab('tab-home');
-  showToast('저장되었습니다');
-}
-
-// ===========================
-// RENDER DEDUCTIONS TAB (accordion, 세법 기준 분류)
-// ===========================
-function renderDeductions() {
-  var container = document.getElementById('deductionAccordions');
-  container.innerHTML = '';
-
-  var items = getMatchedItems();
-
-  // 세법 기준 카테고리 매핑
-  var taxLawCatMap = {
-    // 인적공제
-    'dependents': 'personal', 'dep_senior': 'personal', 'dep_disabled': 'personal',
-    'dep_single': 'personal', 'dep_woman': 'personal',
-    // 특별소득공제
-    'social_insurance': 'special_income', 'housing': 'special_income', 'loan': 'special_income', 'jeonse_loan': 'special_income',
-    // 신용카드 등 소득공제
-    'card': 'card_deduction',
-    // 세액공제
-    'medical': 'tax_credit', 'pension': 'tax_credit', 'insurance': 'tax_credit',
-    'education': 'tax_credit', 'donation': 'tax_credit', 'rent': 'tax_credit',
-    'child_credit': 'tax_credit', 'political': 'tax_credit', 'marriage_credit': 'tax_credit',
-    // 비과세
-    'meal': 'nontax_cat', 'childcare': 'nontax_cat', 'carallow': 'nontax_cat', 'birth_support': 'nontax_cat'
-  };
-
-  var categories = [
-    { id: 'personal', title: '인적공제', items: [] },
-    { id: 'special_income', title: '특별소득공제', items: [] },
-    { id: 'card_deduction', title: '신용카드 등 소득공제', items: [] },
-    { id: 'tax_credit', title: '세액공제', items: [] },
-    { id: 'nontax_cat', title: '비과세', items: [] }
-  ];
-
-  var catMap = {};
-  categories.forEach(function(c) { catMap[c.id] = c; });
-
-  items.forEach(function(item) {
-    var catId = taxLawCatMap[item.id];
-    if (catId && catMap[catId]) {
-      catMap[catId].items.push(item);
-    }
-  });
-
-  categories.forEach(function(cat) {
-    if (cat.items.length === 0) return;
-    var acc = document.createElement('div');
-    acc.className = 'accordion';
-
-    var activeInCat = cat.items.filter(function(item) { return dOn(item.id); }).length;
-    var catSaving = 0;
-    cat.items.forEach(function(item) {
-      if (dOn(item.id)) catSaving += calcItemSaving(item);
-    });
-    var catSavingText = catSaving > 0 ? '+' + fmtMan(catSaving) + '만원' : '';
-
-    var header = document.createElement('div');
-    header.className = 'accordion-header';
-    header.innerHTML =
-      '<div class="accordion-header-left">' +
-        '<span class="accordion-header-title">' + cat.title + '</span>' +
-        '<span class="accordion-badge' + (activeInCat > 0 ? ' show' : '') + '">' + activeInCat + '</span>' +
-      '</div>' +
-      '<div class="accordion-header-right">' +
-        (catSavingText ? '<span class="accordion-header-saving">' + catSavingText + '</span>' : '') +
-        '<span class="accordion-arrow">&#9662;</span>' +
-      '</div>';
-
-    var body = document.createElement('div');
-    body.className = 'accordion-body';
-
-    cat.items.forEach(function(item) {
-      var isOn = dOn(item.id);
-      var saving = calcItemSaving(item);
-      var savingText = isOn && saving > 0 ? '+' + fmtMan(saving) + '만' : '-';
-
-      var div = document.createElement('div');
-      div.className = 'deduction-item' + (isOn ? ' active' : '');
-
-      var topHTML =
-        '<div class="deduction-item-top">' +
-          '<div class="deduction-item-toggle' + (isOn ? ' on' : '') + '" data-item="' + item.id + '">' +
-            '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-          '</div>' +
-          '<div class="deduction-item-info">' +
-            '<div class="deduction-item-name">' + item.name + '</div>' +
-            '<div class="deduction-item-desc">' + item.desc + '</div>' +
-            (item.condition ? '<div class="deduction-item-condition">' + item.condition + '</div>' : '') +
-          '</div>' +
-          '<div class="deduction-item-saving">' + savingText + '</div>' +
-        '</div>';
-
-      var syncBtnHTML = '';
-      if (item.syncable) {
-        syncBtnHTML = '<button class="sync-btn" onclick="showSyncToast(); event.stopPropagation();">' +
-          '<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-            '<path d="M6.5 9.5L4.5 9.5C3.12 9.5 2 8.38 2 7C2 5.62 3.12 4.5 4.5 4.5L6.5 4.5M9.5 6.5L11.5 6.5C12.88 6.5 14 7.62 14 9C14 10.38 12.88 11.5 11.5 11.5L9.5 11.5M5 8H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
-          '</svg>' +
-          '불러오기</button>';
-      }
-
-      var inputsHTML = '<div class="deduction-item-inputs">' + syncBtnHTML;
-
-      if (item.type === 'toggle' || item.type === 'auto' || item.type === 'auto_count') {
-        // No extra inputs
-      } else if (item.type === 'input') {
-        var curVal = dOn(item.id) ? (dVal(item.id, item.inputKey) || '') : '';
-        inputsHTML += '<div class="input-row"><label>' + item.inputLabel + '</label>' +
-          '<input class="input-field" type="text" inputmode="numeric" placeholder="0" data-item="' + item.id + '" data-key="' + item.inputKey + '" value="' + (curVal ? Number(curVal).toLocaleString() : '') + '">' +
-          '<span class="input-unit">' + item.unit + '</span></div>';
-      } else if (item.type === 'multi_input') {
-        if (item.inputs) {
-          item.inputs.forEach(function(inp) {
-            var cv = dOn(item.id) ? (dVal(item.id, inp.key) || '') : '';
-            inputsHTML += '<div class="input-row"><label>' + inp.label + '</label>' +
-              '<input class="input-field" type="text" inputmode="numeric" placeholder="' + inp.placeholder + '" data-item="' + item.id + '" data-key="' + inp.key + '" value="' + (cv ? Number(cv).toLocaleString() : '') + '">' +
-              '<span class="input-unit">' + inp.unit + '</span></div>';
-          });
-        }
-        if (item.selectInputs) {
-          item.selectInputs.forEach(function(sel) {
-            var curSelVal = (S.deductions[item.id] && S.deductions[item.id].values) ? (S.deductions[item.id].values[sel.key] || '') : '';
-            inputsHTML += '<div class="input-row"><label>' + sel.label + '</label>' +
-              '<select class="select-field" data-item="' + item.id + '" data-key="' + sel.key + '">';
-            sel.options.forEach(function(opt) {
-              inputsHTML += '<option value="' + opt.value + '"' + (curSelVal === opt.value ? ' selected' : '') + '>' + opt.text + '</option>';
-            });
-            inputsHTML += '</select></div>';
-          });
-        }
-      } else if (item.type === 'count') {
-        var cntVal = dOn(item.id) ? (dVal(item.id, item.countKey) || 0) : 0;
-        inputsHTML += '<div class="input-row"><label>' + item.countLabel + '</label>' +
-          '<div class="count-control">' +
-          '<button class="count-btn" data-item="' + item.id + '" data-key="' + item.countKey + '" data-dir="-1">-</button>' +
-          '<span class="count-value" id="cnt-' + item.id + '">' + cntVal + '</span>' +
-          '<button class="count-btn" data-item="' + item.id + '" data-key="' + item.countKey + '" data-dir="1">+</button>' +
-          '</div></div>';
-      } else if (item.type === 'medical_detail') {
-        ['general','nanim','glasses','postpartum'].forEach(function(key) {
-          var labels = {general:'일반 의료비',nanim:'난임시술비',glasses:'안경/콘택트렌즈',postpartum:'산후조리원'};
-          var cv = dOn('medical') ? (dVal('medical', key) || '') : '';
-          inputsHTML += '<div class="input-row"><label>' + labels[key] + '</label>' +
-            '<input class="input-field" type="text" inputmode="numeric" placeholder="0" data-item="medical" data-key="' + key + '" value="' + (cv ? Number(cv).toLocaleString() : '') + '">' +
-            '<span class="input-unit">만원</span></div>';
-        });
-      } else if (item.type === 'education_detail') {
-        var eduKeys = [{key:'self',label:'본인'}];
-        if (S.hasChildren) {
-          if (S.childAges.some(function(a){return a<7;})) eduKeys.push({key:'preschool',label:'취학 전'});
-          if (S.childAges.some(function(a){return a>=7&&a<=18;})) eduKeys.push({key:'school',label:'초/중/고'});
-          if (S.childAges.some(function(a){return a>=19;})) eduKeys.push({key:'college',label:'대학생'});
-        }
-        eduKeys.forEach(function(ek) {
-          var cv = dOn('education') ? (dVal('education', ek.key) || '') : '';
-          inputsHTML += '<div class="input-row"><label>' + ek.label + '</label>' +
-            '<input class="input-field" type="text" inputmode="numeric" placeholder="0" data-item="education" data-key="' + ek.key + '" value="' + (cv ? Number(cv).toLocaleString() : '') + '">' +
-            '<span class="input-unit">만원</span></div>';
-        });
-      }
-
-      inputsHTML += '</div>';
-      div.innerHTML = topHTML + inputsHTML;
-      body.appendChild(div);
-    });
-
-    header.onclick = function() { toggleAccordion(acc, body); };
-    acc.appendChild(header);
-    acc.appendChild(body);
-    container.appendChild(acc);
-  });
-
-  // Open all
-  container.querySelectorAll('.accordion').forEach(function(a) {
-    var b = a.querySelector('.accordion-body');
-    a.classList.add('open');
-    if (b) b.style.maxHeight = b.scrollHeight + 'px';
-  });
-
-  // Events
-  container.addEventListener('click', function(e) { handleDeductionClick(e); });
-  container.addEventListener('input', function(e) { handleDeductionInput(e); });
-  container.addEventListener('change', function(e) { handleDeductionChange(e); });
-
-  updateTotalSaving();
-}
-
-function handleDeductionChange(e) {
-  var select = e.target.closest('.select-field');
-  if (!select) return;
-  var itemId = select.getAttribute('data-item');
-  var key = select.getAttribute('data-key');
-  if (!S.deductions[itemId]) S.deductions[itemId] = { on: true, values: {} };
-  S.deductions[itemId].values[key] = select.value;
-  refreshItemSaving(itemId);
-  updateTotalSaving();
-}
-
-function toggleAccordion(acc, body) {
-  if (acc.classList.contains('open')) {
-    body.style.maxHeight = body.scrollHeight + 'px';
-    body.offsetHeight;
-    body.style.maxHeight = '0px';
-    acc.classList.remove('open');
-  } else {
-    acc.classList.add('open');
-    body.style.maxHeight = body.scrollHeight + 'px';
-    var onEnd = function() {
-      if (acc.classList.contains('open')) body.style.maxHeight = body.scrollHeight + 'px';
-      body.removeEventListener('transitionend', onEnd);
-    };
-    body.addEventListener('transitionend', onEnd);
-  }
-}
-
-function refreshAccordionHeights() {
-  document.querySelectorAll('.accordion.open .accordion-body').forEach(function(body) {
-    body.style.maxHeight = body.scrollHeight + 'px';
-  });
-}
-
-function handleDeductionClick(e) {
-  var syncBtn = e.target.closest('.sync-btn');
-  if (syncBtn) return;
-  var toggleEl = e.target.closest('.deduction-item-toggle');
-  if (toggleEl) {
-    var itemId = toggleEl.getAttribute('data-item');
-    toggleDeductionItem(itemId, toggleEl);
-    return;
-  }
-  var nameEl = e.target.closest('.deduction-item-name');
-  if (nameEl) {
-    var row = nameEl.closest('.deduction-item');
-    var tgl = row.querySelector('.deduction-item-toggle');
-    if (tgl) toggleDeductionItem(tgl.getAttribute('data-item'), tgl);
-    return;
-  }
-  var countBtn = e.target.closest('.count-btn');
-  if (countBtn) {
-    var cItemId = countBtn.getAttribute('data-item');
-    var cKey = countBtn.getAttribute('data-key');
-    var dir = parseInt(countBtn.getAttribute('data-dir'));
-    if (!S.deductions[cItemId]) S.deductions[cItemId] = { on: true, values: {} };
-    var cur = Number(S.deductions[cItemId].values[cKey]) || 0;
-    cur = Math.max(0, cur + dir);
-    S.deductions[cItemId].values[cKey] = cur;
-    var cntEl = document.getElementById('cnt-' + cItemId);
-    if (cntEl) cntEl.textContent = cur;
-    refreshItemSaving(cItemId);
-    updateTotalSaving();
-    setTimeout(refreshAccordionHeights, 10);
-  }
-}
-
-function handleDeductionInput(e) {
-  var input = e.target.closest('.input-field');
-  if (!input) return;
-  var itemId = input.getAttribute('data-item');
-  var key = input.getAttribute('data-key');
-  var raw = input.value.replace(/[^0-9]/g, '');
-  input.value = raw ? Number(raw).toLocaleString() : '';
-  if (!S.deductions[itemId]) S.deductions[itemId] = { on: true, values: {} };
-  S.deductions[itemId].values[key] = Number(raw) || 0;
-  refreshItemSaving(itemId);
-  updateTotalSaving();
-  setTimeout(refreshAccordionHeights, 10);
-}
-
-function toggleDeductionItem(itemId, toggleEl) {
-  var isOn = toggleEl.classList.contains('on');
-  var itemRow = toggleEl.closest('.deduction-item');
-  if (isOn) {
-    toggleEl.classList.remove('on');
-    if (S.deductions[itemId]) S.deductions[itemId].on = false;
-    itemRow.classList.remove('active');
-  } else {
-    toggleEl.classList.add('on');
-    if (!S.deductions[itemId]) S.deductions[itemId] = { on: true, values: {} };
-    else S.deductions[itemId].on = true;
-    itemRow.classList.add('active');
-    itemRow.style.animation = 'itemPop 0.25s ease';
-    setTimeout(function() { itemRow.style.animation = ''; }, 250);
-  }
-  refreshItemSaving(itemId);
-  updateTotalSaving();
-  setTimeout(refreshAccordionHeights, 10);
-}
-
-function refreshItemSaving(itemId) {
-  var item = ALL_DEDUCTION_ITEMS.find(function(i) { return i.id === itemId; });
-  if (!item) return;
-  var saving = calcItemSaving(item);
-  var isOn = dOn(itemId);
-  var text = isOn && saving > 0 ? '+' + fmtMan(saving) + '만' : '-';
-  document.querySelectorAll('.deduction-item-toggle[data-item="' + itemId + '"]').forEach(function(t) {
-    var row = t.closest('.deduction-item');
-    if (row) {
-      var sv = row.querySelector('.deduction-item-saving');
-      if (sv) sv.textContent = text;
-    }
-  });
-}
-
-function updateTotalSaving() {
-  var total = 0;
-  ALL_DEDUCTION_ITEMS.forEach(function(item) {
-    if (dOn(item.id)) total += calcItemSaving(item);
-  });
-  var el = document.getElementById('totalSavingDisplay');
-  if (el) el.textContent = total > 0 ? '+' + fmtMan(total) + '만원' : '+0만원';
-}
-
-// ===========================
-// RENDER OPTIMIZE
-// ===========================
-function renderOptimize() {
-  var container = document.getElementById('optimizeContent');
-  container.innerHTML = '';
-
-  if (!S.married) {
-    container.innerHTML = '<div class="opt-card-empty">기혼인 경우에만<br>최적화 추천을 받을 수 있어요.</div>';
-    return;
-  }
-  if (S.spouseSalary <= 0) {
-    container.innerHTML = '<div class="opt-card-empty">배우자 총급여를 입력하면<br>최적화 추천을 받을 수 있어요.<br><br>설정 탭에서 배우자 연봉을 입력해주세요.</div>';
-    return;
-  }
-
-  var myAnnual = S.salary * 10000;
-  var spouseAnnual = S.spouseSalary * 10000;
-  var myNonTax = calcNonTaxable();
-  var myTotalPay = Math.max(myAnnual - myNonTax, 0);
-  var spTotalPay = Math.max(spouseAnnual - myNonTax, 0);
-
-  // 의료비
-  var card1 = document.createElement('div');
-  card1.className = 'opt-card';
-  var medicalWinner = myTotalPay <= spTotalPay ? '본인' : '배우자';
-  var myThreshold = Math.round(myTotalPay * 0.03 / 10000);
-  var spThreshold = Math.round(spTotalPay * 0.03 / 10000);
-  card1.innerHTML =
-    '<div class="opt-card-q">의료비를 누구한테 몰아줘야 할까?</div>' +
-    '<div class="opt-card-a"><strong>' + medicalWinner + '</strong> 쪽으로 몰아주는 게 유리해요.<br>총급여가 낮은 쪽이 3% 기준선이 낮아져 공제받는 금액이 커져요.</div>' +
-    '<div class="opt-card-result">본인 3% 기준선: ' + myThreshold + '만원 / 배우자: ' + spThreshold + '만원</div>';
-  container.appendChild(card1);
-
-  // 부양가족
-  var card2 = document.createElement('div');
-  card2.className = 'opt-card';
-  var myEid = earnedIncomeDeduction(myTotalPay);
-  var spEid = earnedIncomeDeduction(spTotalPay);
-  var myTaxable = Math.max(myTotalPay - myEid - 1500000, 0);
-  var spTaxable = Math.max(spTotalPay - spEid - 1500000, 0);
-  var myMR = marginalRate(myTaxable);
-  var spMR = marginalRate(spTaxable);
-  var famWinner = myMR >= spMR ? '본인' : '배우자';
-  card2.innerHTML =
-    '<div class="opt-card-q">부양가족은 누구한테 등록해야 할까?</div>' +
-    '<div class="opt-card-a"><strong>' + famWinner + '</strong> 쪽에 등록하는 게 유리해요.<br>세율이 높은 쪽에 등록하면 절세 효과가 더 커요.</div>' +
-    '<div class="opt-card-result">본인 한계세율: ' + Math.round(myMR * 100) + '% / 배우자: ' + Math.round(spMR * 100) + '%</div>';
-  container.appendChild(card2);
-
-  // 카드
-  var card3 = document.createElement('div');
-  card3.className = 'opt-card';
-  card3.innerHTML =
-    '<div class="opt-card-q">카드 공제는 어떻게?</div>' +
-    '<div class="opt-card-a">카드 소득공제는 카드 명의자 기준이에요. 각자 자기 카드로 결제한 금액만 공제됩니다.<br><br>' +
-    '<strong>총급여 25% 기준선이 낮은 쪽</strong>이 먼저 기준선을 넘기면 유리해요.</div>';
-  container.appendChild(card3);
 }
 
 // ===========================
@@ -4204,7 +3677,7 @@ function renderRecommendCards() {
         tag: '이 항목은 꼭 확인하세요',
         text: '연금저축/IRP에 추가 납입하면 약 ' + fmt(penSaving) + '만원 절세 가능해요',
         sub: '한도 900만원까지 ' + fmt(Math.round(remainPen / 10000)) + '만원 남음',
-        action: function() { switchTab('tab-deduction'); }
+        action: function() { switchTab('tab-consulting'); }
       });
     }
   }
@@ -4215,7 +3688,7 @@ function renderRecommendCards() {
       tag: '가장 확실한 절세',
       text: '정치자금 10만원 기부하면 거의 전액 돌려받아요',
       sub: '10만원 기부 시 약 10만원 환급 (소득세+지방소득세)',
-      action: function() { switchTab('tab-deduction'); }
+      action: function() { switchTab('tab-consulting'); }
     });
   }
 
@@ -4226,7 +3699,7 @@ function renderRecommendCards() {
       tag: '놓치기 쉬운 공제',
       text: '월세를 내고 계시다면 세액공제 받을 수 있어요',
       sub: '최대 연 ' + fmt(Math.round(10000000 * rentRate * 1.1 / 10000)) + '만원 공제',
-      action: function() { switchTab('tab-deduction'); }
+      action: function() { switchTab('tab-consulting'); }
     });
   }
 
@@ -4236,7 +3709,7 @@ function renderRecommendCards() {
       tag: '신혼부부라면',
       text: '2024~2026 혼인신고 시 50만원 세액공제 가능해요',
       sub: '생애 1회 한정',
-      action: function() { switchTab('tab-deduction'); }
+      action: function() { switchTab('tab-consulting'); }
     });
   }
 
@@ -4246,7 +3719,7 @@ function renderRecommendCards() {
       tag: '맞벌이 최적화',
       text: '배우자와 공제를 어떻게 나눌지 확인해보세요',
       sub: '최적화 탭에서 비교 가능',
-      action: function() { switchTab('tab-optimize'); }
+      action: function() { switchTab('tab-consulting'); }
     });
   }
 
@@ -4303,7 +3776,6 @@ function selectAuth(provider) {
     S.deductions['pension'] = { on: true, values: { pension_saving: 400, irp: 0 } };
 
     closeAuthSheet();
-    renderDeductions();
     showToast('홈택스 자료를 불러왔습니다');
   }, 1500);
 }
@@ -4387,7 +3859,7 @@ function renderProductCards() {
       '<div class="product-card-tag">' + item.tag + '</div>' +
       '<div class="product-card-text">' + item.text + '</div>' +
       '<div class="product-card-sub">' + item.sub + '</div>' +
-      '<button class="product-card-cta" onclick="switchTab(\'tab-deduction\')">설정하기</button>';
+      '<button class="product-card-cta" onclick="switchTab(\'tab-consulting\')">설정하기</button>';
     container.appendChild(card);
   });
 }
@@ -4519,7 +3991,6 @@ function saveToLocal() {
       prevSalary: prevSalary,
       prevTax: prevTax,
       comparePersons: comparePersons,
-      goalAmount: goalAmount,
       rate: S.rate
     };
     localStorage.setItem('sipsamwol_data', JSON.stringify(data));
@@ -4539,7 +4010,6 @@ function loadFromLocal() {
     prevTax = data.prevTax || 0;
     comparePersons = data.comparePersons || [];
     compareLabelIdx = comparePersons.length;
-    goalAmount = data.goalAmount || 0;
     if (data.rate) S.rate = data.rate;
     return true;
   } catch(e) {
@@ -4551,7 +4021,7 @@ function loadFromLocal() {
 // ENTER SIMPLE MODE (new flow entry)
 // ===========================
 function enterSimpleMode() {
-  loadFromLocal(); // merge any saved data (comparePersons, goalAmount etc)
+  loadFromLocal();
   // Keep current S.salary and simpleFamily as set by caller
   saveToLocal();
   simpleResultVisited = true;
@@ -4745,7 +4215,7 @@ function renderConsulting() {
         '<span class="compare-person-tag me">본인</span>' +
         '<input class="compare-person-input" type="text" value="' + Number(S.salary).toLocaleString() + '" disabled style="cursor:default;" id="consultCompareMyDisplay">' +
         '<span class="compare-person-unit">만원</span>' +
-        '<div style="width:44px;"></div>' +
+        '<div class="compare-person-spacer"></div>' +
       '</div>' +
       '<div id="consultComparePersonList"></div>' +
       '<button class="compare-add-btn" onclick="addComparePerson();">+ 추가</button>' +
@@ -4799,11 +4269,13 @@ function renderGroupedConsultingCards() {
 
   var groups = [
     {
-      id: 'grp_family', title: '가족', icon: '👨‍👩‍👧‍👦',
+      id: 'grp_family', title: '가족', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="7" r="2.5"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><path d="M17 11.5a3 3 0 013 3V21"/></svg>',
       cards: [
         { id: 'c_dep', title: '부양가족 공제 배분', body: function() {
           return '<div class="consulting-card-desc">부모님·장인장모님 기본공제(1인당 150만원)는 세율이 높은 쪽이 유리해요.</div>' +
             '<div class="sim-row"><span class="sim-label">부양가족</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="dep_count" oninput="simDep()"><span class="sim-unit">명</span></div>' +
+            '<div class="sim-row"><span class="sim-label">경로우대 (만70세↑)</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="dep_senior" oninput="simDep()"><span class="sim-unit">명</span></div>' +
+            '<div class="sim-row"><span class="sim-label">장애인</span><input class="sim-input" type="text" inputmode="numeric" placeholder="0" data-sim="dep_disabled" oninput="simDep()"><span class="sim-unit">명</span></div>' +
             '<div id="simDepResult"></div>';
         }},
         { id: 'c_child', title: '자녀 기본공제', body: function() {
@@ -4815,7 +4287,7 @@ function renderGroupedConsultingCards() {
       ]
     },
     {
-      id: 'grp_spend', title: '소비', icon: '💳',
+      id: 'grp_spend', title: '소비', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><line x1="2" y1="10" x2="22" y2="10"/></svg>',
       cards: [
         { id: 'c_card', title: '카드 공제 한도 트래킹', body: function() {
           var threshold25 = Math.round(me.totalPay * 0.25);
@@ -4831,7 +4303,7 @@ function renderGroupedConsultingCards() {
       ]
     },
     {
-      id: 'grp_housing', title: '주거', icon: '🏠',
+      id: 'grp_housing', title: '주거', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 4l9 6.5"/><path d="M5 12v7a1 1 0 001 1h12a1 1 0 001-1v-7"/></svg>',
       cards: [
         { id: 'c_house', title: '주택 전략', body: function() {
           return '<div class="consulting-card-desc">주택청약·전세대출·월세·주담대 공제는 세대주만 가능해요.</div>' +
@@ -4843,7 +4315,7 @@ function renderGroupedConsultingCards() {
       ]
     },
     {
-      id: 'grp_savings', title: '저축', icon: '💰',
+      id: 'grp_savings', title: '저축', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 10V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-3"/><path d="M15 12h4a1 1 0 011 1v1a1 1 0 01-1 1h-4a2 2 0 010-4z"/><line x1="9" y1="5" x2="9" y2="3"/><line x1="15" y1="5" x2="15" y2="3"/></svg>',
       cards: [
         { id: 'c_pension', title: '연금저축/IRP', body: function() {
           return '<div class="consulting-card-desc">총급여 5,500만원 이하면 공제율 15%, 초과면 12%.</div>' +
@@ -4854,7 +4326,7 @@ function renderGroupedConsultingCards() {
       ]
     },
     {
-      id: 'grp_medical', title: '의료', icon: '🏥',
+      id: 'grp_medical', title: '의료', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/><line x1="12" y1="8" x2="12" y2="14"/><line x1="9" y1="11" x2="15" y2="11"/></svg>',
       cards: [
         { id: 'c_medical', title: '의료비 몰아주기', body: function() {
           return '<div class="consulting-card-desc">의료비는 총급여 3% 초과분부터 15% 공제. 소득 낮은 쪽이 유리해요.</div>' +
@@ -4872,9 +4344,10 @@ function renderGroupedConsultingCards() {
 
     var header = document.createElement('div');
     header.className = 'accordion-header';
+    var iconColors = {
     header.innerHTML =
       '<div class="accordion-header-left">' +
-        '<span style="font-size:16px;margin-right:2px;">' + group.icon + '</span>' +
+        '<div class="accordion-header-icon">' + group.icon + '</div>' +
         '<span class="accordion-header-title">' + group.title + '</span>' +
       '</div>' +
       '<div class="accordion-header-right">' +
@@ -5055,7 +4528,7 @@ var DETAIL_CATEGORIES = [
   {
     id: 'family',
     name: '인적공제',
-    icon: '👨‍👩‍👧',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="7" r="2.5"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/><path d="M17 11.5a3 3 0 013 3V21"/></svg>',
     desc: '부양가족, 장애인, 경로우대',
     steps: [
       {
@@ -5186,7 +4659,7 @@ var DETAIL_CATEGORIES = [
   {
     id: 'housing',
     name: '주거',
-    icon: '🏠',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 4l9 6.5"/><path d="M5 12v7a1 1 0 001 1h12a1 1 0 001-1v-7"/></svg>',
     desc: '주택, 전세대출, 월세',
     steps: [
       {
@@ -5266,7 +4739,7 @@ var DETAIL_CATEGORIES = [
   {
     id: 'income_ded',
     name: '소득공제',
-    icon: '💳',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><line x1="2" y1="10" x2="22" y2="10"/></svg>',
     desc: '카드, 주택청약, 비과세',
     steps: [
       {
@@ -5768,27 +5241,9 @@ function catCollectChildAges() {
   }
 }
 
-// Auto-load from localStorage on page init
+// 매번 새로 입력하도록 연봉 화면은 빈 상태로 시작
 (function() {
-  var hasData = loadFromLocal();
-  if (hasData && S.salary > 0) {
-    // Pre-fill salary input with saved value, but always show salary screen
-    document.getElementById('salaryInput').value = Number(S.salary).toLocaleString();
-    document.getElementById('startBtn').disabled = false;
-    var monthly = document.getElementById('salaryMonthly');
-    if (monthly) monthly.textContent = '월 환산 약 ' + fmt(Math.round(S.salary / 12)) + '만원';
-    // Restore job change state
-    if (jobChanged) {
-      var wrap = document.getElementById('jobChangeWrap');
-      var toggle = document.getElementById('jobChangeToggle');
-      if (wrap) wrap.classList.add('active');
-      if (toggle) toggle.classList.add('on');
-      var prevSalEl = document.getElementById('prevSalaryInput');
-      var prevTaxEl = document.getElementById('prevTaxInput');
-      if (prevSalEl && prevSalary > 0) prevSalEl.value = Number(prevSalary).toLocaleString();
-      if (prevTaxEl && prevTax > 0) prevTaxEl.value = Number(prevTax).toLocaleString();
-    }
-  }
+  loadFromLocal(); // 내부 상태만 복원 (진행 중 데이터용)
 })();
 </script>
 </body>
