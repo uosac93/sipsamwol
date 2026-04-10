@@ -4344,7 +4344,6 @@ function renderGroupedConsultingCards() {
 
     var header = document.createElement('div');
     header.className = 'accordion-header';
-    var iconColors = {
     header.innerHTML =
       '<div class="accordion-header-left">' +
         '<div class="accordion-header-icon">' + group.icon + '</div>' +
@@ -5241,9 +5240,21 @@ function catCollectChildAges() {
   }
 }
 
-// 매번 새로 입력하도록 연봉 화면은 빈 상태로 시작
+// 초기화: 내부 상태 복원, 연봉 입력란은 비움
 (function() {
-  loadFromLocal(); // 내부 상태만 복원 (진행 중 데이터용)
+  loadFromLocal();
+  // 입력란에 값이 남아있으면(브라우저 자동완성 등) 버튼 활성화
+  var inp = document.getElementById('salaryInput');
+  var btn = document.getElementById('startBtn');
+  if (inp && inp.value) {
+    var v = inp.value.replace(/[^0-9]/g, '');
+    if (v && Number(v) > 0) {
+      inp.value = Number(v).toLocaleString();
+      btn.disabled = false;
+      var monthly = document.getElementById('salaryMonthly');
+      if (monthly) monthly.textContent = '월 환산 약 ' + fmt(Math.round(Number(v) / 12)) + '만원';
+    }
+  }
 })();
 </script>
 </body>
