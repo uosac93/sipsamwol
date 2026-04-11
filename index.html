@@ -21,13 +21,13 @@
   --red: #f04452;
   --border: #f2f4f6;
   --input-border: #e5e8eb;
-  --side: 20px;
+  --side: 24px;
   /* TDS semantic aliases */
   --line: #e5e8eb;
   --card: #f2f4f6;
   --accent: #3182f6;
   --accent-light: #e8f3ff;
-  --side-pad: 20px;
+  --side-pad: 24px;
 }
 
 body {
@@ -107,7 +107,7 @@ body {
   flex: 1; display: flex; flex-direction: column; padding: 0 var(--side);
   position: relative;
 }
-.onboarding-screen::before { content: ''; flex: 0.35; min-height: 80px; }
+.onboarding-screen::before { content: ''; flex: 0.4; min-height: 80px; }
 .onboarding-screen::after { content: ''; flex: 1; }
 .onboarding-top-bar {
   position: absolute; top: 0; left: 0; right: 0; padding: 12px var(--side);
@@ -124,30 +124,30 @@ body {
 .back-btn svg { width: 24px; height: 24px; }
 .step-indicator { font-size: 13px; font-weight: 500; color: var(--text4); }
 .onboarding-title {
-  font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
+  font-size: 26px; font-weight: 800; letter-spacing: -0.5px;
   line-height: 1.4; margin-bottom: 8px; color: var(--text);
 }
-.onboarding-sub { font-size: 13px; font-weight: 400; color: var(--text3); margin-bottom: 24px; line-height: 19.5px; }
+.onboarding-sub { font-size: 16px; font-weight: 400; color: var(--text3); margin-top: 8px; margin-bottom: 48px; line-height: 1.5; }
 
 /* === Salary Input === */
 .salary-input-wrap { position: relative; margin-bottom: 8px; }
 .salary-input {
-  width: 100%; font-size: 34px; font-weight: 700; letter-spacing: -1.5px;
-  border: none; border-bottom: 1px solid var(--line); outline: none;
+  width: 100%; font-size: 30px; font-weight: 700; letter-spacing: -1.5px;
+  border: none; border-bottom: 1.5px solid var(--line); outline: none;
   padding: 12px 50px 12px 0; background: transparent; color: var(--text);
   font-family: inherit; caret-color: var(--accent); transition: border-color 0.2s;
-  line-height: 46px;
+  line-height: 42px;
 }
 .salary-input:focus { border-bottom-color: var(--accent); }
 .salary-input::placeholder { color: var(--text4); font-size: 20px; font-weight: 400; }
 .salary-unit { position: absolute; right: 0; bottom: 16px; font-size: 16px; font-weight: 500; color: var(--text3); }
-.salary-monthly { font-size: 13px; color: var(--text3); margin-top: 6px; min-height: 18px; }
+.salary-monthly { font-size: 14px; color: var(--text3); margin-top: 12px; min-height: 18px; }
 
 /* === Primary Button === */
 .primary-btn {
-  width: 100%; height: 52px; border: none; border-radius: 12px;
+  width: 100%; height: 56px; border: none; border-radius: 12px;
   background: var(--accent); color: #fff; font-size: 16px; font-weight: 700;
-  font-family: inherit; cursor: pointer; margin-top: 24px;
+  font-family: inherit; cursor: pointer; margin-top: 32px;
   transition: transform 0.15s, opacity 0.15s;
 }
 .primary-btn:disabled { background: var(--bg2); color: var(--text4); pointer-events: none; }
@@ -166,10 +166,10 @@ body {
 .choice-btn-sub { font-size: 13px; font-weight: 400; color: var(--text3); margin-top: 4px; }
 
 /* === Simple Mode Family Counter === */
-.simple-family-wrap { text-align: center; margin: 40px 0 32px; }
+.simple-family-wrap { text-align: center; margin: 48px 0 32px; }
 .simple-family-counter {
   display: inline-flex; align-items: center; gap: 24px;
-  background: var(--bg2); border-radius: 16px; padding: 24px 32px;
+  background: transparent; border-radius: 16px; padding: 24px 32px;
 }
 .simple-counter-btn {
   width: 44px; height: 44px; border-radius: 50%; border: none;
@@ -218,7 +218,7 @@ body {
 
 /* === Matched Items === */
 .matched-header { padding: 60px var(--side) 0; }
-.matched-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.4; }
+.matched-title { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.4; }
 .matched-sub { font-size: 13px; color: var(--text3); margin-top: 8px; }
 .section-label {
   font-size: 13px; font-weight: 600; color: var(--text3); letter-spacing: 0.3px;
@@ -255,7 +255,7 @@ body {
 }
 .item-progress-dot.done { background: var(--brand); }
 .item-progress-dot.current { background: var(--brand); width: 20px; border-radius: 3px; }
-.item-question { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.4; margin-bottom: 8px; }
+.item-question { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.4; margin-bottom: 8px; }
 .item-hint { font-size: 13px; color: var(--text3); margin-bottom: 28px; line-height: 1.5; }
 .item-input-area { flex: 1; }
 .item-input-label { font-size: 14px; font-weight: 600; color: var(--text2); margin-bottom: 8px; }
@@ -299,26 +299,25 @@ body {
 
 /* === Home — Option B: Card Layout === */
 .home-cards-wrap {
-  padding: 56px var(--side) 0;
-  display: flex; flex-direction: column; gap: 12px;
+  padding: 32px var(--side) 0;
+  display: flex; flex-direction: column; gap: 0;
 }
 
 /* Refund hero card */
 .home-refund-card {
-  background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
-  border-radius: 20px; padding: 28px 24px 24px;
+  background: var(--bg); border-radius: 0; padding: 0 0 32px;
   position: relative; overflow: hidden;
 }
 .home-refund-card .home-profile-chip {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 12px; background: rgba(255,255,255,0.7); border-radius: 8px;
-  margin-bottom: 20px; cursor: pointer; min-height: 32px;
-  width: fit-content; backdrop-filter: blur(8px);
+  padding: 6px 12px; background: var(--bg2); border-radius: 8px;
+  margin-bottom: 32px; cursor: pointer; min-height: 32px;
+  width: fit-content;
 }
-.home-profile-chip span:first-child { font-size: 13px; font-weight: 500; color: var(--text2); }
-.home-profile-chip span:last-child { font-size: 13px; color: var(--text3); font-weight: 500; }
+.home-profile-chip span:first-child { font-size: 14px; font-weight: 500; color: var(--text2); }
+.home-profile-chip span:last-child { font-size: 14px; color: var(--text3); font-weight: 500; }
 
-.home-my-label { font-size: 13px; font-weight: 500; color: var(--text3); margin-bottom: 8px; line-height: 19.5px; }
+.home-my-label { font-size: 15px; font-weight: 400; color: var(--text3); margin-bottom: 8px; line-height: 1.5; }
 .home-my-amount {
   font-size: 36px; font-weight: 800; letter-spacing: -1.5px; color: var(--text);
   line-height: 44px;
@@ -326,26 +325,27 @@ body {
 .home-my-amount.negative { color: var(--red); }
 .home-my-amount.bump { transform: scale(1.02); }
 .home-my-unit { font-size: 16px; font-weight: 700; margin-left: 2px; }
-.home-my-sub { font-size: 13px; color: var(--text3); margin-top: 8px; font-weight: 400; line-height: 19.5px; }
+.home-my-sub { font-size: 14px; color: var(--text4); margin-top: 8px; font-weight: 400; line-height: 1.5; }
 
 /* Tips card */
 .home-tips-card {
-  background: var(--card); border-radius: 16px; padding: 20px;
+  background: var(--bg); border-radius: 0; padding: 0; margin-top: 48px;
 }
-.home-tips-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 16px; line-height: 22.5px; }
-.home-tip-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.04); }
+.home-tips-title { font-size: 14px; font-weight: 600; color: var(--text3); margin-bottom: 20px; line-height: 1.5; }
+.home-tip-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line); }
 .home-tip-row:last-child { border-bottom: none; }
-.home-tip-text { font-size: 15px; color: var(--text); font-weight: 400; line-height: 22.5px; }
-.home-tip-amount { font-size: 15px; color: var(--brand); font-weight: 600; white-space: nowrap; line-height: 22.5px; }
+.home-tip-text { font-size: 16px; color: var(--text); font-weight: 400; line-height: 1.5; }
+.home-tip-amount { font-size: 16px; color: var(--text3); font-weight: 400; white-space: nowrap; line-height: 1.5; }
 
 /* Spouse card */
 .home-spouse-outer-card {
-  background: var(--card); border-radius: 16px; padding: 20px; overflow: hidden;
+  background: var(--bg); border-radius: 0; padding: 0; overflow: hidden; margin-top: 32px;
+  text-align: center;
 }
 .spouse-toggle-btn {
-  display: flex; align-items: center; justify-content: space-between; gap: 6px;
-  width: 100%; padding: 0; border: none; border-radius: 0;
-  background: transparent; font-size: 15px; font-weight: 700; color: var(--text);
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  width: auto; padding: 20px 0; border: none; border-radius: 0;
+  background: transparent; font-size: 16px; font-weight: 500; color: var(--text);
   font-family: inherit; cursor: pointer; transition: all 0.2s;
 }
 .spouse-toggle-btn:active { opacity: 0.5; }
@@ -386,7 +386,7 @@ body {
 
 /* Detail CTA card */
 .home-detail-card {
-  background: var(--card); border-radius: 16px; padding: 20px;
+  background: var(--bg); border-radius: 0; padding: 0; margin-top: 32px;
   text-align: center;
 }
 
@@ -433,10 +433,10 @@ body {
 .fopt-total-unit { font-size: 14px; font-weight: 700; margin-left: 2px; }
 .fopt-total-diff { font-size: 13px; font-weight: 700; color: var(--green); margin-top: 6px; min-height: 18px; }
 
-.home-detail-label { font-size: 13px; color: var(--text3); text-align: center; margin-bottom: 10px; }
+.home-detail-label { font-size: 14px; color: var(--text4); text-align: center; margin-bottom: 10px; }
 .home-detail-btn {
-  width: 100%; height: 52px; border: none; border-radius: 12px;
-  background: var(--bg); font-family: inherit; font-size: 15px;
+  width: 100%; height: 56px; border: none; border-radius: 12px;
+  background: var(--bg2); font-family: inherit; font-size: 16px;
   font-weight: 600; color: var(--text2); cursor: pointer;
   transition: background 0.15s; display: flex; align-items: center; justify-content: center;
 }
@@ -611,7 +611,7 @@ body {
 
 /* === Settings === */
 .settings-header { padding: 12px var(--side); }
-.settings-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; display: none; }
+.settings-title { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; display: none; }
 .settings-section { margin: 0 var(--side) 20px; }
 .settings-section-label { font-size: 13px; font-weight: 600; color: var(--text3); letter-spacing: 0.3px; margin-bottom: 8px; padding-left: 4px; }
 .settings-card { background: var(--bg2); border-radius: 16px; overflow: hidden; }
@@ -862,7 +862,7 @@ body {
 .profile-summary-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 13px; color: var(--text3); background: var(--bg2); border: none; font-family: inherit; cursor: pointer; padding: 8px 14px; border-radius: 8px; font-weight: 600; min-height: 44px; }
 .profile-summary-btn:active { background: #e5e8eb; }
 .home-greeting { font-size: 14px; color: var(--text3); margin-bottom: 4px; }
-.home-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.3; }
+.home-title { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.3; }
 .home-title .accent { color: var(--brand); }
 .home-optimized-card { padding: 20px; border-radius: 12px; background: var(--bg2); }
 .home-optimized-label { font-size: 13px; font-weight: 500; color: var(--text3); margin-bottom: 4px; }
