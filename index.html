@@ -46,22 +46,22 @@ body{
 .step-line.active{background:var(--blue)}
 .step-line.done{background:var(--blue)}
 .step-label{font-size:14px;font-weight:600;color:var(--blue);margin-top:10px}
-.input-top{padding-top:16px}
+.input-top{padding-top:16px;margin-bottom:28px}
 .input-title{font-size:22px;font-weight:700;letter-spacing:-.4px;line-height:1.45}
-.input-sub{font-size:14px;color:var(--text3);margin-top:8px;margin-bottom:32px}
-.salary-section{display:flex;flex-direction:column}
-.salary-wrap{display:flex;align-items:baseline;gap:16px;width:100%}
+.input-sub{font-size:14px;color:var(--text3);margin-top:8px}
+.salary-section{}
+.salary-wrap{display:flex;align-items:center;gap:12px}
 .salary-input{
-  width:0;flex:1;font-size:36px;font-weight:800;letter-spacing:-2px;
-  border:none;border-bottom:3px solid #DDE0E4;outline:none;
-  padding:8px 0;background:transparent;color:var(--text);
+  flex:1;font-size:32px;font-weight:800;letter-spacing:-1.5px;
+  border:none;border-bottom:2.5px solid #DDE0E4;outline:none;
+  padding:12px 0;background:transparent;color:var(--text);
   font-family:inherit;caret-color:var(--blue);text-align:right;
   transition:border-color .2s;
 }
 .salary-input:focus{border-bottom-color:var(--blue)}
-.salary-input::placeholder{color:var(--text4);font-size:22px;font-weight:400}
-.salary-unit{font-size:18px;font-weight:600;color:var(--text3);white-space:nowrap;flex-shrink:0}
-.salary-hint{font-size:14px;color:var(--blue);margin-top:14px;min-height:20px;font-weight:500}
+.salary-input::placeholder{color:var(--text4);font-size:20px;font-weight:400}
+.salary-unit{font-size:17px;font-weight:600;color:var(--text3);white-space:nowrap;flex-shrink:0}
+.salary-hint{font-size:13px;color:var(--blue);margin-top:10px;min-height:18px;font-weight:500}
 .spouse-toggle-row{display:flex;justify-content:space-between;align-items:center}
 .spouse-toggle-label{font-size:15px;font-weight:600;color:var(--text)}
 .spouse-btns{display:flex;gap:6px}
@@ -394,21 +394,17 @@ body{
       </div>
       <div id="salaryHint" class="salary-hint"></div>
     </div>
-    <div class="spouse-section" style="margin-top:20px">
-      <div class="spouse-toggle-row">
-        <span class="spouse-toggle-label">배우자가 있나요?</span>
-        <div class="spouse-btns" id="spouseToggle">
-          <button class="spouse-btn" data-val="no" onclick="setSpouseToggle('no')">없어요</button>
-          <button class="spouse-btn" data-val="yes" onclick="setSpouseToggle('yes')">있어요</button>
+    <div class="spouse-section">
+      <button id="addSpouseBtn" class="add-spouse-btn" onclick="showSpouseInput()">+ 배우자 추가</button>
+      <div id="spouseSalaryWrap" class="spouse-salary-wrap">
+        <div class="spouse-salary-header">
+          <div class="salary-label">배우자 급여</div>
+          <button class="spouse-close" onclick="hideSpouseInput()">×</button>
         </div>
-      </div>
-      <div id="spouseSalaryWrap" style="display:none;margin-top:14px">
-        <div class="salary-label">배우자 급여</div>
         <div class="salary-wrap">
           <input id="spouseSalaryInput" class="salary-input" style="font-size:28px" type="tel" inputmode="numeric" placeholder="" autocomplete="off" oninput="onSpouseSalaryInput(this)">
           <span class="salary-unit">만원</span>
         </div>
-        <div class="salary-hint" style="color:var(--text3)">맞벌이 부부 기준이에요</div>
       </div>
     </div>
     <div class="input-bottom">
