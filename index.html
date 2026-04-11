@@ -283,6 +283,16 @@ body{
   font-family:inherit;cursor:pointer;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px;
 }
 .card-import-btn:active{transform:scale(.97);opacity:.8;background:var(--blue-bg)}
+.auth-list{display:flex;flex-direction:column;gap:8px}
+.auth-item{
+  display:flex;align-items:center;gap:14px;width:100%;padding:16px 20px;
+  background:var(--bg2);border:none;border-radius:14px;font-family:inherit;cursor:pointer;
+  transition:transform .2s cubic-bezier(.16,1,.3,1);
+}
+.auth-item:active{transform:scale(.96)}
+.auth-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.auth-name{font-size:15px;font-weight:600;color:var(--text);flex:1;text-align:left}
+.auth-arrow{font-size:16px;color:var(--text4)}
 .card-field-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
 .card-field-info{flex:1;min-width:0}
 .card-field-name{font-size:14px;font-weight:600;color:var(--text)}
@@ -473,6 +483,39 @@ body{
   <div id="detailContent" class="panel-content"></div>
 </div>
 
+<!-- AUTH PICKER -->
+<div id="authPanel" class="bottom-panel">
+  <div class="panel-handle-area" onclick="closeAllPanels()"><div class="panel-handle"></div></div>
+  <div class="panel-header">
+    <div class="panel-title">인증 방법 선택</div>
+    <button class="panel-close" onclick="closeAllPanels()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="panel-content" style="padding-bottom:32px">
+    <div class="auth-list">
+      <button class="auth-item" onclick="closeAllPanels();showToast('준비 중이에요')">
+        <div class="auth-logo" style="background:#FEE500"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 3C6.48 3 2 6.36 2 10.5c0 2.69 1.8 5.04 4.5 6.38l-.9 3.32c-.08.28.25.5.48.34L10 17.9c.65.07 1.32.1 2 .1 5.52 0 10-3.36 10-7.5S17.52 3 12 3z" fill="#3C1E1E"/></svg></div>
+        <span class="auth-name">카카오</span>
+        <span class="auth-arrow">›</span>
+      </button>
+      <button class="auth-item" onclick="closeAllPanels();showToast('준비 중이에요')">
+        <div class="auth-logo" style="background:#0064FF"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5.5 7.5H14.5V9H11V15H9V9H5.5V7.5Z" fill="white"/></svg></div>
+        <span class="auth-name">토스</span>
+        <span class="auth-arrow">›</span>
+      </button>
+      <button class="auth-item" onclick="closeAllPanels();showToast('준비 중이에요')">
+        <div class="auth-logo" style="background:#E42828"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5z" fill="white"/></svg></div>
+        <span class="auth-name">PASS</span>
+        <span class="auth-arrow">›</span>
+      </button>
+      <button class="auth-item" onclick="closeAllPanels();showToast('준비 중이에요')">
+        <div class="auth-logo" style="background:#03C75A"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M16.27 10.58L7.37 18V6l8.9 4.58z" fill="white"/></svg></div>
+        <span class="auth-name">네이버</span>
+        <span class="auth-arrow">›</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 <script>
@@ -488,7 +531,7 @@ var spouseResult = null;
 
 // 카테고리 입력값 (만원 단위)
 var catInputs = {
-  card: { credit: 0, debit: 0, cash: 0, market: 0, transit: 0 },
+  card: { credit: 0, debit: 0, cash: 0 },
   housing: { rent: 0, subscription: 0, loanInterest: 0 },
   pension: { pensionSaving: 0, irp: 0, insurance: 0 },
   living: { education: 0, medical: 0 },
@@ -741,29 +784,19 @@ function calcCatSaving(catKey) {
 
   if (catKey === 'card') {
     var threshold = tp * 0.25;
-    var totalSpend = (ci.credit + ci.debit + ci.cash + ci.market + ci.transit) * 10000;
+    var totalSpend = (ci.credit + ci.debit + ci.cash) * 10000;
     if (totalSpend <= threshold) return 0;
-    // 25% 초과분에서 카드 종류별 공제율 적용 (신용카드가 먼저 문턱에 소진)
     var usedFromCredit = Math.min(ci.credit * 10000, threshold);
     var remain = threshold - usedFromCredit;
     var usedFromDebit = Math.min(ci.debit * 10000, remain); remain -= usedFromDebit;
-    var usedFromCash = Math.min(ci.cash * 10000, remain); remain -= usedFromCash;
-    var usedFromMarket = Math.min(ci.market * 10000, remain); remain -= usedFromMarket;
-    var usedFromTransit = Math.min(ci.transit * 10000, remain);
+    var usedFromCash = Math.min(ci.cash * 10000, remain);
     var creditOver = ci.credit * 10000 - usedFromCredit;
     var debitOver = ci.debit * 10000 - usedFromDebit;
     var cashOver = ci.cash * 10000 - usedFromCash;
-    var marketOver = ci.market * 10000 - usedFromMarket;
-    var transitOver = ci.transit * 10000 - usedFromTransit;
-    // 기본 한도
     var baseLimit = tp <= 70000000 ? 3000000 : (tp <= 120000000 ? 2500000 : 2000000);
     var baseDed = creditOver * 0.15 + debitOver * 0.30 + cashOver * 0.30;
     baseDed = Math.min(baseDed, baseLimit);
-    // 전통시장·대중교통 추가 한도 각 300만원
-    var marketDed = Math.min(marketOver * 0.40, 3000000);
-    var transitDed = Math.min(transitOver * 0.40, 3000000);
-    var deduction = baseDed + marketDed + transitDed;
-    return Math.round(deduction * mr * 1.1);
+    return Math.round(baseDed * mr * 1.1);
   }
 
   if (catKey === 'housing') {
@@ -924,28 +957,20 @@ function getFamilyAdvice(catKey) {
 function getCardThresholdInfo() {
   var tp = getTotalPay();
   var ci = catInputs.card;
-  var totalSpend = (ci.credit + ci.debit + ci.cash + ci.market + ci.transit) * 10000;
+  var totalSpend = (ci.credit + ci.debit + ci.cash) * 10000;
   var threshold = tp * 0.25;
   var baseLimit = tp <= 70000000 ? 3000000 : (tp <= 120000000 ? 2500000 : 2000000);
 
-  // 기본 공제액 (신용/체크/현금)
   var baseDed = 0;
   if (totalSpend > threshold) {
     var usedFromCredit = Math.min(ci.credit * 10000, threshold);
     var remain = threshold - usedFromCredit;
     var usedFromDebit = Math.min(ci.debit * 10000, remain); remain -= usedFromDebit;
-    var usedFromCash = Math.min(ci.cash * 10000, remain); remain -= usedFromCash;
-    var usedFromMarket = Math.min(ci.market * 10000, remain); remain -= usedFromMarket;
-    var usedFromTransit = Math.min(ci.transit * 10000, remain);
+    var usedFromCash = Math.min(ci.cash * 10000, remain);
     baseDed = (ci.credit*10000-usedFromCredit)*0.15 + (ci.debit*10000-usedFromDebit)*0.30 + (ci.cash*10000-usedFromCash)*0.30;
     baseDed = Math.min(baseDed, baseLimit);
   }
-  var marketDed = Math.min(Math.max((ci.market * 10000) - (totalSpend > threshold ? 0 : 0), 0) * 0.40, 3000000);
-  var transitDed = Math.min(Math.max(ci.transit * 10000, 0) * 0.40, 3000000);
-  var totalDed = baseDed + (totalSpend > threshold ? marketDed + transitDed : 0);
-  var totalLimit = baseLimit + 3000000 + 3000000; // 기본 + 전통시장 + 대중교통
 
-  // 카드별 공제 가능액
   var perCard = {};
   CAT_META.card.fields.forEach(function(f) {
     var amt = ci[f.key] * 10000;
@@ -957,14 +982,9 @@ function getCardThresholdInfo() {
     threshold: threshold,
     thresholdPct: threshold > 0 ? Math.min(Math.round(totalSpend / threshold * 100), 100) : 0,
     overThreshold: totalSpend > threshold,
-    deduction: totalDed,
+    deduction: baseDed,
     baseLimit: baseLimit,
     baseDed: baseDed,
-    marketDed: totalSpend > threshold ? marketDed : 0,
-    marketLimit: 3000000,
-    transitDed: totalSpend > threshold ? transitDed : 0,
-    transitLimit: 3000000,
-    totalLimit: totalLimit,
     limitPct: baseLimit > 0 ? Math.min(Math.round(baseDed / baseLimit * 100), 100) : 0,
     limitReached: baseDed >= baseLimit,
     perCard: perCard
@@ -979,20 +999,18 @@ var CAT_META = {
     name: '카드 사용',
     desc: '카드·현금영수증·전통시장·대중교통으로 돌려받기',
     fields: [
-      { key: 'credit', label: '신용카드', hint: '쓴 만큼 돌려받아요', unit: '만원', rate: 0.15 },
-      { key: 'debit', label: '체크카드', hint: '신용카드보다 2배 더 돌려받아요', unit: '만원', rate: 0.30 },
-      { key: 'cash', label: '현금영수증', hint: '체크카드와 같은 혜택이에요', unit: '만원', rate: 0.30 },
-      { key: 'market', label: '전통시장', hint: '가장 많이 돌려받아요', unit: '만원', rate: 0.40 },
-      { key: 'transit', label: '대중교통', hint: '가장 많이 돌려받아요', unit: '만원', rate: 0.40 }
+      { key: 'credit', label: '신용카드', unit: '만원', rate: 0.15 },
+      { key: 'debit', label: '체크카드', unit: '만원', rate: 0.30 },
+      { key: 'cash', label: '현금영수증', unit: '만원', rate: 0.30 }
     ]
   },
   housing: {
     name: '주택/주거',
     desc: '월세·대출이자·청약으로 돌려받기',
     fields: [
-      { key: 'rent', label: '월세 (월)', hint: '매달 내는 월세로 돌려받아요', unit: '만원' },
-      { key: 'subscription', label: '주택청약 납입액 (연)', hint: '청약 넣은 돈으로 돌려받아요', unit: '만원' },
-      { key: 'loanInterest', label: '대출이자 납입액 (연)', hint: '대출이자로 돌려받아요', unit: '만원' }
+      { key: 'rent', label: '월세 (월)', unit: '만원' },
+      { key: 'subscription', label: '주택청약 납입액 (연)', unit: '만원' },
+      { key: 'loanInterest', label: '대출이자 납입액 (연)', unit: '만원' }
     ]
   },
   pension: {
@@ -1200,29 +1218,20 @@ function getCatSteps(key, ans) {
     s.push({ type: 'done' }); return s;
   }
   if (key === 'housing') {
-    s.push({ type: 'choice', title: '주택이 있나요?', sub: '주거비로 돌려받을 수 있는지 확인해 드릴게요', key: 'hasHouse', options: [
-      { label: '없어요 (무주택)', value: 'none' }, { label: '1채', value: 'one' }, { label: '2채 이상', value: 'multi' }
+    s.push({ type: 'multi', title: '어떤 주거비를\n내고 있나요?', key: 'housingTypes', options: [
+      { label: '월세', value: 'rent' },
+      { label: '전세 대출', value: 'jeonse' },
+      { label: '주택담보대출', value: 'mortgage' },
+      { label: '주택청약', value: 'subscription' },
+      { label: '해당 없음', value: 'none' }
     ]});
-    if (ans.hasHouse === 'multi') {
-      s.push({ type: 'info', title: '주거비로 돌려받기는\n해당되지 않아요', msg: '월세, 대출이자, 청약 혜택은 무주택이거나 1채만 있을 때 받을 수 있어요' });
-      s.push({ type: 'done' }); return s;
-    }
-    if (ans.hasHouse === 'none') {
-      s.push({ type: 'choice', title: '어떻게 살고 있나요?', sub: '맞는 혜택을 찾아드릴게요', key: 'livingType', options: [
-        { label: '월세', value: 'rent' }, { label: '전세', value: 'jeonse' }, { label: '기타', value: 'other' }
-      ]});
-      if (ans.livingType === 'rent') s.push({ type: 'input', title: '월세를 얼마나 내나요?', sub: tp <= 70000000 ? '월세로 돌려받을 수 있어요' : '총급여 7천만원 초과 시 혜택이 없어요', fields: [CAT_META.housing.fields[0]] });
-      else if (ans.livingType === 'jeonse') s.push({ type: 'input', title: '전세대출 이자를\n얼마나 내나요?', sub: '대출이자로 돌려받을 수 있어요', fields: [CAT_META.housing.fields[2]] });
-      s.push({ type: 'choice', title: '주택청약에\n넣고 있나요?', sub: '청약 납입액으로도 돌려받아요', key: 'hasSubscription', options: [
-        { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '시작할 예정이에요', value: 'plan' }
-      ]});
-      if (ans.hasSubscription === 'yes' || ans.hasSubscription === 'plan') s.push({ type: 'input', title: ans.hasSubscription === 'plan' ? '청약에 얼마나\n넣을 예정인가요?' : '주택청약 납입액을\n입력해 주세요', sub: ans.hasSubscription === 'plan' ? '예상 금액으로 얼마나 돌려받는지 확인해요' : '올해 넣은 총 금액이에요', fields: [CAT_META.housing.fields[1]] });
-    } else if (ans.hasHouse === 'one') {
-      s.push({ type: 'choice', title: '주택담보대출이\n있나요?', sub: '대출이자로 돌려받을 수 있어요', key: 'hasLoan', options: [
-        { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '받을 예정이에요', value: 'plan' }
-      ]});
-      if (ans.hasLoan === 'yes' || ans.hasLoan === 'plan') s.push({ type: 'input', title: ans.hasLoan === 'plan' ? '대출이자를 얼마나\n낼 예정인가요?' : '대출이자를 얼마나\n내고 있나요?', sub: ans.hasLoan === 'plan' ? '예상 금액으로 얼마나 돌려받는지 확인해요' : '올해 낸 이자 총액이에요', fields: [CAT_META.housing.fields[2]] });
-    }
+    var ht = ans.housingTypes || [];
+    if (ht.indexOf('none') >= 0 || ht.length === 0) { s.push({ type: 'done' }); return s; }
+    var housingFields = [];
+    if (ht.indexOf('rent') >= 0) housingFields.push(CAT_META.housing.fields[0]);
+    if (ht.indexOf('jeonse') >= 0 || ht.indexOf('mortgage') >= 0) housingFields.push(CAT_META.housing.fields[2]);
+    if (ht.indexOf('subscription') >= 0) housingFields.push(CAT_META.housing.fields[1]);
+    if (housingFields.length > 0) s.push({ type: 'input', title: '금액을 입력해 주세요', fields: housingFields });
     s.push({ type: 'done' }); return s;
   }
   if (key === 'pension') {
@@ -1312,7 +1321,7 @@ function renderCatStep() {
   }
   if (st.type === 'cardInput') {
     // 카드 사용 내역 불러오기 버튼
-    h += '<button class="card-import-btn" onclick="showToast(\'간편인증 연동 후 자동으로 불러올 수 있어요\')">간편인증 불러오기</button>';
+    h += '<button class="card-import-btn" onclick="openAuthPicker()">간편인증 불러오기</button>';
     var ci = catInputs.card, ti = getCardThresholdInfo();
     // 카드별 입력 필드
     CAT_META.card.fields.forEach(function(f) {
@@ -1352,12 +1361,9 @@ function renderCardThresholdHTML() {
     h += '<div class="threshold-alert">지금은 0원이지만 <b>' + fmtAmt(gap) + '원</b> 더 쓰면 <b>' + fmtAmt(potentialSaving) + '원</b> 돌려받아요</div>';
   }
   h += '</div>';
-  // 3개 한도 트래커
   if (ti.overThreshold) {
-    h += '<div class="limit-tracker"><div class="limit-tracker-title">한도별 현황</div>';
-    h += renderLimitItem('신용·체크·현금', ti.baseDed, ti.baseLimit);
-    h += renderLimitItem('전통시장 추가', ti.marketDed, ti.marketLimit);
-    h += renderLimitItem('대중교통 추가', ti.transitDed, ti.transitLimit);
+    h += '<div class="limit-tracker">';
+    h += renderLimitItem('공제 한도', ti.baseDed, ti.baseLimit);
     h += '</div>';
   }
   return h;
@@ -1413,7 +1419,7 @@ function renderCatSummary() {
 
 function getMaxCatSaving(key) {
   var tp = getTotalPay(), mr = getMRate();
-  if (key === 'card') { var bl = tp <= 70000000 ? 3000000 : (tp <= 120000000 ? 2500000 : 2000000); return Math.round((bl + 3000000 + 3000000) * mr * 1.1); }
+  if (key === 'card') { var bl = tp <= 70000000 ? 3000000 : (tp <= 120000000 ? 2500000 : 2000000); return Math.round(bl * mr * 1.1); }
   if (key === 'housing') { var m = 0; if (tp <= 70000000) m += Math.round(7500000 * 0.17); if (tp <= 70000000) m += Math.round(2400000 * 0.4 * mr * 1.1); m += Math.round(20000000 * mr * 1.1); return m; }
   if (key === 'pension') { var pr = tp <= 55000000 ? 0.15 : 0.12; return Math.round(9000000 * pr + 1000000 * 0.12); }
   if (key === 'living') return Math.round(9000000 * 0.15 + 7000000 * 0.15);
@@ -1441,6 +1447,10 @@ function onFlowMulti(key, value) {
   if (idx >= 0) arr.splice(idx, 1); else arr.push(value);
   catFlow.answers[key] = arr;
   if (key === 'donTypes') { var ci = catInputs.donation; ['hometown','political','religious','general'].forEach(function(t) { if (arr.indexOf(t) < 0) ci[t] = 0; }); }
+  if (key === 'housingTypes') {
+    if (value === 'none') { catFlow.answers[key] = ['none']; }
+    else { var ni = arr.indexOf('none'); if (ni >= 0) arr.splice(ni, 1); catFlow.answers[key] = arr; }
+  }
   renderCatStep();
 }
 
@@ -1466,11 +1476,13 @@ function onCatInput(el) {
   catInputs[currentCat][field] = Number(v) || 0;
   var saving = calcCatSaving(currentCat);
   var display = document.getElementById('catSavingDisplay');
-  if (display) display.textContent = fmtAmt(saving) + '원';
+  if (display) {
+    var prev = parseInt((display.textContent || '0').replace(/[^0-9]/g, '')) || 0;
+    if (prev !== saving) animateCountUp(display, saving, '원', 300);
+  }
   if (currentCat === 'card') {
     var thArea = document.getElementById('cardThresholdArea');
     if (thArea) thArea.innerHTML = renderCardThresholdHTML();
-    // 카드별 공제액 업데이트
     var ti = getCardThresholdInfo();
     document.querySelectorAll('.card-field-deduct').forEach(function(d) { d.remove(); });
     if (ti.overThreshold) {
@@ -1509,7 +1521,7 @@ function openPanel(id) {
 
 function closeAllPanels() {
   document.getElementById('panelOverlay').classList.remove('show');
-  ['settingsPanel','detailPanel','catDetailPanel'].forEach(function(id) {
+  ['settingsPanel','detailPanel','catDetailPanel','authPanel'].forEach(function(id) {
     document.getElementById(id).classList.remove('show');
   });
   document.body.style.overflow = '';
@@ -1526,6 +1538,7 @@ function openSettings() {
   openPanel('settingsPanel');
 }
 function openDetail() { openPanel('detailPanel'); }
+function openAuthPicker() { openPanel('authPanel'); }
 
 // ===========================
 // SETTINGS
