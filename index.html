@@ -325,10 +325,10 @@ body{
 .advice-box b{color:var(--blue);font-weight:700}
 
 /* CARD THRESHOLD */
-.threshold-section{margin:16px 0}
-.threshold-label{font-size:13px;color:var(--text3);margin-bottom:6px}
-.threshold-bar-bg{height:8px;background:var(--bg2);border-radius:4px;overflow:hidden}
-.threshold-bar-fill{height:100%;border-radius:4px;background:var(--blue);transition:width .4s}
+.threshold-section{margin:20px 0;background:var(--bg2);border-radius:14px;padding:16px}
+.threshold-label{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px}
+.threshold-bar-bg{height:4px;background:var(--input-line);border-radius:2px;overflow:hidden}
+.threshold-bar-fill{height:100%;border-radius:2px;background:var(--blue);transition:width .4s}
 .threshold-bar-fill.over{background:var(--green)}
 .threshold-info{display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:var(--text3)}
 .threshold-info b{color:var(--blue);font-weight:700}
@@ -336,27 +336,27 @@ body{
 .threshold-alert.done{color:var(--green)}
 
 /* CARD LIMIT TRACKER */
-.limit-tracker{margin:16px 0}
-.limit-tracker-title{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px}
-.limit-item{margin-bottom:14px}
-.limit-item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.limit-tracker{margin:12px 0}
+.limit-item{background:var(--bg2);border-radius:14px;padding:16px;margin-bottom:10px}
+.limit-item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .limit-item-name{font-size:13px;font-weight:600;color:var(--text2)}
 .limit-item-amount{font-size:13px;font-weight:700;color:var(--blue)}
 .limit-item-amount.full{color:var(--green)}
-.limit-bar-bg{height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
-.limit-bar-fill{height:100%;border-radius:3px;background:var(--blue);transition:width .6s cubic-bezier(.16,1,.3,1);animation:fillBar .6s cubic-bezier(.16,1,.3,1)}
+.limit-bar-bg{height:4px;background:var(--input-line);border-radius:2px;overflow:hidden}
+.limit-bar-fill{height:100%;border-radius:2px;background:var(--blue);transition:width .6s cubic-bezier(.16,1,.3,1);animation:fillBar .6s cubic-bezier(.16,1,.3,1)}
 .limit-bar-fill.full{background:var(--green)}
-.limit-item-msg{font-size:12px;margin-top:4px}
+.limit-item-msg{font-size:12px;margin-top:6px}
 .limit-item-msg.done{color:var(--green);font-weight:600}
 .limit-item-msg.remain{color:var(--text3)}
 
 /* CARD IMPORT */
 .card-import-btn{
-  width:100%;height:52px;border:1.5px solid var(--blue);border-radius:14px;
-  background:var(--bg);font-size:15px;font-weight:600;color:var(--blue);
-  font-family:inherit;cursor:pointer;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px;
+  border:none;border-radius:10px;
+  background:var(--blue-bg);font-size:13px;font-weight:600;color:var(--blue);
+  font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  padding:8px 14px;transition:all .15s;
 }
-.card-import-btn:active{transform:scale(.97);opacity:.8;background:var(--blue-bg)}
+.card-import-btn:active{transform:scale(.97);opacity:.8}
 .auth-list{display:flex;flex-direction:column;gap:8px}
 .auth-item{
   display:flex;align-items:center;gap:14px;width:100%;padding:16px 20px;
@@ -367,16 +367,18 @@ body{
 .auth-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .auth-name{font-size:15px;font-weight:600;color:var(--text);flex:1;text-align:left}
 .auth-arrow{font-size:16px;color:var(--text4)}
-.card-field-row{background:var(--bg2);border-radius:14px;padding:16px;margin-bottom:10px}
-.card-field-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.card-field-info{display:flex;align-items:center;gap:8px}
-.card-field-name{font-size:15px;font-weight:700;color:var(--text)}
+.card-field-row{padding:14px 0;border-bottom:1px solid var(--line)}
+.card-field-row:last-of-type{border-bottom:none}
+.card-field-top{display:flex;justify-content:space-between;align-items:center}
+.card-field-info{display:flex;align-items:center;gap:6px}
+.card-field-name{font-size:14px;font-weight:600;color:var(--text)}
 .card-field-badge{font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-bg);padding:2px 8px;border-radius:6px}
-.card-field-rate{font-size:12px;color:var(--text3);margin-top:2px}
-.card-field-input{width:120px;position:relative;flex-shrink:0}
-.card-field-input .cat-input{text-align:right;padding-right:40px;height:42px;font-size:15px}
+.card-field-rate{font-size:12px;color:var(--text3)}
+.card-field-input{width:140px;position:relative;flex-shrink:0}
+.card-field-input .cat-input{text-align:right;padding-right:40px;height:44px;font-size:16px;font-weight:700;border:none;border-radius:10px;background:var(--bg2)}
+.card-field-input .cat-input:focus{background:var(--blue-bg)}
 .card-field-input .cat-input-unit{font-size:13px}
-.card-field-deduct{font-size:12px;color:var(--blue);font-weight:600;text-align:right;margin-top:2px;min-width:120px}
+.card-field-deduct{font-size:12px;color:var(--blue);font-weight:600}
 
 /* LOAN LINK */
 .loan-link-btn{
