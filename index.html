@@ -1846,13 +1846,6 @@ function showToast(msg) {
   if (loadFromLocal() && salary >= 100) {
     salaryInput.value = salary.toLocaleString();
     if (spouseSalary > 0) hasSpouseFlag = true;
-    calculate();
-    showScreen('result');
-    // 저장 데이터 있으면 스플래시 바로 닫기
-    var sp = document.getElementById('splash');
-    sp.style.display = 'none';
-  } else {
-    salaryInput.focus();
   }
 })();
 </script>
