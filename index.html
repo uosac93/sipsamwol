@@ -93,7 +93,12 @@ body{
 
 /* INPUT */
 .input-screen{flex:1;display:flex;flex-direction:column;padding:0 var(--pad)}
-.step-bar{padding:20px 0 16px}
+.step-bar{padding:20px var(--pad) 16px;display:flex;align-items:center;gap:12px}
+.step-back{
+  border:none;background:none;font-family:inherit;font-size:14px;font-weight:500;
+  color:var(--text3);cursor:pointer;padding:4px 0;flex-shrink:0;
+}
+.step-back:active{opacity:.4}
 .step-progress{display:flex;gap:4px;margin-bottom:0}
 .step-progress-seg{flex:1;height:3px;border-radius:2px;background:var(--line);transition:background .4s}
 .step-progress-seg.active,.step-progress-seg.done{background:var(--blue)}
@@ -120,8 +125,9 @@ body{
 /* SPOUSE CHOICE */
 .spouse-choice-screen{flex:1;display:flex;flex-direction:column;padding:0 var(--pad)}
 .spouse-choice-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:80px}
-.spouse-choice-title{font-size:28px;font-weight:800;letter-spacing:-.6px;text-align:center;line-height:1.45}
-.spouse-choice-btns{display:flex;gap:10px;margin-top:40px}
+.spouse-choice-emoji{font-size:48px;text-align:center;animation:springIn .6s cubic-bezier(.16,1,.3,1) .1s both}
+.spouse-choice-title{font-size:28px;font-weight:800;letter-spacing:-.6px;text-align:center;line-height:1.45;margin-top:20px;animation:splashFade .5s ease-out .2s both}
+.spouse-choice-btns{display:flex;gap:10px;margin-top:40px;animation:splashFade .5s ease-out .35s both}
 .spouse-choice-btn{
   flex:1;height:52px;border:none;border-radius:14px;
   background:var(--bg2);font-family:inherit;font-size:16px;font-weight:600;
@@ -458,6 +464,7 @@ body{
       </div>
     </div>
     <div class="spouse-choice-body">
+      <div class="spouse-choice-emoji">👨‍👩‍👧‍👦</div>
       <div class="spouse-choice-title">배우자가 있나요?</div>
       <div class="spouse-choice-btns">
         <button class="spouse-choice-btn" onclick="chooseSpouse(true)">네</button>
@@ -471,7 +478,8 @@ body{
 <div id="screen-input" class="screen">
   <div class="input-screen">
     <div class="step-bar">
-      <div class="step-progress">
+      <button class="step-back" onclick="showScreen('spouse')">←</button>
+      <div class="step-progress" style="flex:1">
         <div class="step-progress-seg done"></div>
         <div class="step-progress-seg active"></div>
         <div class="step-progress-seg"></div>
@@ -696,8 +704,8 @@ function chooseSpouse(val) {
   if (!val) { spouseSalary = 0; }
   // 버튼 선택 효과
   var btns = document.querySelectorAll('.spouse-choice-btn');
-  btns[0].classList.toggle('selected', !val);
-  btns[1].classList.toggle('selected', val);
+  btns[0].classList.toggle('selected', val);
+  btns[1].classList.toggle('selected', !val);
   // 배우자 급여 섹션 표시/숨김
   document.getElementById('spouseSalarySection').style.display = val ? 'block' : 'none';
   // 짧은 딜레이 후 다음 화면으로
