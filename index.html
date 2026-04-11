@@ -1129,20 +1129,26 @@ function getCardThresholdInfo() {
   var baseLimit = tp <= 70000000 ? 3000000 : (tp <= 120000000 ? 2500000 : 2000000);
 
   var baseDed = 0;
+  var perCard = {};
+  var mr = marginalRate(lastResult ? lastResult.taxable : 0);
   if (totalSpend > threshold) {
     var usedFromCredit = Math.min(ci.credit * 10000, threshold);
     var remain = threshold - usedFromCredit;
     var usedFromDebit = Math.min(ci.debit * 10000, remain); remain -= usedFromDebit;
     var usedFromCash = Math.min(ci.cash * 10000, remain);
-    baseDed = (ci.credit*10000-usedFromCredit)*0.15 + (ci.debit*10000-usedFromDebit)*0.30 + (ci.cash*10000-usedFromCash)*0.30;
+    var creditOver = ci.credit * 10000 - usedFromCredit;
+    var debitOver = ci.debit * 10000 - usedFromDebit;
+    var cashOver = ci.cash * 10000 - usedFromCash;
+    baseDed = creditOver * 0.15 + debitOver * 0.30 + cashOver * 0.30;
     baseDed = Math.min(baseDed, baseLimit);
+    perCard.credit = { amount: ci.credit * 10000, deduction: Math.round(creditOver * 0.15), taxSaving: Math.round(creditOver * 0.15 * mr * 1.1) };
+    perCard.debit = { amount: ci.debit * 10000, deduction: Math.round(debitOver * 0.30), taxSaving: Math.round(debitOver * 0.30 * mr * 1.1) };
+    perCard.cash = { amount: ci.cash * 10000, deduction: Math.round(cashOver * 0.30), taxSaving: Math.round(cashOver * 0.30 * mr * 1.1) };
+  } else {
+    perCard.credit = { amount: ci.credit * 10000, deduction: 0, taxSaving: 0 };
+    perCard.debit = { amount: ci.debit * 10000, deduction: 0, taxSaving: 0 };
+    perCard.cash = { amount: ci.cash * 10000, deduction: 0, taxSaving: 0 };
   }
-
-  var perCard = {};
-  CAT_META.card.fields.forEach(function(f) {
-    var amt = ci[f.key] * 10000;
-    perCard[f.key] = { amount: amt, rate: f.rate, deductible: Math.round(amt * f.rate) };
-  });
 
   return {
     totalSpend: totalSpend,
@@ -1496,7 +1502,7 @@ function renderCatStep() {
       h += '부부, 자녀, 부모님 의료비 모두 한쪽으로 몰아서 돌려받을 수 있어요.</div>';
     }
     var saving = calcCatSaving(catFlow.cat);
-    h += '<div class="cat-result-box"><div class="cat-result-label">돌려받는 금액</div>';
+    h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
     h += '<div class="cat-result-value" id="catSavingDisplay">' + fmtAmt(saving) + '원</div></div>';
     h += '<button class="btn-save-cat" onclick="nextFlowStep()">다음</button>';
   }
@@ -1535,7 +1541,7 @@ function renderCatStep() {
     // 문턱 + 한도
     h += '<div id="cardThresholdArea">' + renderCardThresholdHTML() + '</div>';
     var saving = calcCatSaving('card');
-    h += '<div class="cat-result-box"><div class="cat-result-label">돌려받는 금액</div>';
+    h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
     h += '<div class="cat-result-value" id="catSavingDisplay">' + fmtAmt(saving) + '원</div></div>';
     h += '<button class="btn-save-cat" onclick="nextFlowStep()">다음</button>';
   }
@@ -1606,7 +1612,7 @@ function renderCatSummary() {
     h += '<div class="advice-box"><span class="badge ' + (advice.who === 'me' ? 'badge-me' : 'badge-spouse') + '">';
     h += (advice.who === 'me' ? '본인이 유리' : '배우자가 유리') + '</span> ' + advice.reason + '</div>';
   }
-  h += '<div class="cat-result-box"><div class="cat-result-label">돌려받는 금액</div>';
+  h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
   h += '<div class="cat-result-value">' + fmtAmt(saving) + '원</div></div>';
   if (maxSaving > 0) {
     var pct = Math.min(Math.round(saving / maxSaving * 100), 100), isFull = pct >= 100;
@@ -1696,9 +1702,9 @@ function onCatInput(el) {
         if (!inp) return;
         var fk = inp.getAttribute('data-field');
         var pc = ti.perCard[fk];
-        if (pc && catInputs.card[fk] > 0) {
+        if (pc && catInputs.card[fk] > 0 && pc.taxSaving > 0) {
           var d = document.createElement('div'); d.className = 'card-field-deduct';
-          d.textContent = fmtAmt(pc.deductible) + '원 돌려받아요';
+          d.textContent = '절세 ' + fmtAmt(pc.taxSaving) + '원';
           wrap.appendChild(d);
         }
       });
