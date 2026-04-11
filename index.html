@@ -32,17 +32,17 @@ body{
 .input-top{padding-top:80px}
 .input-title{font-size:26px;font-weight:700;letter-spacing:-.6px;line-height:1.42}
 .input-sub{font-size:15px;color:var(--text3);margin-top:12px}
-.salary-wrap{position:relative;margin-top:40px;text-align:center}
+.salary-wrap{display:flex;align-items:baseline;justify-content:center;gap:8px;margin-top:48px}
 .salary-input{
-  width:100%;font-size:32px;font-weight:700;letter-spacing:-1.5px;
-  border:none;border-bottom:2px solid var(--line);outline:none;
-  padding:12px 50px 12px 0;background:transparent;color:var(--text);
-  font-family:inherit;caret-color:var(--blue);transition:border-color .2s;text-align:center;
+  width:auto;max-width:200px;font-size:36px;font-weight:800;letter-spacing:-2px;
+  border:none;border-bottom:2.5px solid var(--blue);outline:none;
+  padding:8px 0;background:transparent;color:var(--text);
+  font-family:inherit;caret-color:var(--blue);text-align:center;
 }
 .salary-input:focus{border-bottom-color:var(--blue)}
-.salary-input::placeholder{color:var(--text4);font-size:20px;font-weight:400}
-.salary-unit{position:absolute;right:0;bottom:18px;font-size:16px;font-weight:500;color:var(--text3)}
-.salary-hint{font-size:14px;color:var(--text3);margin-top:12px;min-height:20px;text-align:center}
+.salary-input::placeholder{color:var(--text4);font-size:24px;font-weight:400}
+.salary-unit{font-size:20px;font-weight:600;color:var(--text3)}
+.salary-hint{font-size:14px;color:var(--blue);margin-top:16px;min-height:20px;text-align:center;font-weight:500}
 .input-bottom{margin-top:auto;padding-bottom:40px}
 .btn-primary{
   width:100%;height:56px;border:none;border-radius:14px;background:var(--blue);color:#fff;
@@ -74,7 +74,7 @@ body{
 }
 .result-amount .unit{font-size:28px;font-weight:700;margin-left:2px}
 .result-amount.negative{color:var(--red)}
-.result-sub{font-size:14px;color:var(--text3);margin-top:16px;animation:slideUp .6s ease-out .4s both}
+.result-sub{font-size:14px;color:var(--text3);margin-top:16px;animation:slideUp .6s ease-out .4s both;white-space:pre-line}
 .result-actions{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:32px;animation:slideUp .6s ease-out .6s both}
 .view-tips-btn{
   border:none;background:none;font-family:inherit;font-size:15px;font-weight:600;color:var(--blue);
@@ -263,7 +263,7 @@ body{
       <div class="input-sub">세전 연봉으로 입력해 주세요</div>
     </div>
     <div class="salary-wrap">
-      <input id="salaryInput" class="salary-input" type="tel" inputmode="numeric" placeholder="5,000" autocomplete="off">
+      <input id="salaryInput" class="salary-input" type="tel" inputmode="numeric" placeholder="" autocomplete="off">
       <span class="salary-unit">만원</span>
     </div>
     <div id="salaryHint" class="salary-hint"></div>
@@ -285,6 +285,7 @@ body{
     <div class="result-label" id="resultLabel">예상 환급액</div>
     <div id="resultAmount" class="result-amount"></div>
     <div id="resultSub" class="result-sub"></div>
+    <div id="tipNudge" class="result-sub" style="color:var(--blue);font-weight:600;margin-top:24px;animation:slideUp .7s ease-out .7s both"></div>
     <div class="result-actions">
       <button class="view-tips-btn" onclick="openTips()">
         절세 방법 보기
@@ -328,12 +329,12 @@ body{
   <div class="panel-content">
     <div class="setting-group">
       <div class="setting-label">연봉 (만원)</div>
-      <input id="setSalary" class="setting-input" type="tel" inputmode="numeric" placeholder="세전 연봉">
+      <input id="setSalary" class="setting-input" type="tel" inputmode="numeric" placeholder="">
     </div>
     <div class="setting-group">
       <div class="setting-label">배우자 연봉 (만원)</div>
-      <input id="setSpouseSalary" class="setting-input" type="tel" inputmode="numeric" placeholder="없으면 비워두세요">
-      <div class="setting-hint">입력하면 카테고리별로 누가 유리한지 안내해 드려요</div>
+      <input id="setSpouseSalary" class="setting-input" type="tel" inputmode="numeric" placeholder="">
+      <div class="setting-hint">없으면 비워두세요. 입력하면 누가 유리한지 안내해 드려요</div>
     </div>
     <div class="setting-group">
       <div class="setting-label">원천징수 비율</div>
@@ -725,6 +726,108 @@ function calcAllCatSavings() {
 }
 
 // ===========================
+// SPOUSE / FAMILY LOGIC
+// ===========================
+function getSpouseTP() {
+  if (spouseSalary <= 0) return 0;
+  return Math.max(spouseSalary * 10000 - 2400000, 0);
+}
+
+function getSpouseTaxable() {
+  var tp = getSpouseTP();
+  if (tp <= 0) return 0;
+  var eid = earnedIncomeDeduction(tp);
+  var si = calcSocialInsForTax(tp);
+  // 부양가족 1명 기준 특별소득공제
+  var sd = 0;
+  if(tp<=30000000)sd=3100000+tp*0.04;
+  else if(tp<=45000000)sd=3100000+tp*0.04-(tp-30000000)*0.05;
+  else if(tp<=70000000)sd=3100000+tp*0.015;
+  else if(tp<=120000000)sd=3100000+tp*0.005;
+  else sd=3100000+120000000*0.005;
+  return Math.max(tp - eid - 1500000 - si - Math.round(sd), 0);
+}
+
+function getSpouseMR() { return marginalRate(getSpouseTaxable()); }
+
+function hasSpouse() { return spouseSalary > 0; }
+
+// 가족 유불리 판단
+function getFamilyAdvice(catKey) {
+  if (!hasSpouse()) return null;
+  var myTP = getTotalPay();
+  var spTP = getSpouseTP();
+  var myMR = getMRate();
+  var spMR = getSpouseMR();
+  var myTaxable = lastResult ? lastResult.taxable : 0;
+  var spTaxable = getSpouseTaxable();
+
+  if (catKey === 'card') {
+    // 소득 낮은 쪽이 25% 문턱 빨리 넘으므로 유리
+    var myThreshold = myTP * 0.25;
+    var spThreshold = spTP * 0.25;
+    if (myTP <= spTP) return { who: 'me', reason: '소득이 낮아서 25% 문턱을 빨리 넘을 수 있어요' };
+    return { who: 'spouse', reason: '배우자 소득이 낮아서 25% 문턱을 빨리 넘을 수 있어요' };
+  }
+
+  if (catKey === 'pension') {
+    // 세율 높은 쪽이 공제율 높으니 유리
+    var myPR = myTP <= 55000000 ? 0.15 : 0.12;
+    var spPR = spTP <= 55000000 ? 0.15 : 0.12;
+    if (myPR > spPR) return { who: 'me', reason: '공제율이 ' + Math.round(myPR*100) + '%로 더 높아요' };
+    if (spPR > myPR) return { who: 'spouse', reason: '배우자 공제율이 ' + Math.round(spPR*100) + '%로 더 높아요' };
+    // 공제율 같으면 세율 높은 쪽
+    if (myMR >= spMR) return { who: 'me', reason: '적용 세율이 더 높아서 절세 효과가 커요' };
+    return { who: 'spouse', reason: '배우자 적용 세율이 더 높아서 절세 효과가 커요' };
+  }
+
+  if (catKey === 'living') {
+    // 의료비: 소득 낮은 쪽이 3% 문턱 빨리 넘음
+    if (myTP <= spTP) return { who: 'me', reason: '소득이 낮아서 3% 문턱을 빨리 넘을 수 있어요' };
+    return { who: 'spouse', reason: '배우자 소득이 낮아서 3% 문턱을 빨리 넘을 수 있어요' };
+  }
+
+  if (catKey === 'donation') {
+    // 세율 높은 쪽이 유리
+    if (myMR >= spMR) return { who: 'me', reason: '적용 세율이 더 높아서 공제 효과가 커요' };
+    return { who: 'spouse', reason: '배우자 적용 세율이 더 높아서 공제 효과가 커요' };
+  }
+
+  return null;
+}
+
+// 카드 문턱 분석
+function getCardThresholdInfo() {
+  var tp = getTotalPay();
+  var ci = catInputs.card;
+  var totalSpend = (ci.credit + ci.debit + ci.cash) * 10000;
+  var threshold = tp * 0.25;
+  var limit = tp <= 70000000 ? 3000000 : 2500000;
+
+  // 현재 공제액 계산
+  var deduction = 0;
+  if (totalSpend > threshold) {
+    var usedFromCredit = Math.min(ci.credit * 10000, threshold);
+    var remain = threshold - usedFromCredit;
+    var usedFromDebit = Math.min(ci.debit * 10000, remain); remain -= usedFromDebit;
+    var usedFromCash = Math.min(ci.cash * 10000, remain);
+    deduction = (ci.credit*10000-usedFromCredit)*0.15 + (ci.debit*10000-usedFromDebit)*0.30 + (ci.cash*10000-usedFromCash)*0.30;
+    deduction = Math.min(deduction, limit);
+  }
+
+  return {
+    totalSpend: totalSpend,
+    threshold: threshold,
+    thresholdPct: threshold > 0 ? Math.min(Math.round(totalSpend / threshold * 100), 100) : 0,
+    overThreshold: totalSpend > threshold,
+    deduction: deduction,
+    limit: limit,
+    limitPct: limit > 0 ? Math.min(Math.round(deduction / limit * 100), 100) : 0,
+    limitReached: deduction >= limit
+  };
+}
+
+// ===========================
 // CATEGORY DEFINITIONS
 // ===========================
 var CAT_META = {
@@ -794,6 +897,8 @@ function showScreen(id) {
 
 function calculate() {
   lastResult = calcSimpleRefund(salary, 1);
+  if (hasSpouse()) spouseResult = calcSimpleRefund(spouseSalary, 1);
+  else spouseResult = null;
   renderResult(lastResult);
   showScreen('result');
   saveToLocal();
@@ -801,6 +906,8 @@ function calculate() {
 
 function recalculate() {
   lastResult = calcSimpleRefund(salary, 1);
+  if (hasSpouse()) spouseResult = calcSimpleRefund(spouseSalary, 1);
+  else spouseResult = null;
   renderResult(lastResult);
 }
 
@@ -811,7 +918,21 @@ function renderResult(r) {
   var el = document.getElementById('resultAmount');
   el.className = 'result-amount' + (pos ? '' : ' negative');
   el.innerHTML = (pos ? '+' : '-') + fmtAmt(amt) + '<span class="unit">원</span>';
-  document.getElementById('resultSub').textContent = '연봉 ' + salary.toLocaleString() + '만원 · 원천징수 ' + rate + '% 기준';
+  var subText = '연봉 ' + salary.toLocaleString() + '만원 · 원천징수 ' + rate + '% 기준';
+  if (hasSpouse() && spouseResult) {
+    var combinedRefund = r.refund + spouseResult.refund;
+    var cpos = combinedRefund >= 0;
+    subText += '\n가족 합산 ' + (cpos ? '+' : '-') + fmtAmt(Math.abs(combinedRefund)) + '원';
+  }
+  document.getElementById('resultSub').textContent = subText;
+  // 절세 유도 문구
+  var totalCatSaving = calcAllCatSavings();
+  var nudge = document.getElementById('tipNudge');
+  if (totalCatSaving > 0) {
+    nudge.textContent = '절세 항목으로 ' + fmtAmt(totalCatSaving) + '원 더 돌려받을 수 있어요';
+  } else {
+    nudge.textContent = '공제 항목을 입력하면 더 돌려받을 수 있어요';
+  }
   renderDetail(r);
 }
 
@@ -825,7 +946,7 @@ function renderDetail(r) {
   h += dRow('근로소득공제', '- ' + fmtWon(r.eid));
   h += dRow('인적공제 (본인)', '- ' + fmtWon(r.personal));
   h += dRow('4대보험료', '- ' + fmtWon(r.socialIns));
-  h += dRow('특별소득공제 (추정)', '- ' + fmtWon(r.specialDed));
+  h += dRow('특별소득공제', '- ' + fmtWon(r.specialDed));
   h += dRow('과세표준', fmtWon(r.taxable), true);
   h += '<div class="detail-divider"></div><div class="detail-section-title">세액</div>';
   h += dRow('산출세액', fmtWon(r.computed));
@@ -870,7 +991,14 @@ function renderTipsPanel() {
     var pct = (goal > 0 && saving > 0) ? Math.min(Math.round(saving / goal * 100), 100) : 0;
 
     h += '<div class="cat-card" onclick="openCatDetail(\'' + key + '\')">';
-    h += '<div class="cat-card-top"><span class="cat-card-name">' + meta.name + '</span><span class="cat-card-arrow">›</span></div>';
+    h += '<div class="cat-card-top"><span class="cat-card-name">' + meta.name;
+    var advice = getFamilyAdvice(key);
+    if (advice) {
+      h += '<span class="badge ' + (advice.who === 'me' ? 'badge-me' : 'badge-spouse') + '">';
+      h += advice.who === 'me' ? '본인이 유리' : '배우자가 유리';
+      h += '</span>';
+    }
+    h += '</span><span class="cat-card-arrow">›</span></div>';
     h += '<div class="cat-card-saving ' + (hasInput ? '' : 'empty') + '">';
     h += hasInput ? fmtAmt(saving) + '원 절세' : meta.desc;
     h += '</div>';
@@ -898,8 +1026,19 @@ function openCatDetail(key) {
   var saving = calcCatSaving(key);
   var goal = catGoals[key];
 
-  var h = '<div style="font-size:20px;font-weight:800;margin-bottom:4px">' + meta.name + '</div>';
-  h += '<div style="font-size:14px;color:var(--text3);margin-bottom:24px">' + meta.desc + '</div>';
+  var h = '<div style="font-size:20px;font-weight:800;margin-bottom:4px">' + meta.name;
+  var advice = getFamilyAdvice(key);
+  if (advice) {
+    h += '<span class="badge ' + (advice.who === 'me' ? 'badge-me' : 'badge-spouse') + '">';
+    h += advice.who === 'me' ? '본인이 유리' : '배우자가 유리';
+    h += '</span>';
+  }
+  h += '</div>';
+  if (advice) {
+    h += '<div class="advice-box">' + advice.reason + '</div>';
+  } else {
+    h += '<div style="font-size:14px;color:var(--text3);margin-bottom:24px">' + meta.desc + '</div>';
+  }
 
   meta.fields.forEach(function(f) {
     var val = ci[f.key] || 0;
@@ -911,6 +1050,45 @@ function openCatDetail(key) {
     h += '<span class="cat-input-unit">' + f.unit + '</span>';
     h += '</div></div>';
   });
+
+  // 카드: 25% 문턱 현황
+  if (key === 'card') {
+    var ti = getCardThresholdInfo();
+    h += '<div class="threshold-section">';
+    h += '<div class="threshold-label">총급여 25% 문턱 현황</div>';
+    h += '<div class="threshold-bar-bg"><div class="threshold-bar-fill' + (ti.overThreshold ? ' over' : '') + '" style="width:' + ti.thresholdPct + '%"></div></div>';
+    h += '<div class="threshold-info"><span>사용액 ' + fmtAmt(ti.totalSpend) + '원</span><span>문턱 <b>' + fmtAmt(ti.threshold) + '원</b></span></div>';
+    if (ti.overThreshold) {
+      h += '<div class="threshold-alert done">문턱을 넘었어요! 공제가 시작돼요</div>';
+      if (ti.limitReached) {
+        h += '<div class="threshold-alert done">공제 한도 ' + fmtAmt(ti.limit) + '원에 도달했어요</div>';
+      } else {
+        h += '<div class="threshold-alert">공제 한도까지 ' + ti.limitPct + '% 채웠어요. 체크카드나 현금영수증을 늘려보세요</div>';
+      }
+    } else if (ti.totalSpend > 0) {
+      var remaining = ti.threshold - ti.totalSpend;
+      h += '<div class="threshold-alert">' + fmtAmt(remaining) + '원 더 쓰면 공제가 시작돼요</div>';
+    }
+    h += '</div>';
+  }
+
+  // 주택/주거: 대출 금리 비교 버튼
+  if (key === 'housing') {
+    h += '<div style="margin-top:8px;text-align:center">';
+    h += '<button class="loan-link-btn" onclick="showToast(\'토스에서 대출 금리 비교가 가능해요\')">더 낮은 금리 확인하기 →</button>';
+    h += '</div>';
+  }
+
+  // 생활비(의료비): 가족 몰아주기 안내
+  if (key === 'living' && hasSpouse()) {
+    var myTP = getTotalPay();
+    var spTP = getSpouseTP();
+    var lowerName = myTP <= spTP ? '본인' : '배우자';
+    var lowerThreshold = Math.min(myTP, spTP) * 0.03;
+    h += '<div class="advice-box"><b>의료비는 가족 것을 한 사람에게 몰아서 공제받을 수 있어요.</b><br>';
+    h += '소득이 낮은 <b>' + lowerName + '</b> 명의로 몰면 3% 문턱(' + fmtAmt(lowerThreshold) + '원)을 빨리 넘어서 공제 효과가 커요.<br>';
+    h += '부부, 자녀, 부모님 의료비 모두 한쪽으로 몰아서 공제받을 수 있어요.</div>';
+  }
 
   h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
   h += '<div class="cat-result-value" id="catSavingDisplay">' + (saving > 0 ? fmtAmt(saving) + '원' : '금액을 입력해 주세요') + '</div></div>';
@@ -1000,6 +1178,7 @@ function closeAllPanels() {
 function openTips() { renderTipsPanel(); openPanel('tipsPanel'); }
 function openSettings() {
   document.getElementById('setSalary').value = salary > 0 ? salary.toLocaleString() : '';
+  document.getElementById('setSpouseSalary').value = spouseSalary > 0 ? spouseSalary.toLocaleString() : '';
   document.querySelectorAll('#setRateGroup .rate-btn').forEach(function(btn) {
     btn.classList.toggle('active', parseInt(btn.getAttribute('data-rate')) === rate);
   });
@@ -1023,6 +1202,8 @@ function saveSettings() {
     salary = Number(sv);
     salaryInput.value = salary.toLocaleString();
   }
+  var ssv = document.getElementById('setSpouseSalary').value.replace(/[^0-9]/g, '');
+  spouseSalary = ssv ? Number(ssv) : 0;
   closeAllPanels();
   recalculate();
   saveToLocal();
@@ -1030,6 +1211,12 @@ function saveSettings() {
 }
 
 document.getElementById('setSalary').addEventListener('input', function() {
+  var v = this.value.replace(/[^0-9]/g, '');
+  if (v.length > 6) v = v.slice(0, 6);
+  this.value = v ? Number(v).toLocaleString() : '';
+});
+
+document.getElementById('setSpouseSalary').addEventListener('input', function() {
   var v = this.value.replace(/[^0-9]/g, '');
   if (v.length > 6) v = v.slice(0, 6);
   this.value = v ? Number(v).toLocaleString() : '';
@@ -1060,7 +1247,7 @@ document.getElementById('setSalary').addEventListener('input', function() {
 function saveToLocal() {
   try {
     localStorage.setItem('sipsamwol_data', JSON.stringify({
-      salary: salary, rate: rate, catInputs: catInputs, catGoals: catGoals
+      salary: salary, rate: rate, spouseSalary: spouseSalary, catInputs: catInputs, catGoals: catGoals
     }));
   } catch(e) {}
 }
@@ -1073,6 +1260,7 @@ function loadFromLocal() {
     if (!d || !d.salary || d.salary <= 0) return false;
     salary = d.salary;
     if (d.rate) rate = d.rate;
+    if (d.spouseSalary) spouseSalary = d.spouseSalary;
     if (d.catInputs) {
       for (var k in d.catInputs) {
         if (catInputs[k]) {
