@@ -367,9 +367,11 @@ body{
 .auth-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .auth-name{font-size:15px;font-weight:600;color:var(--text);flex:1;text-align:left}
 .auth-arrow{font-size:16px;color:var(--text4)}
-.card-field-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.card-field-info{flex:1;min-width:0}
-.card-field-name{font-size:14px;font-weight:600;color:var(--text)}
+.card-field-row{background:var(--bg2);border-radius:14px;padding:16px;margin-bottom:10px}
+.card-field-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.card-field-info{display:flex;align-items:center;gap:8px}
+.card-field-name{font-size:15px;font-weight:700;color:var(--text)}
+.card-field-badge{font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-bg);padding:2px 8px;border-radius:6px}
 .card-field-rate{font-size:12px;color:var(--text3);margin-top:2px}
 .card-field-input{width:120px;position:relative;flex-shrink:0}
 .card-field-input .cat-input{text-align:right;padding-right:40px;height:42px;font-size:15px}
@@ -1477,18 +1479,23 @@ function renderCatStep() {
     h += '<button class="btn-save-cat" onclick="nextFlowStep()">다음</button>';
   }
   if (st.type === 'cardInput') {
-    // 카드 사용 내역 불러오기 버튼
-    h += '<button class="card-import-btn" onclick="openAuthPicker()">간편인증 불러오기</button>';
     var ci = catInputs.card, ti = getCardThresholdInfo();
-    // 카드별 입력 필드
+    var tp = getTotalPay();
+    var baseLimit = tp <= 70000000 ? 300 : (tp <= 120000000 ? 250 : 200);
+    h += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">';
+    h += '<div style="font-size:13px;color:var(--text3)">내 공제 한도 <b style="color:var(--blue)">' + baseLimit + '만원</b></div>';
+    h += '<button class="card-import-btn" style="width:auto;margin:0;height:36px;font-size:13px;padding:0 16px" onclick="openAuthPicker()">간편인증 불러오기</button>';
+    h += '</div>';
+    // 카드별 카드형 입력
     CAT_META.card.fields.forEach(function(f) {
       var val = ci[f.key] || 0;
       var ded = ti.perCard[f.key];
       h += '<div class="card-field-row">';
-      h += '<div class="card-field-info"><div class="card-field-name">' + f.label + '</div></div>';
-      h += '<div class="card-field-input"><div class="cat-input-wrap"><input class="cat-input" type="tel" inputmode="numeric" data-field="' + f.key + '" value="' + (val > 0 ? val.toLocaleString() : '') + '" placeholder="0" oninput="onCatInput(this)"><span class="cat-input-unit">만원</span></div>';
-      if (val > 0 && ti.overThreshold) h += '<div class="card-field-deduct">' + fmtAmt(ded.deductible) + '원 돌려받아요</div>';
-      h += '</div></div>';
+      h += '<div class="card-field-top"><div class="card-field-info"><span class="card-field-name">' + f.label + '</span></div>';
+      if (val > 0 && ti.overThreshold) h += '<span class="card-field-deduct">' + fmtAmt(ded.deductible) + '원 공제</span>';
+      h += '</div>';
+      h += '<div class="card-field-input"><div class="cat-input-wrap"><input class="cat-input" type="tel" inputmode="numeric" data-field="' + f.key + '" value="' + (val > 0 ? val.toLocaleString() : '') + '" placeholder="0" oninput="onCatInput(this)"><span class="cat-input-unit">만원</span></div></div>';
+      h += '</div>';
     });
     // 문턱 + 한도
     h += '<div id="cardThresholdArea">' + renderCardThresholdHTML() + '</div>';
