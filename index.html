@@ -120,15 +120,15 @@ body{
 /* SPOUSE CHOICE */
 .spouse-choice-screen{flex:1;display:flex;flex-direction:column;padding:0 var(--pad)}
 .spouse-choice-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:80px}
-.spouse-choice-title{font-size:26px;font-weight:800;letter-spacing:-.6px;text-align:center;line-height:1.45}
-.spouse-choice-btns{display:flex;gap:10px;margin-top:36px}
+.spouse-choice-title{font-size:28px;font-weight:800;letter-spacing:-.6px;text-align:center;line-height:1.45}
+.spouse-choice-btns{display:flex;gap:10px;margin-top:40px}
 .spouse-choice-btn{
-  flex:1;height:56px;border:1.5px solid var(--line);border-radius:14px;
-  background:var(--bg);font-family:inherit;font-size:17px;font-weight:600;
+  flex:1;height:52px;border:none;border-radius:14px;
+  background:var(--bg2);font-family:inherit;font-size:16px;font-weight:600;
   color:var(--text2);cursor:pointer;transition:all .2s cubic-bezier(.16,1,.3,1);
 }
 .spouse-choice-btn:active{transform:scale(.95)}
-.spouse-choice-btn.selected{border-color:var(--blue);background:var(--blue-bg);color:var(--blue)}
+.spouse-choice-btn.selected{background:var(--blue);color:#fff}
 .input-bottom{padding:28px 0 0}
 .btn-primary{
   width:100%;height:56px;border:none;border-radius:14px;background:var(--blue);color:#fff;
@@ -460,8 +460,8 @@ body{
     <div class="spouse-choice-body">
       <div class="spouse-choice-title">배우자가 있나요?</div>
       <div class="spouse-choice-btns">
+        <button class="spouse-choice-btn" onclick="chooseSpouse(true)">네</button>
         <button class="spouse-choice-btn" onclick="chooseSpouse(false)">아니요</button>
-        <button class="spouse-choice-btn" onclick="chooseSpouse(true)">네, 있어요</button>
       </div>
     </div>
   </div>
