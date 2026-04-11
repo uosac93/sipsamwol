@@ -380,18 +380,18 @@ body{
 .auth-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .auth-name{font-size:15px;font-weight:600;color:var(--text);flex:1;text-align:left}
 .auth-arrow{font-size:16px;color:var(--text4)}
-.card-field-row{padding:14px 0;border-bottom:1px solid var(--line)}
+.card-field-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line)}
 .card-field-row:last-of-type{border-bottom:none}
-.card-field-top{display:flex;justify-content:space-between;align-items:center}
+.card-field-top{display:flex;flex-direction:column;gap:2px;min-width:0}
 .card-field-info{display:flex;align-items:center;gap:6px}
-.card-field-name{font-size:14px;font-weight:600;color:var(--text)}
+.card-field-name{font-size:15px;font-weight:600;color:var(--text)}
 .card-field-badge{font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-bg);padding:2px 8px;border-radius:6px}
 .card-field-rate{font-size:12px;color:var(--text3)}
-.card-field-input{width:140px;position:relative;flex-shrink:0}
-.card-field-input .cat-input{text-align:right;padding-right:40px;height:44px;font-size:16px;font-weight:700;border:none;border-radius:10px;background:var(--bg2)}
+.card-field-deduct{font-size:12px;color:var(--blue);font-weight:600}
+.card-field-input{width:150px;position:relative;flex-shrink:0}
+.card-field-input .cat-input{text-align:right;padding-right:40px;height:44px;font-size:18px;font-weight:800;border:none;border-radius:10px;background:var(--bg2)}
 .card-field-input .cat-input:focus{background:var(--blue-bg)}
 .card-field-input .cat-input-unit{font-size:13px}
-.card-field-deduct{font-size:12px;color:var(--blue);font-weight:600}
 
 /* LOAN LINK */
 .loan-link-btn{
@@ -1387,7 +1387,6 @@ function prefillCatAnswers(key) {
     var ht = [];
     if (ci.rent > 0) ht.push('rent');
     if (ci.loanInterest > 0) ht.push('mortgage');
-    if (ci.subscription > 0) ht.push('subscription');
     if (ht.length > 0) a.housingTypes = ht;
   }
   if (key === 'donation') {
@@ -1503,7 +1502,7 @@ function renderCatStep() {
       var val = ci[f.key] || 0;
       var ded = ti.perCard[f.key];
       h += '<div class="card-field-row">';
-      h += '<div class="card-field-top"><div class="card-field-info"><span class="card-field-name">' + f.label + '</span></div>';
+      h += '<div class="card-field-top"><span class="card-field-name">' + f.label + '</span>';
       if (val > 0 && ti.overThreshold) h += '<span class="card-field-deduct">' + fmtAmt(ded.deductible) + '원 공제</span>';
       h += '</div>';
       h += '<div class="card-field-input"><div class="cat-input-wrap"><input class="cat-input" type="tel" inputmode="numeric" data-field="' + f.key + '" value="' + (val > 0 ? val.toLocaleString() : '') + '" placeholder="0" oninput="onCatInput(this)"><span class="cat-input-unit">만원</span></div></div>';
@@ -1828,7 +1827,14 @@ function showToast(msg) {
 // INIT
 // ===========================
 (function() {
-  salaryInput.focus();
+  if (loadFromLocal() && salary >= 100) {
+    salaryInput.value = salary.toLocaleString();
+    if (spouseSalary > 0) hasSpouseFlag = true;
+    calculate();
+    showScreen('result');
+  } else {
+    salaryInput.focus();
+  }
 })();
 </script>
 </body>
