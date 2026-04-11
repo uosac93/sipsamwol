@@ -478,7 +478,7 @@ body{
       </div>
     </div>
     <div class="input-top">
-      <div class="input-title">올해 받을 급여가<br>얼마예요?</div>
+      <div class="input-title">2026년 받을 급여가<br>얼마예요?</div>
       <div class="input-sub">세전 총급여 기준</div>
     </div>
     <div class="salary-section">
@@ -1378,7 +1378,7 @@ function prefillCatAnswers(key) {
 function getCatSteps(key, ans) {
   var s = []; var tp = getTotalPay();
   if (key === 'card') {
-    s.push({ type: 'cardInput', title: '카드 사용액을\n입력해 주세요', sub: '올해 쓴 금액 기준이에요' });
+    s.push({ type: 'cardInput', title: '카드 사용액을\n입력해 주세요', sub: '2026년 쓴 금액 기준이에요' });
     s.push({ type: 'done' }); return s;
   }
   if (key === 'housing') {
@@ -1399,17 +1399,17 @@ function getCatSteps(key, ans) {
     s.push({ type: 'done' }); return s;
   }
   if (key === 'pension') {
-    s.push({ type: 'input', title: '올해 연금저축\n얼마 정도 넣게 돼요?', fields: [CAT_META.pension.fields[0], CAT_META.pension.fields[1]] });
-    s.push({ type: 'input', title: '올해 보험료\n얼마 정도 내게 돼요?', fields: [CAT_META.pension.fields[2]] });
+    s.push({ type: 'input', title: '2026년 연금저축\n얼마 정도 넣게 돼요?', fields: [CAT_META.pension.fields[0], CAT_META.pension.fields[1]] });
+    s.push({ type: 'input', title: '2026년 보험료\n얼마 정도 내게 돼요?', fields: [CAT_META.pension.fields[2]] });
     s.push({ type: 'done' }); return s;
   }
   if (key === 'living') {
-    s.push({ type: 'input', title: '올해 교육비에\n얼마 정도 쓰게 돼요?', fields: [CAT_META.living.fields[0]] });
-    s.push({ type: 'input', title: '올해 의료비에\n얼마 정도 쓰게 돼요?', fields: [CAT_META.living.fields[1]], extra: 'medicalAdvice' });
+    s.push({ type: 'input', title: '2026년 교육비에\n얼마 정도 쓰게 돼요?', fields: [CAT_META.living.fields[0]] });
+    s.push({ type: 'input', title: '2026년 의료비에\n얼마 정도 쓰게 돼요?', fields: [CAT_META.living.fields[1]], extra: 'medicalAdvice' });
     s.push({ type: 'done' }); return s;
   }
   if (key === 'donation') {
-    s.push({ type: 'multi', title: '올해 기부금\n얼마 정도 하게 돼요?', key: 'donTypes', options: [
+    s.push({ type: 'multi', title: '2026년 기부금\n얼마 정도 하게 돼요?', key: 'donTypes', options: [
       { label: '고향사랑기부금', value: 'hometown' }, { label: '정치자금 기부금', value: 'political' },
       { label: '종교단체 기부금', value: 'religious' }, { label: '일반 기부금', value: 'general' }
     ]});
