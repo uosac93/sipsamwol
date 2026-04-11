@@ -62,6 +62,12 @@ body{
 .salary-input::placeholder{color:var(--text4);font-size:22px;font-weight:400}
 .salary-unit{font-size:18px;font-weight:600;color:var(--text3);white-space:nowrap;flex-shrink:0}
 .salary-hint{font-size:14px;color:var(--blue);margin-top:14px;min-height:20px;font-weight:500}
+.spouse-toggle-row{display:flex;justify-content:space-between;align-items:center}
+.spouse-toggle-label{font-size:15px;font-weight:600;color:var(--text)}
+.spouse-btns{display:flex;gap:6px}
+.spouse-btn{padding:8px 16px;border:1.5px solid var(--input-line);border-radius:10px;background:var(--bg);font-family:inherit;font-size:14px;font-weight:500;color:var(--text3);cursor:pointer;transition:all .2s}
+.spouse-btn.active{border-color:var(--blue);background:var(--blue-bg);color:var(--blue);font-weight:600}
+.salary-label{font-size:14px;font-weight:600;color:var(--text2);margin-bottom:8px}
 .input-bottom{padding:28px 0 0}
 .btn-primary{
   width:100%;height:56px;border:none;border-radius:14px;background:var(--blue);color:#fff;
@@ -93,6 +99,10 @@ body{
 }
 .result-amount .unit{font-size:24px;font-weight:700;margin-left:2px}
 .result-amount.negative{color:var(--red)}
+.spouse-result{width:100%;margin-top:16px;padding:14px 18px;background:var(--bg2);border-radius:12px;animation:slideUp .5s ease-out .5s both}
+.spouse-result-row{display:flex;justify-content:space-between;font-size:14px;color:var(--text2);padding:4px 0}
+.spouse-result-row .neg{color:var(--red)}
+.spouse-result-total{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:var(--text);padding:8px 0 0;margin-top:6px;border-top:1px solid var(--line)}
 .basis-btn{
   border:none;background:none;font-family:inherit;font-size:13px;font-weight:500;
   color:var(--text3);cursor:pointer;padding:8px 0;margin-top:8px;
@@ -384,6 +394,23 @@ body{
       </div>
       <div id="salaryHint" class="salary-hint"></div>
     </div>
+    <div class="spouse-section" style="margin-top:20px">
+      <div class="spouse-toggle-row">
+        <span class="spouse-toggle-label">배우자가 있나요?</span>
+        <div class="spouse-btns" id="spouseToggle">
+          <button class="spouse-btn" data-val="no" onclick="setSpouseToggle('no')">없어요</button>
+          <button class="spouse-btn" data-val="yes" onclick="setSpouseToggle('yes')">있어요</button>
+        </div>
+      </div>
+      <div id="spouseSalaryWrap" style="display:none;margin-top:14px">
+        <div class="salary-label">배우자 급여</div>
+        <div class="salary-wrap">
+          <input id="spouseSalaryInput" class="salary-input" style="font-size:28px" type="tel" inputmode="numeric" placeholder="" autocomplete="off" oninput="onSpouseSalaryInput(this)">
+          <span class="salary-unit">만원</span>
+        </div>
+        <div class="salary-hint" style="color:var(--text3)">맞벌이 부부 기준이에요</div>
+      </div>
+    </div>
     <div class="input-bottom">
       <button id="calcBtn" class="btn-primary" disabled onclick="calculate()">환급액 확인하기</button>
     </div>
@@ -411,6 +438,7 @@ body{
   <div class="result-fullscreen">
     <div class="result-label" id="resultLabel">예상 환급액</div>
     <div id="resultAmount" class="result-amount"></div>
+    <div id="spouseResultArea"></div>
     <button class="basis-btn" onclick="openSettings()">기준 확인하기 ›</button>
     <div id="resultCats" style="width:100%;margin-top:28px"></div>
   </div>
@@ -525,6 +553,7 @@ body{
 var salary = 0;
 var rate = 100;
 var spouseSalary = 0;
+var hasSpouseFlag = false;
 var nonTaxMeal = true; // 비과세 식대 토글
 var lastResult = null;
 var spouseResult = null;
@@ -568,6 +597,22 @@ salaryInput.addEventListener('input', function() {
 salaryInput.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && salary >= 100) calculate();
 });
+
+function setSpouseToggle(val) {
+  hasSpouseFlag = (val === 'yes');
+  document.querySelectorAll('#spouseToggle .spouse-btn').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-val') === val);
+  });
+  document.getElementById('spouseSalaryWrap').style.display = hasSpouseFlag ? 'block' : 'none';
+  if (!hasSpouseFlag) { spouseSalary = 0; }
+}
+
+function onSpouseSalaryInput(el) {
+  var raw = el.value.replace(/[^0-9]/g, '');
+  if (raw.length > 6) raw = raw.slice(0, 6);
+  el.value = raw ? Number(raw).toLocaleString() : '';
+  spouseSalary = Number(raw) || 0;
+}
 
 // ===========================
 // TAX CALCULATION (2026 귀속)
@@ -907,7 +952,7 @@ function getSpouseTaxable() {
 
 function getSpouseMR() { return marginalRate(getSpouseTaxable()); }
 
-function hasSpouse() { return spouseSalary > 0; }
+function hasSpouse() { return hasSpouseFlag && spouseSalary > 0; }
 
 // 가족 유불리 판단
 function getFamilyAdvice(catKey) {
@@ -997,7 +1042,7 @@ function getCardThresholdInfo() {
 var CAT_META = {
   card: {
     name: '카드 사용',
-    desc: '카드·현금영수증·전통시장·대중교통으로 돌려받기',
+    desc: '카드·현금영수증으로 돌려받기',
     fields: [
       { key: 'credit', label: '신용카드', unit: '만원', rate: 0.15 },
       { key: 'debit', label: '체크카드', unit: '만원', rate: 0.30 },
@@ -1017,27 +1062,27 @@ var CAT_META = {
     name: '연금/보험',
     desc: '연금·IRP·보험료로 돌려받기',
     fields: [
-      { key: 'pensionSaving', label: '연금저축 납입액 (연)', hint: '넣은 만큼 돌려받아요', unit: '만원' },
-      { key: 'irp', label: 'IRP 납입액 (연)', hint: '연금저축과 합산해서 돌려받아요', unit: '만원' },
-      { key: 'insurance', label: '보장성보험료 (연)', hint: '보험료로도 돌려받아요', unit: '만원' }
+      { key: 'pensionSaving', label: '연금저축 (연)', unit: '만원' },
+      { key: 'irp', label: 'IRP (연)', unit: '만원' },
+      { key: 'insurance', label: '보장성보험료 (연)', unit: '만원' }
     ]
   },
   living: {
     name: '생활비',
     desc: '교육비·의료비로 돌려받기',
     fields: [
-      { key: 'education', label: '교육비 (연)', hint: '학비로 돌려받아요', unit: '만원' },
-      { key: 'medical', label: '의료비 (연)', hint: '병원비로 돌려받아요', unit: '만원' }
+      { key: 'education', label: '교육비 (연)', unit: '만원' },
+      { key: 'medical', label: '의료비 (연)', unit: '만원' }
     ]
   },
   donation: {
     name: '기부금',
     desc: '기부한 만큼 돌려받기',
     fields: [
-      { key: 'hometown', label: '고향사랑기부금', hint: '10만원까지 전액 돌려받아요', unit: '만원' },
-      { key: 'political', label: '정치자금 기부금', hint: '10만원까지 전액 돌려받아요', unit: '만원' },
-      { key: 'religious', label: '종교단체 기부금', hint: '기부액의 일부를 돌려받아요', unit: '만원' },
-      { key: 'general', label: '일반 기부금', hint: '기부액의 일부를 돌려받아요', unit: '만원' }
+      { key: 'hometown', label: '고향사랑기부금', unit: '만원' },
+      { key: 'political', label: '정치자금 기부금', unit: '만원' },
+      { key: 'religious', label: '종교단체 기부금', unit: '만원' },
+      { key: 'general', label: '일반 기부금', unit: '만원' }
     ]
   }
 };
@@ -1114,6 +1159,23 @@ function renderResult(r) {
     }
     requestAnimationFrame(step);
   })();
+  // 배우자 결과 표시
+  var spArea = document.getElementById('spouseResultArea');
+  if (hasSpouse() && spouseResult) {
+    var spPos = spouseResult.refund >= 0;
+    var spAmt = Math.abs(spouseResult.refund);
+    var totalRefund = r.refund + spouseResult.refund;
+    var tPos = totalRefund >= 0;
+    var tAmt = Math.abs(totalRefund);
+    var sh = '<div class="spouse-result">';
+    sh += '<div class="spouse-result-row"><span>본인</span><span class="' + (pos ? '' : 'neg') + '">' + (pos ? '+' : '-') + amt.toLocaleString() + '원</span></div>';
+    sh += '<div class="spouse-result-row"><span>배우자</span><span class="' + (spPos ? '' : 'neg') + '">' + (spPos ? '+' : '-') + spAmt.toLocaleString() + '원</span></div>';
+    sh += '<div class="spouse-result-total"><span>합산</span><span>' + (tPos ? '+' : '-') + tAmt.toLocaleString() + '원</span></div>';
+    sh += '</div>';
+    spArea.innerHTML = sh;
+  } else {
+    spArea.innerHTML = '';
+  }
   renderDetail(r);
   renderTipsPanel();
 }
@@ -1171,6 +1233,8 @@ function renderTipsPanel() {
     h += '<div class="cat-card" onclick="openCatDetail(\'' + key + '\')">';
     h += '<div class="cat-card-top"><span class="cat-card-name">' + meta.name;
     if (hasInput) h += '<span class="cat-card-amt">' + fmtAmt(saving) + '원</span>';
+    var advice = hasSpouse() ? getFamilyAdvice(key) : null;
+    if (advice) h += '<span class="badge ' + (advice.who === 'me' ? 'badge-me' : 'badge-spouse') + '">' + (advice.who === 'me' ? '본인이 유리' : '배우자가 유리') + '</span>';
     h += '</span><span class="cat-card-arrow">›</span></div>';
     h += '</div>';
   });
@@ -1196,17 +1260,17 @@ function openCatDetail(key) {
 function prefillCatAnswers(key) {
   var ci = catInputs[key]; var a = {};
   if (key === 'housing') {
-    if (ci.rent > 0) { a.hasHouse = 'none'; a.livingType = 'rent'; a.hasSubscription = ci.subscription > 0 ? 'yes' : 'no'; }
-    else if (ci.loanInterest > 0 && !ci.subscription) { a.hasHouse = 'one'; a.hasLoan = 'yes'; }
-    else if (ci.subscription > 0) { a.hasHouse = 'none'; a.livingType = 'other'; a.hasSubscription = 'yes'; }
+    var ht = [];
+    if (ci.rent > 0) ht.push('rent');
+    if (ci.loanInterest > 0) ht.push('mortgage');
+    if (ci.subscription > 0) ht.push('subscription');
+    if (ht.length > 0) a.housingTypes = ht;
   }
-  if (key === 'pension') { a.hasPension = (ci.pensionSaving > 0 || ci.irp > 0) ? 'yes' : 'no'; a.hasInsurance = ci.insurance > 0 ? 'yes' : 'no'; }
-  if (key === 'living') { a.hasEducation = ci.education > 0 ? 'yes' : 'no'; a.hasMedical = ci.medical > 0 ? 'yes' : 'no'; }
   if (key === 'donation') {
     var types = [];
     if (ci.hometown > 0) types.push('hometown'); if (ci.political > 0) types.push('political');
     if (ci.religious > 0) types.push('religious'); if (ci.general > 0) types.push('general');
-    a.hasDonation = types.length > 0 ? 'yes' : 'no'; if (types.length > 0) a.donTypes = types;
+    if (types.length > 0) a.donTypes = types;
   }
   return a;
 }
@@ -1231,45 +1295,28 @@ function getCatSteps(key, ans) {
     if (ht.indexOf('rent') >= 0) housingFields.push(CAT_META.housing.fields[0]);
     if (ht.indexOf('jeonse') >= 0 || ht.indexOf('mortgage') >= 0) housingFields.push(CAT_META.housing.fields[2]);
     if (ht.indexOf('subscription') >= 0) housingFields.push(CAT_META.housing.fields[1]);
-    if (housingFields.length > 0) s.push({ type: 'input', title: '금액을 입력해 주세요', fields: housingFields });
+    if (housingFields.length > 0) s.push({ type: 'input', title: '금액을 입력해 주세요', fields: housingFields, extra: (ht.indexOf('jeonse') >= 0 || ht.indexOf('mortgage') >= 0) ? 'loanCompare' : null });
     s.push({ type: 'done' }); return s;
   }
   if (key === 'pension') {
-    s.push({ type: 'choice', title: '연금저축이나 IRP에\n넣고 있나요?', sub: '넣은 만큼 돌려받아요', key: 'hasPension', options: [
-      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '시작할 예정이에요', value: 'plan' }
-    ]});
-    if (ans.hasPension === 'yes' || ans.hasPension === 'plan') s.push({ type: 'input', title: ans.hasPension === 'plan' ? '얼마나 넣을\n예정인가요?' : '연금 납입액을\n입력해 주세요', sub: ans.hasPension === 'plan' ? '예상 금액으로 얼마나 돌려받는지 확인해요' : '합산 900만원까지 돌려받아요', fields: [CAT_META.pension.fields[0], CAT_META.pension.fields[1]] });
-    s.push({ type: 'choice', title: '보장성 보험에\n가입했나요?', sub: '보험료로도 돌려받아요', key: 'hasInsurance', options: [
-      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '가입할 예정이에요', value: 'plan' }
-    ]});
-    if (ans.hasInsurance === 'yes' || ans.hasInsurance === 'plan') s.push({ type: 'input', title: ans.hasInsurance === 'plan' ? '보험료를 얼마나\n낼 예정인가요?' : '보험료를\n입력해 주세요', sub: ans.hasInsurance === 'plan' ? '예상 금액으로 얼마나 돌려받는지 확인해요' : '연간 납입액 기준', fields: [CAT_META.pension.fields[2]] });
+    s.push({ type: 'input', title: '올해 연금저축\n얼마 정도 넣게 돼요?', fields: [CAT_META.pension.fields[0], CAT_META.pension.fields[1]] });
+    s.push({ type: 'input', title: '올해 보험료\n얼마 정도 내게 돼요?', fields: [CAT_META.pension.fields[2]] });
     s.push({ type: 'done' }); return s;
   }
   if (key === 'living') {
-    s.push({ type: 'choice', title: '올해 교육비\n지출이 있나요?', sub: '학비로 돌려받을 수 있어요', key: 'hasEducation', options: [
-      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '지출 예정이에요', value: 'plan' }
-    ]});
-    if (ans.hasEducation === 'yes' || ans.hasEducation === 'plan') s.push({ type: 'input', title: ans.hasEducation === 'plan' ? '교육비를 얼마나\n쓸 예정인가요?' : '교육비를\n입력해 주세요', sub: ans.hasEducation === 'plan' ? '예상 금액으로 얼마나 돌려받는지 확인해요' : '연간 지출액 기준', fields: [CAT_META.living.fields[0]] });
-    s.push({ type: 'choice', title: '의료비 지출이\n있나요?', sub: '병원비가 많으면 돌려받을 수 있어요', key: 'hasMedical', options: [
-      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '지출 예정이에요', value: 'plan' }
-    ]});
-    if (ans.hasMedical === 'yes' || ans.hasMedical === 'plan') s.push({ type: 'input', title: ans.hasMedical === 'plan' ? '의료비를 얼마나\n쓸 예정인가요?' : '의료비를\n입력해 주세요', sub: ans.hasMedical === 'plan' ? '예상 금액으로 얼마나 돌려받는지 확인해요' : '연간 지출액 기준', fields: [CAT_META.living.fields[1]], extra: 'medicalAdvice' });
+    s.push({ type: 'input', title: '올해 교육비에\n얼마 정도 쓰게 돼요?', fields: [CAT_META.living.fields[0]] });
+    s.push({ type: 'input', title: '올해 의료비에\n얼마 정도 쓰게 돼요?', fields: [CAT_META.living.fields[1]], extra: 'medicalAdvice' });
     s.push({ type: 'done' }); return s;
   }
   if (key === 'donation') {
-    s.push({ type: 'choice', title: '올해 기부한 적\n있나요?', sub: '기부한 만큼 돌려받아요', key: 'hasDonation', options: [
-      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '할 예정이에요', value: 'plan' }
+    s.push({ type: 'multi', title: '올해 기부금\n얼마 정도 하게 돼요?', key: 'donTypes', options: [
+      { label: '고향사랑기부금', value: 'hometown' }, { label: '정치자금 기부금', value: 'political' },
+      { label: '종교단체 기부금', value: 'religious' }, { label: '일반 기부금', value: 'general' }
     ]});
-    if (ans.hasDonation === 'yes' || ans.hasDonation === 'plan') {
-      s.push({ type: 'multi', title: ans.hasDonation === 'plan' ? '어디에 기부할\n예정인가요?' : '어디에 기부했나요?', sub: '해당하는 항목을 모두 선택하세요', key: 'donTypes', options: [
-        { label: '고향사랑기부금', value: 'hometown' }, { label: '정치자금 기부금', value: 'political' },
-        { label: '종교단체 기부금', value: 'religious' }, { label: '일반 기부금', value: 'general' }
-      ]});
-      var dt = ans.donTypes || [];
-      if (dt.length > 0) {
-        var df = CAT_META.donation.fields.filter(function(f) { return dt.indexOf(f.key) >= 0; });
-        s.push({ type: 'input', title: '기부 금액을\n입력해 주세요', sub: '연간 기부액 기준', fields: df });
-      }
+    var dt = ans.donTypes || [];
+    if (dt.length > 0) {
+      var df = CAT_META.donation.fields.filter(function(f) { return dt.indexOf(f.key) >= 0; });
+      s.push({ type: 'input', title: '기부 금액을\n입력해 주세요', fields: df });
     }
     s.push({ type: 'done' }); return s;
   }
@@ -1307,6 +1354,9 @@ function renderCatStep() {
       h += '<span class="cat-input-unit">' + (f.unit || '만원') + '</span></div></div>';
     });
     if (st.extra === 'cardThreshold') h += '<div id="cardThresholdArea">' + renderCardThresholdHTML() + '</div>';
+    if (st.extra === 'loanCompare') {
+      h += '<button class="card-import-btn" onclick="showToast(\'곧 연동될 예정이에요\')" style="margin-top:12px">내 한도·금리 확인하기 ›</button>';
+    }
     if (st.extra === 'medicalAdvice' && hasSpouse()) {
       var myTP = getTotalPay(), spTP = getSpouseTP();
       var ln = myTP <= spTP ? '본인' : '배우자', lt = Math.min(myTP, spTP) * 0.03;
@@ -1430,15 +1480,6 @@ function getMaxCatSaving(key) {
 function onFlowChoice(key, value) {
   catFlow.history.push({ step: catFlow.step, answers: JSON.parse(JSON.stringify(catFlow.answers)) });
   catFlow.answers[key] = value;
-  var ci = catInputs[catFlow.cat];
-  if (key === 'hasHouse') { ci.rent = 0; ci.subscription = 0; ci.loanInterest = 0; delete catFlow.answers.livingType; delete catFlow.answers.hasSubscription; delete catFlow.answers.hasLoan; }
-  if (key === 'livingType') { ci.rent = 0; ci.loanInterest = 0; }
-  if (value === 'no') {
-    if (key === 'hasPension') { ci.pensionSaving = 0; ci.irp = 0; } if (key === 'hasInsurance') ci.insurance = 0;
-    if (key === 'hasEducation') ci.education = 0; if (key === 'hasMedical') ci.medical = 0;
-    if (key === 'hasDonation') { ci.hometown = 0; ci.political = 0; ci.religious = 0; ci.general = 0; }
-    if (key === 'hasSubscription') ci.subscription = 0; if (key === 'hasLoan') ci.loanInterest = 0;
-  }
   catFlow.step++; renderCatStep();
 }
 
