@@ -438,13 +438,9 @@ body{
 <!-- SPLASH -->
 <div id="splash" class="splash">
   <div class="splash-center">
-    <div class="splash-hero">13</div>
-    <div class="splash-title"><span class="splash-title-accent">십삼월</span>의 월급</div>
-    <div class="splash-desc">연말정산, 미리 준비하면 더 받아요</div>
-    <div class="splash-refund">
-      <div class="splash-refund-label">평균 환급액</div>
-      <div class="splash-refund-amount" id="splashRefund">+0원</div>
-    </div>
+    <div class="splash-hero">십삼월</div>
+    <div class="splash-title">13월의 환급</div>
+    <div class="splash-desc">우리 가족 맞춤 절세, 미리 준비하세요</div>
   </div>
   <div class="splash-bottom">
     <button class="splash-start" onclick="dismissSplash()">내 환급액 확인하기</button>
@@ -638,22 +634,6 @@ body{
 // ===========================
 // SPLASH
 // ===========================
-(function splashCountUp() {
-  var target = 1230000, dur = 1200, el = document.getElementById('splashRefund');
-  if (!el) return;
-  setTimeout(function() {
-    var start = null;
-    function ease(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
-    function step(ts) {
-      if (!start) start = ts;
-      var p = Math.min((ts - start) / dur, 1);
-      el.textContent = '+' + Math.round(ease(p) * target).toLocaleString() + '원';
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }, 1000);
-})();
-
 function dismissSplash() {
   var el = document.getElementById('splash');
   el.classList.add('fade-out');
