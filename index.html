@@ -41,8 +41,8 @@ body{
   max-width:440px;margin:0 auto;
 }
 .splash.fade-out{opacity:0;pointer-events:none}
-.splash-center{display:flex;flex-direction:column;align-items:center}
-.splash-title{font-size:28px;font-weight:800;color:var(--blue);letter-spacing:-1px;animation:fadeIn .6s ease-out both}
+.splash-center{display:flex;flex-direction:column;align-items:center;margin-top:-60px}
+.splash-title{font-size:36px;font-weight:800;color:var(--blue);letter-spacing:-1.5px;animation:fadeIn .6s ease-out both;margin-bottom:4px}
 .splash-cat{font-size:14px;color:var(--text3);margin-top:6px;animation:fadeIn .6s ease-out .15s both}
 .splash-sub{font-size:15px;color:var(--text3);margin-top:4px;animation:fadeIn .6s ease-out .3s both}
 .splash-bottom{position:absolute;bottom:48px;left:var(--pad);right:var(--pad);animation:fadeIn .6s ease-out .5s both}
@@ -84,7 +84,7 @@ body{
 .salary-unit{font-size:17px;font-weight:600;color:var(--text3);white-space:nowrap;flex-shrink:0}
 .salary-hint{font-size:13px;color:var(--blue);margin-top:10px;min-height:18px;font-weight:500}
 .spouse-section{margin-top:24px}
-.salary-label{font-size:14px;font-weight:600;color:var(--text2);margin-bottom:0}
+.salary-label{font-size:15px;font-weight:700;color:var(--text);margin-bottom:0}
 
 /* SPOUSE CHOICE */
 .spouse-choice-screen{flex:1;display:flex;flex-direction:column;padding:0 var(--pad)}
@@ -280,7 +280,7 @@ body{
 /* BADGE */
 .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;margin-left:8px;vertical-align:middle}
 .badge-me{background:var(--blue-bg);color:var(--blue)}
-.badge-spouse{background:#FFF0F0;color:var(--red)}
+.badge-spouse{background:var(--blue-bg);color:var(--blue)}
 .badge-plan{background:#FFF8E1;color:#F59F00}
 
 /* ADVICE BOX */
@@ -457,7 +457,8 @@ body{
       <div class="input-sub">세전 총급여 기준</div>
     </div>
     <div class="salary-section">
-      <div class="salary-wrap">
+      <div class="salary-label">본인 급여</div>
+      <div class="salary-wrap" style="margin-top:8px;">
         <input id="salaryInput" class="salary-input" type="tel" inputmode="numeric" placeholder="" autocomplete="off">
         <span class="salary-unit">만원</span>
       </div>
@@ -466,7 +467,7 @@ body{
     <div id="spouseSalarySection" class="spouse-section" style="display:none;margin-top:28px;">
       <div class="salary-label">배우자 급여</div>
       <div class="salary-wrap" style="margin-top:8px;">
-        <input id="spouseSalaryInput" class="salary-input" style="font-size:28px" type="tel" inputmode="numeric" placeholder="" autocomplete="off" oninput="onSpouseSalaryInput(this)">
+        <input id="spouseSalaryInput" class="salary-input" type="tel" inputmode="numeric" placeholder="" autocomplete="off" oninput="onSpouseSalaryInput(this)">
         <span class="salary-unit">만원</span>
       </div>
     </div>
