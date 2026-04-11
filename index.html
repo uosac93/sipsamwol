@@ -1075,12 +1075,8 @@ function showToast(msg) {
     salaryInput.value = salary.toLocaleString();
     calcBtn.disabled = false;
     salaryHint.textContent = '월 약 ' + Math.round(salary / 12).toLocaleString() + '만원';
-    lastResult = calcSimpleRefund(salary, 1);
-    renderResult(lastResult);
-    showScreen('result');
-  } else {
-    salaryInput.focus();
   }
+  salaryInput.focus();
 })();
 </script>
 </body>
