@@ -31,7 +31,7 @@ body{
 @keyframes fillBar{from{width:0}}
 
 /* APP NAME */
-.app-name{font-size:14px;font-weight:700;color:var(--blue);text-align:center;padding-top:16px}
+.app-name{font-size:15px;font-weight:700;color:var(--blue);text-align:left;padding:12px 0 0}
 
 /* INPUT */
 .input-screen{flex:1;display:flex;flex-direction:column;padding:0 var(--pad)}
@@ -47,17 +47,17 @@ body{
 .input-title{font-size:22px;font-weight:700;letter-spacing:-.4px;line-height:1.45}
 .input-sub{font-size:14px;color:var(--text3);margin-top:8px}
 .salary-section{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.salary-wrap{display:flex;align-items:baseline;justify-content:center;gap:6px}
+.salary-wrap{display:flex;align-items:baseline;justify-content:center;gap:8px}
 .salary-input{
-  width:100%;font-size:40px;font-weight:800;letter-spacing:-2px;
+  width:0;flex:1;max-width:220px;font-size:36px;font-weight:800;letter-spacing:-2px;
   border:none;border-bottom:3px solid var(--line);outline:none;
   padding:8px 0;background:transparent;color:var(--text);
   font-family:inherit;caret-color:var(--blue);text-align:center;
   transition:border-color .2s;
 }
 .salary-input:focus{border-bottom-color:var(--blue)}
-.salary-input::placeholder{color:var(--text4);font-size:24px;font-weight:400}
-.salary-unit{font-size:18px;font-weight:600;color:var(--text3)}
+.salary-input::placeholder{color:var(--text4);font-size:22px;font-weight:400}
+.salary-unit{font-size:18px;font-weight:600;color:var(--text3);white-space:nowrap;flex-shrink:0}
 .salary-hint{font-size:14px;color:var(--blue);margin-top:14px;min-height:20px;text-align:center;font-weight:500}
 .input-bottom{padding:24px 0}
 .btn-primary{
@@ -70,8 +70,8 @@ body{
 /* RESULT */
 .result-screen{position:relative;background:var(--bg)}
 .result-fullscreen{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:0 var(--pad);min-height:calc(100vh - 140px);
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:20px var(--pad) 0;
 }
 .result-top-bar{
   display:flex;justify-content:space-between;align-items:center;
@@ -85,13 +85,13 @@ body{
 .settings-btn svg{width:22px;height:22px}
 .result-label{font-size:15px;font-weight:500;color:var(--text3);animation:slideUp .5s ease-out both}
 .result-amount{
-  font-size:42px;font-weight:800;letter-spacing:-2px;color:var(--blue);margin-top:12px;line-height:1.15;
+  font-size:42px;font-weight:800;letter-spacing:-2px;color:var(--blue);margin-top:8px;line-height:1.15;
   animation:countUp .6s cubic-bezier(.16,1,.3,1) .2s both;
 }
 .result-amount .unit{font-size:28px;font-weight:700;margin-left:2px}
 .result-amount.negative{color:var(--red)}
-.result-sub{font-size:14px;color:var(--text3);margin-top:16px;animation:slideUp .6s ease-out .4s both;white-space:pre-line}
-.result-actions{display:flex;flex-direction:column;gap:10px;margin-top:32px;width:100%;animation:slideUp .6s ease-out .6s both}
+.result-sub{font-size:14px;color:var(--text3);margin-top:10px;animation:slideUp .6s ease-out .4s both;white-space:pre-line}
+.result-actions{display:flex;flex-direction:column;gap:10px;margin-top:20px;width:100%;animation:slideUp .6s ease-out .6s both}
 .action-card{
   width:100%;background:var(--bg2);border:none;border-radius:14px;padding:18px 20px;
   font-family:inherit;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
@@ -402,10 +402,10 @@ body{
     <div class="result-label" id="resultLabel">예상 환급액</div>
     <div id="resultAmount" class="result-amount"></div>
     <div id="resultSub" class="result-sub"></div>
-    <div id="tipNudge" class="result-sub" style="color:var(--blue);font-weight:600;margin-top:24px;animation:slideUp .7s ease-out .7s both"></div>
+    <div id="tipNudge" class="result-sub" style="color:var(--blue);font-weight:600;margin-top:14px;animation:slideUp .7s ease-out .7s both"></div>
     <div class="result-actions">
       <button class="action-card" onclick="openTips()">
-        <div><div class="action-card-title">더 돌려받기</div><div class="action-card-sub">항목별로 얼마나 돌려받는지 확인</div></div>
+        <div><div class="action-card-title">더 돌려받는 방법</div><div class="action-card-sub">항목별로 얼마나 돌려받는지 확인</div></div>
         <span class="action-card-arrow">›</span>
       </button>
       <button class="action-card" onclick="openDetail()">
@@ -435,7 +435,7 @@ body{
     <div class="step-label">3단계 — 항목 입력</div>
   </div>
   <div class="panel-header">
-    <div class="panel-title">더 돌려받기</div>
+    <div class="panel-title">더 돌려받는 방법</div>
     <button class="panel-close" onclick="closeAllPanels()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
   <div id="tipsContent" class="panel-content"></div>
@@ -460,11 +460,11 @@ body{
   </div>
   <div class="panel-content">
     <div class="setting-group">
-      <div class="setting-label">연봉 (만원)</div>
+      <div class="setting-label">총급여 (만원)</div>
       <input id="setSalary" class="setting-input" type="tel" inputmode="numeric" placeholder="">
     </div>
     <div class="setting-group">
-      <div class="setting-label">배우자 연봉 (만원)</div>
+      <div class="setting-label">배우자 총급여 (만원)</div>
       <input id="setSpouseSalary" class="setting-input" type="tel" inputmode="numeric" placeholder="">
       <div class="setting-hint">없으면 비워두세요. 입력하면 누가 유리한지 안내해 드려요</div>
     </div>
@@ -1122,7 +1122,7 @@ function renderResult(r) {
     }
     requestAnimationFrame(step);
   })();
-  var subText = '연봉 ' + salary.toLocaleString() + '만원 · 원천징수 ' + rate + '% 기준';
+  var subText = '총급여 ' + salary.toLocaleString() + '만원 · 원천징수 ' + rate + '% 기준';
   if (hasSpouse() && spouseResult) {
     var combinedRefund = r.refund + spouseResult.refund;
     var cpos = combinedRefund >= 0;
@@ -1143,7 +1143,7 @@ function renderResult(r) {
 function renderDetail(r) {
   var h = '';
   h += '<div class="detail-section-title">소득</div>';
-  h += dRow('세전 연봉', fmtWon(salary * 10000));
+  h += dRow('세전 총급여', fmtWon(salary * 10000));
   h += dRow('비과세 (식대)', nonTaxMeal ? '- ' + fmtWon(2400000) : '0원');
   h += dRow('총급여액', fmtWon(r.totalPay));
   h += '<div class="detail-divider"></div><div class="detail-section-title">공제</div>';
@@ -1277,7 +1277,7 @@ function getCatSteps(key, ans) {
       s.push({ type: 'choice', title: '어떻게 살고 있나요?', sub: '맞는 혜택을 찾아드릴게요', key: 'livingType', options: [
         { label: '월세', value: 'rent' }, { label: '전세', value: 'jeonse' }, { label: '기타', value: 'other' }
       ]});
-      if (ans.livingType === 'rent') s.push({ type: 'input', title: '월세를 얼마나 내나요?', sub: tp <= 70000000 ? '월세로 돌려받을 수 있어요' : '연봉 7천만원 초과 시 혜택이 없어요', fields: [CAT_META.housing.fields[0]] });
+      if (ans.livingType === 'rent') s.push({ type: 'input', title: '월세를 얼마나 내나요?', sub: tp <= 70000000 ? '월세로 돌려받을 수 있어요' : '총급여 7천만원 초과 시 혜택이 없어요', fields: [CAT_META.housing.fields[0]] });
       else if (ans.livingType === 'jeonse') s.push({ type: 'input', title: '전세대출 이자를\n얼마나 내나요?', sub: '대출이자로 돌려받을 수 있어요', fields: [CAT_META.housing.fields[2]] });
       s.push({ type: 'choice', title: '주택청약에\n넣고 있나요?', sub: '청약 납입액으로도 돌려받아요', key: 'hasSubscription', options: [
         { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '시작할 예정이에요', value: 'plan' }
