@@ -936,7 +936,7 @@ function calcSimpleRefund(sal, fam) {
 // CATEGORY SAVING CALCULATIONS
 // ===========================
 function getTotalPay() {
-  return lastResult ? lastResult.totalPay : Math.max(salary * 10000 - 2400000, 0);
+  return lastResult ? lastResult.totalPay : Math.max(salary * 10000 - (nonTaxMeal ? 2400000 : 0), 0);
 }
 
 function getMRate() {
@@ -1055,7 +1055,7 @@ function calcAllCatSavings() {
 // ===========================
 function getSpouseTP() {
   if (spouseSalary <= 0) return 0;
-  return Math.max(spouseSalary * 10000 - 2400000, 0);
+  return Math.max(spouseSalary * 10000 - (nonTaxMeal ? 2400000 : 0), 0);
 }
 
 function getSpouseTaxable() {
@@ -1174,7 +1174,7 @@ var CAT_META = {
   },
   housing: {
     name: '주택/주거',
-    desc: '월세·대출이자·청약으로 돌려받기',
+    desc: '월세·대출이자로 돌려받기',
     fields: [
       { key: 'rent', label: '월세 (월)', unit: '만원' },
       { key: 'subscription', label: '주택청약 납입액 (연)', unit: '만원' },
@@ -1262,15 +1262,16 @@ function recalculate() {
 }
 
 function renderResult(r) {
-  var pos = r.refund >= 0;
-  var amt = Math.round(Math.abs(r.refund));
-  var showAmt = amt, showPos = pos, showPrefix;
+  var catSavings = calcAllCatSavings();
+  var totalRefund = r.refund + catSavings;
+  var pos = totalRefund >= 0;
+  var showAmt = Math.abs(Math.round(totalRefund)), showPos = pos, showPrefix;
   // 배우자 있으면 합산이 메인
   var spArea = document.getElementById('spouseResultArea');
   if (hasSpouse() && spouseResult) {
-    var totalRefund = Math.round(r.refund + spouseResult.refund);
+    totalRefund = r.refund + catSavings + spouseResult.refund;
     showPos = totalRefund >= 0;
-    showAmt = Math.abs(totalRefund);
+    showAmt = Math.abs(Math.round(totalRefund));
   }
   showPrefix = showPos ? '+' : '-';
   document.getElementById('resultLabel').textContent = showPos ? '예상 환급액' : '추가 납부 예상액';
@@ -1339,7 +1340,18 @@ function dRow(label, value, bold, color) {
   return '<div class="detail-item"><span class="detail-item-label">'+label+'</span><span class="'+cls+'" style="'+st+'">'+value+'</span></div>';
 }
 
-function goBack() { closeAllPanels(); showScreen('input'); salaryInput.focus(); }
+function goBack() {
+  closeAllPanels();
+  salaryInput.value = salary > 0 ? salary.toLocaleString() : '';
+  calcBtn.disabled = salary < 100;
+  if (salary >= 100) salaryHint.textContent = '월 약 ' + Math.round(salary / 12).toLocaleString() + '만원';
+  if (hasSpouseFlag) {
+    document.getElementById('spouseSalarySection').style.display = 'block';
+    document.getElementById('spouseSalaryInput').value = spouseSalary > 0 ? spouseSalary.toLocaleString() : '';
+  }
+  showScreen('input');
+  salaryInput.focus();
+}
 function goToSpouse() { showScreen('spouse'); }
 
 // ===========================
@@ -1626,6 +1638,9 @@ function onFlowMulti(key, value) {
   catFlow.answers[key] = arr;
   if (key === 'donTypes') { var ci = catInputs.donation; ['hometown','political','religious','general'].forEach(function(t) { if (arr.indexOf(t) < 0) ci[t] = 0; }); }
   if (key === 'housingTypes') {
+    var ci = catInputs.housing;
+    if (arr.indexOf('rent') < 0) ci.rent = 0;
+    if (arr.indexOf('jeonse') < 0 && arr.indexOf('mortgage') < 0) ci.loanInterest = 0;
     catFlow.answers[key] = arr;
   }
   renderCatStep();
@@ -1735,6 +1750,7 @@ function saveSettings() {
   }
   var ssv = document.getElementById('setSpouseSalary').value.replace(/[^0-9]/g, '');
   spouseSalary = ssv ? Number(ssv) : 0;
+  hasSpouseFlag = spouseSalary > 0;
   nonTaxMeal = document.getElementById('setNonTaxMeal').checked;
   closeAllPanels();
   recalculate();
