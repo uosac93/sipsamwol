@@ -93,10 +93,10 @@ body{
 
 /* INPUT */
 .input-screen{flex:1;display:flex;flex-direction:column;padding:0 var(--pad)}
-.step-bar{padding:20px var(--pad) 16px;display:flex;align-items:center;gap:12px}
+.step-bar{padding:16px var(--pad) 12px}
 .step-back{
-  border:none;background:none;font-family:inherit;font-size:14px;font-weight:500;
-  color:var(--text3);cursor:pointer;padding:4px 0;flex-shrink:0;
+  border:none;background:none;font-family:inherit;font-size:22px;font-weight:400;
+  color:var(--text3);cursor:pointer;padding:8px 0;display:block;margin-bottom:8px;
 }
 .step-back:active{opacity:.4}
 .step-progress{display:flex;gap:4px;margin-bottom:0}
@@ -495,7 +495,7 @@ body{
   <div class="input-screen">
     <div class="step-bar">
       <button class="step-back" onclick="showScreen('spouse')">←</button>
-      <div class="step-progress" style="flex:1">
+      <div class="step-progress">
         <div class="step-progress-seg done"></div>
         <div class="step-progress-seg active"></div>
         <div class="step-progress-seg"></div>
