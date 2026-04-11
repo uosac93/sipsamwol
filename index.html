@@ -1516,7 +1516,7 @@ function renderCatStep() {
       h += '<div class="card-field-input"><div class="cat-input-wrap"><input class="cat-input" type="tel" inputmode="numeric" data-field="' + f.key + '" value="' + (val > 0 ? val.toLocaleString() : '') + '" placeholder="0" oninput="onCatInput(this)"><span class="cat-input-unit">만원</span></div></div>';
       h += '</div>';
     });
-    h += '<div style="font-size:13px;color:var(--text3);margin-top:8px">공제 한도 <b style="color:var(--blue)">' + baseLimit + '만원</b> · 25% 문턱 <b style="color:var(--blue)">' + fmtAmt(ti.threshold) + '원</b></div>';
+    h += '<div style="font-size:13px;color:var(--text3);margin-top:8px">신용/체크/현금 합산 한도 <b style="color:var(--blue)">' + baseLimit + '만원</b> · 25% 문턱 <b style="color:var(--blue)">' + fmtAmt(ti.threshold) + '원</b></div>';
     // 문턱 + 한도
     h += '<div id="cardThresholdArea">' + renderCardThresholdHTML() + '</div>';
     var saving = calcCatSaving('card');
