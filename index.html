@@ -1535,9 +1535,11 @@ function renderCardThresholdHTML() {
     if (remain > 0) {
       var extraRefund = Math.round(remain * mr * 1.1);
       h += '<div class="advice-box" style="margin-top:12px"><b>추가 환급 가능액 ' + fmtAmt(extraRefund) + '원</b><br>';
-      // 체크카드 기준으로 얼마 더 써야 하는지
       var debitNeeded = Math.round(remain / 0.30 / 10000);
       h += '체크카드로 <b>' + debitNeeded.toLocaleString() + '만원</b> 더 쓰면 한도까지 채울 수 있어요</div>';
+    } else {
+      h += '<div class="advice-box" style="margin-top:12px;background:var(--blue-bg)"><b style="color:var(--blue)">공제 한도를 모두 채웠어요!</b><br>';
+      h += '신용카드 대신 <b>체크카드·현금영수증</b>을 쓰면 추가 한도를 받을 수 있어요</div>';
     }
     h += '</div>';
   }
