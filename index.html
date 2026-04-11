@@ -1513,21 +1513,32 @@ function renderCatStep() {
 
 function renderCardThresholdHTML() {
   var ti = getCardThresholdInfo();
-  var h = '<div class="threshold-section"><div class="threshold-label">얼마나 써야 돌려받나요?</div>';
+  var mr = getMRate();
+  var h = '';
+  // 문턱 프로그레스
+  h += '<div class="threshold-section"><div class="threshold-label">25% 문턱</div>';
   h += '<div class="threshold-bar-bg"><div class="threshold-bar-fill' + (ti.overThreshold ? ' over' : '') + '" style="width:' + ti.thresholdPct + '%"></div></div>';
-  h += '<div class="threshold-info"><span>총 사용액 ' + fmtAmt(ti.totalSpend) + '원</span><span>기준 <b>' + fmtAmt(ti.threshold) + '원</b></span></div>';
-  if (ti.overThreshold) {
-    h += '<div class="threshold-alert done">기준을 넘었어요! 돌려받기 시작해요</div>';
-  } else if (ti.totalSpend > 0) {
+  h += '<div class="threshold-info"><span>' + fmtAmt(ti.totalSpend) + '원</span><span>' + fmtAmt(ti.threshold) + '원</span></div>';
+  if (!ti.overThreshold && ti.totalSpend > 0) {
     var gap = ti.threshold - ti.totalSpend;
-    // 문턱 넘었을 때 예상 환급액 계산 (체크카드 기준 30%)
-    var potentialSaving = Math.round(gap * 0.30);
-    h += '<div class="threshold-alert">지금은 0원이지만 <b>' + fmtAmt(gap) + '원</b> 더 쓰면 <b>' + fmtAmt(potentialSaving) + '원</b> 돌려받아요</div>';
+    h += '<div class="threshold-alert"><b>' + fmtAmt(gap) + '원</b> 더 쓰면 공제 시작</div>';
+  } else if (ti.overThreshold) {
+    h += '<div class="threshold-alert done">문턱 달성!</div>';
   }
   h += '</div>';
+  // 한도 프로그레스
   if (ti.overThreshold) {
     h += '<div class="limit-tracker">';
     h += renderLimitItem('공제 한도', ti.baseDed, ti.baseLimit);
+    // 추가 환급 가능액 컨설팅
+    var remain = Math.max(ti.baseLimit - ti.baseDed, 0);
+    if (remain > 0) {
+      var extraRefund = Math.round(remain * mr * 1.1);
+      h += '<div class="advice-box" style="margin-top:12px"><b>추가 환급 가능액 ' + fmtAmt(extraRefund) + '원</b><br>';
+      // 체크카드 기준으로 얼마 더 써야 하는지
+      var debitNeeded = Math.round(remain / 0.30 / 10000);
+      h += '체크카드로 <b>' + debitNeeded.toLocaleString() + '만원</b> 더 쓰면 한도까지 채울 수 있어요</div>';
+    }
     h += '</div>';
   }
   return h;
