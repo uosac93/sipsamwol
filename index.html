@@ -1840,16 +1840,7 @@ function showToast(msg) {
 // INIT
 // ===========================
 (function() {
-  if (loadFromLocal() && salary >= 100) {
-    salaryInput.value = salary.toLocaleString();
-    calcBtn.disabled = false;
-    salaryHint.textContent = '월 약 ' + Math.round(salary / 12).toLocaleString() + '만원';
-    if (spouseSalary > 0) {
-      hasSpouseFlag = true;
-      document.getElementById('spouseSalarySection').style.display = 'block';
-      document.getElementById('spouseSalaryInput').value = spouseSalary.toLocaleString();
-    }
-  }
+  localStorage.removeItem('sipsamwol_data');
 })();
 </script>
 </body>
