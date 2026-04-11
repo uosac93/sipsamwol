@@ -139,6 +139,11 @@ body{
   background:var(--bg);border-radius:14px;padding:18px 20px;margin-bottom:10px;cursor:pointer;
   transition:transform .15s;animation:staggerIn .4s ease-out both;
 }
+.goal-card{background:var(--bg);border-radius:14px;padding:18px 20px;margin-bottom:10px}
+.goal-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.goal-card-name{font-size:15px;font-weight:700;color:var(--text1)}
+.goal-card-saving{font-size:14px;font-weight:600;color:var(--blue)}
+.goal-card-empty{font-size:13px;color:var(--text3);margin-top:4px}
 .cat-card:nth-child(2){animation-delay:.05s}
 .cat-card:nth-child(3){animation-delay:.1s}
 .cat-card:nth-child(4){animation-delay:.15s}
@@ -404,42 +409,72 @@ body{
     <div id="resultSub" class="result-sub"></div>
     <div id="tipNudge" class="result-sub" style="color:var(--blue);font-weight:600;margin-top:14px;animation:slideUp .7s ease-out .7s both"></div>
     <div class="result-actions">
-      <button class="action-card" onclick="openTips()">
-        <div><div class="action-card-title">더 돌려받는 방법</div><div class="action-card-sub">항목별로 얼마나 돌려받는지 확인</div></div>
-        <span class="action-card-arrow">›</span>
-      </button>
-      <button class="action-card" onclick="openDetail()">
-        <div><div class="action-card-title">상세 계산 내역</div><div class="action-card-sub">세금 계산 과정 자세히 보기</div></div>
+      <button class="action-card" onclick="goToStep3()">
+        <div><div class="action-card-title">더 돌려받는 방법</div></div>
         <span class="action-card-arrow">›</span>
       </button>
     </div>
+  </div>
+</div>
+
+<!-- STEP 3 SCREEN (더 돌려받는 방법) -->
+<div id="screen-tips" class="screen">
+  <div style="padding:0 var(--pad)">
+    <div class="step-bar" id="tipsStepBar">
+      <div class="step-dots">
+        <div class="step-num done">1</div>
+        <div class="step-line done"></div>
+        <div class="step-num done">2</div>
+        <div class="step-line active"></div>
+        <div class="step-num active">3</div>
+        <div class="step-line"></div>
+        <div class="step-num">4</div>
+      </div>
+      <div class="step-label">3단계 — 항목 입력</div>
+    </div>
+  </div>
+  <div class="result-top-bar">
+    <button class="reset-btn" onclick="goBackToResult()">← 돌아가기</button>
+    <button class="settings-btn" onclick="openSettings()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </div>
+  <div style="padding:0 var(--pad);flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch">
+    <div class="panel-title" style="margin-bottom:16px">더 돌려받는 방법</div>
+    <div id="tipsContent"></div>
+  </div>
+</div>
+
+<!-- STEP 4 SCREEN (목표 관리) -->
+<div id="screen-goals" class="screen">
+  <div style="padding:0 var(--pad)">
+    <div class="step-bar" id="goalsStepBar">
+      <div class="step-dots">
+        <div class="step-num done">1</div>
+        <div class="step-line done"></div>
+        <div class="step-num done">2</div>
+        <div class="step-line done"></div>
+        <div class="step-num done">3</div>
+        <div class="step-line active"></div>
+        <div class="step-num active">4</div>
+      </div>
+      <div class="step-label">4단계 — 목표 관리</div>
+    </div>
+  </div>
+  <div class="result-top-bar">
+    <button class="reset-btn" onclick="goBackToTips()">← 돌아가기</button>
+    <button class="settings-btn" onclick="openSettings()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </div>
+  <div style="padding:0 var(--pad);flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch">
+    <div class="panel-title" style="margin-bottom:16px">올해 목표</div>
+    <div id="goalsContent"></div>
   </div>
 </div>
 
 <!-- OVERLAY -->
 <div id="panelOverlay" class="panel-overlay" onclick="closeAllPanels()"></div>
-
-<!-- TIPS PANEL (5 카테고리) -->
-<div id="tipsPanel" class="bottom-panel">
-  <div class="panel-handle-area" onclick="closeAllPanels()"><div class="panel-handle"></div></div>
-  <div class="step-bar" style="padding-top:4px;padding-bottom:8px">
-    <div class="step-dots">
-      <div class="step-num done">1</div>
-      <div class="step-line active"></div>
-      <div class="step-num done">2</div>
-      <div class="step-line active"></div>
-      <div class="step-num active">3</div>
-      <div class="step-line"></div>
-      <div class="step-num">4</div>
-    </div>
-    <div class="step-label">3단계 — 항목 입력</div>
-  </div>
-  <div class="panel-header">
-    <div class="panel-title">더 돌려받는 방법</div>
-    <button class="panel-close" onclick="closeAllPanels()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-  </div>
-  <div id="tipsContent" class="panel-content"></div>
-</div>
 
 <!-- CATEGORY DETAIL PANEL -->
 <div id="catDetailPanel" class="bottom-panel">
@@ -486,6 +521,12 @@ body{
       <div class="setting-hint">ON이면 월 20만원(연 240만원)을 비과세로 반영해요</div>
     </div>
     <button class="btn-save" onclick="saveSettings()">저장하고 다시 계산</button>
+    <div class="setting-group" style="margin-top:12px;border-top:1px solid var(--line);padding-top:16px">
+      <button class="action-card" onclick="closeAllPanels();openDetail()" style="margin:0">
+        <div><div class="action-card-title">상세 계산 내역</div></div>
+        <span class="action-card-arrow">›</span>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1217,10 +1258,48 @@ function renderTipsPanel() {
     h += '</div>';
   });
 
+  h += '<button class="btn-save" onclick="goToStep4()" style="margin-top:20px;margin-bottom:24px">목표 설정하기</button>';
+
   document.getElementById('tipsContent').innerHTML = h;
   // 총액 카운트업
   if (totalSaving > 0) {
     var tv = document.querySelector('.tips-total-value');
+    if (tv) animateCountUp(tv, totalSaving, '원', 600);
+  }
+}
+
+function renderGoalsScreen() {
+  var totalSaving = calcAllCatSavings();
+  var cats = ['card','housing','pension','living','donation'];
+  var h = '<div class="tips-total"><div class="tips-total-label">현재 추가 환급액</div><div class="tips-total-value">';
+  h += totalSaving > 0 ? fmtAmt(totalSaving) + '원' : '0원';
+  h += '</div></div>';
+
+  h += '<div style="margin-top:20px">';
+  cats.forEach(function(key) {
+    var meta = CAT_META[key];
+    var saving = calcCatSaving(key);
+    var goal = catGoals[key] || 0;
+    var goalAmt = goal * 10000;
+    h += '<div class="goal-card">';
+    h += '<div class="goal-card-header"><span class="goal-card-name">' + meta.name + '</span>';
+    h += '<span class="goal-card-saving">' + (saving > 0 ? fmtAmt(saving) + '원' : '-') + '</span></div>';
+    if (goalAmt > 0) {
+      var pct = Math.min(Math.round(saving / goalAmt * 100), 100);
+      h += '<div class="progress-bar-bg"><div class="progress-bar-fill' + (pct >= 100 ? ' full' : '') + '" style="width:' + pct + '%"></div></div>';
+      h += '<div class="progress-info"><span class="progress-label">목표 ' + fmtAmt(goalAmt) + '원</span><span class="progress-pct' + (pct >= 100 ? ' full' : '') + '">' + pct + '%</span></div>';
+    } else {
+      h += '<div class="goal-card-empty">항목을 입력하면 목표를 설정할 수 있어요</div>';
+    }
+    h += '</div>';
+  });
+  h += '</div>';
+
+  h += '<button class="btn-save" onclick="goBackToResult()" style="margin-top:20px;margin-bottom:24px">결과로 돌아가기</button>';
+
+  document.getElementById('goalsContent').innerHTML = h;
+  if (totalSaving > 0) {
+    var tv = document.querySelector('#screen-goals .tips-total-value');
     if (tv) animateCountUp(tv, totalSaving, '원', 600);
   }
 }
@@ -1237,8 +1316,7 @@ function openCatDetail(key) {
   catFlow = { cat: key, step: 0, answers: ans, history: [] };
   if (hasData) { var steps = getCatSteps(key, ans); catFlow.step = steps.length - 1; }
   renderCatStep();
-  document.getElementById('tipsPanel').classList.remove('show');
-  document.getElementById('catDetailPanel').classList.add('show');
+  openPanel('catDetailPanel');
 }
 
 function prefillCatAnswers(key) {
@@ -1379,14 +1457,14 @@ function renderCatStep() {
   }
   if (st.type === 'cardInput') {
     // 카드 사용 내역 불러오기 버튼
-    h += '<button class="card-import-btn" onclick="showToast(\'토스 연동 후 자동으로 불러올 수 있어요\')"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#0064FF"/><path d="M5.5 7.5H14.5V9H11V15H9V9H5.5V7.5Z" fill="white"/></svg>토스에서 불러오기</button>';
+    h += '<button class="card-import-btn" onclick="showToast(\'간편인증 연동 후 자동으로 불러올 수 있어요\')">간편인증 불러오기</button>';
     var ci = catInputs.card, ti = getCardThresholdInfo();
     // 카드별 입력 필드
     CAT_META.card.fields.forEach(function(f) {
       var val = ci[f.key] || 0;
       var ded = ti.perCard[f.key];
       h += '<div class="card-field-row">';
-      h += '<div class="card-field-info"><div class="card-field-name">' + f.label + '</div><div class="card-field-rate">' + f.hint + '</div></div>';
+      h += '<div class="card-field-info"><div class="card-field-name">' + f.label + '</div></div>';
       h += '<div class="card-field-input"><div class="cat-input-wrap"><input class="cat-input" type="tel" inputmode="numeric" data-field="' + f.key + '" value="' + (val > 0 ? val.toLocaleString() : '') + '" placeholder="0" oninput="onCatInput(this)"><span class="cat-input-unit">만원</span></div>';
       if (val > 0 && ti.overThreshold) h += '<div class="card-field-deduct">' + fmtAmt(ded.deductible) + '원 돌려받아요</div>';
       h += '</div></div>';
@@ -1413,7 +1491,10 @@ function renderCardThresholdHTML() {
   if (ti.overThreshold) {
     h += '<div class="threshold-alert done">기준을 넘었어요! 돌려받기 시작해요</div>';
   } else if (ti.totalSpend > 0) {
-    h += '<div class="threshold-alert">' + fmtAmt(ti.threshold - ti.totalSpend) + '원 더 쓰면 돌려받기 시작해요</div>';
+    var gap = ti.threshold - ti.totalSpend;
+    // 문턱 넘었을 때 예상 환급액 계산 (체크카드 기준 30%)
+    var potentialSaving = Math.round(gap * 0.30);
+    h += '<div class="threshold-alert">지금은 0원이지만 <b>' + fmtAmt(gap) + '원</b> 더 쓰면 <b>' + fmtAmt(potentialSaving) + '원</b> 돌려받아요</div>';
   }
   h += '</div>';
   // 3개 한도 트래커
@@ -1555,9 +1636,8 @@ function onCatInput(el) {
 
 
 function backToTips() {
-  document.getElementById('catDetailPanel').classList.remove('show');
+  closeAllPanels();
   renderTipsPanel();
-  document.getElementById('tipsPanel').classList.add('show');
   currentCat = null;
 }
 
@@ -1573,7 +1653,7 @@ function openPanel(id) {
 
 function closeAllPanels() {
   document.getElementById('panelOverlay').classList.remove('show');
-  ['tipsPanel','settingsPanel','detailPanel','catDetailPanel'].forEach(function(id) {
+  ['settingsPanel','detailPanel','catDetailPanel'].forEach(function(id) {
     document.getElementById(id).classList.remove('show');
   });
   document.body.style.overflow = '';
@@ -1581,6 +1661,10 @@ function closeAllPanels() {
 }
 
 function openTips() { renderTipsPanel(); openPanel('tipsPanel'); }
+function goToStep3() { renderTipsPanel(); showScreen('tips'); }
+function goBackToResult() { showScreen('result'); }
+function goBackToTips() { renderTipsPanel(); showScreen('tips'); }
+function goToStep4() { renderGoalsScreen(); showScreen('goals'); }
 function openSettings() {
   document.getElementById('setSalary').value = salary > 0 ? salary.toLocaleString() : '';
   document.getElementById('setSpouseSalary').value = spouseSalary > 0 ? spouseSalary.toLocaleString() : '';
