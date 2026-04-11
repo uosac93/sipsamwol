@@ -1313,8 +1313,6 @@ function renderTipsPanel() {
     h += '<div class="cat-card" onclick="openCatDetail(\'' + key + '\')">';
     h += '<div class="cat-card-top"><span class="cat-card-name">' + meta.name;
     if (hasInput) h += '<span class="cat-card-amt">' + fmtAmt(saving) + '원</span>';
-    var advice = hasSpouse() ? getFamilyAdvice(key) : null;
-    if (advice) h += '<span class="badge ' + (advice.who === 'me' ? 'badge-me' : 'badge-spouse') + '">' + (advice.who === 'me' ? '본인이 유리' : '배우자가 유리') + '</span>';
     h += '</span><span class="cat-card-arrow">›</span></div>';
     h += '</div>';
   });
