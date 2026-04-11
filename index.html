@@ -1390,6 +1390,7 @@ function openCatDetail(key) {
   if (hasData) { var steps = getCatSteps(key, ans); catFlow.step = steps.length - 1; }
   renderCatStep();
   openPanel('catDetailPanel');
+  currentCat = key;
 }
 
 function prefillCatAnswers(key) {
