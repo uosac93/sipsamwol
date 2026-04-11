@@ -42,24 +42,25 @@ body{
 .step-num.done{background:var(--blue);color:#fff}
 .step-line{width:28px;height:2px;background:var(--line);transition:background .3s}
 .step-line.active{background:var(--blue)}
+.step-line.done{background:var(--blue)}
 .step-label{font-size:14px;font-weight:600;color:var(--blue);margin-top:10px}
 .input-top{padding-top:16px}
 .input-title{font-size:22px;font-weight:700;letter-spacing:-.4px;line-height:1.45}
-.input-sub{font-size:14px;color:var(--text3);margin-top:8px;margin-bottom:40px}
-.salary-section{display:flex;flex-direction:column;align-items:center}
-.salary-wrap{display:flex;align-items:baseline;justify-content:center;gap:8px}
+.input-sub{font-size:14px;color:var(--text3);margin-top:8px;margin-bottom:32px}
+.salary-section{display:flex;flex-direction:column}
+.salary-wrap{display:flex;align-items:baseline;gap:8px;width:100%}
 .salary-input{
-  width:0;flex:1;max-width:220px;font-size:36px;font-weight:800;letter-spacing:-2px;
-  border:none;border-bottom:3px solid var(--line);outline:none;
+  width:0;flex:1;font-size:36px;font-weight:800;letter-spacing:-2px;
+  border:none;border-bottom:3px solid #DDE0E4;outline:none;
   padding:8px 0;background:transparent;color:var(--text);
-  font-family:inherit;caret-color:var(--blue);text-align:center;
+  font-family:inherit;caret-color:var(--blue);text-align:right;
   transition:border-color .2s;
 }
 .salary-input:focus{border-bottom-color:var(--blue)}
 .salary-input::placeholder{color:var(--text4);font-size:22px;font-weight:400}
 .salary-unit{font-size:18px;font-weight:600;color:var(--text3);white-space:nowrap;flex-shrink:0}
-.salary-hint{font-size:14px;color:var(--blue);margin-top:14px;min-height:20px;text-align:center;font-weight:500}
-.input-bottom{padding:32px 0 0}
+.salary-hint{font-size:14px;color:var(--blue);margin-top:14px;min-height:20px;font-weight:500}
+.input-bottom{padding:28px 0 0}
 .btn-primary{
   width:100%;height:56px;border:none;border-radius:14px;background:var(--blue);color:#fff;
   font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .15s,opacity .15s;
