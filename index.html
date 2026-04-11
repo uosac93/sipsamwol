@@ -546,7 +546,6 @@ body{
     <div class="result-label" id="resultLabel">예상 환급액</div>
     <div id="resultAmount" class="result-amount"></div>
     <div id="spouseResultArea"></div>
-    <button class="basis-btn" onclick="openSettings()">기준 확인하기 ›</button>
     <div id="resultCats" style="width:100%;margin-top:28px"></div>
   </div>
 </div>
@@ -1517,6 +1516,22 @@ function renderCatStep() {
       h += '</div>';
     });
     h += '<div style="font-size:13px;color:var(--text3);margin-top:8px">신용/체크/현금 합산 한도 <b style="color:var(--blue)">' + baseLimit + '만원</b> · 25% 문턱 <b style="color:var(--blue)">' + fmtAmt(ti.threshold) + '원</b></div>';
+    // 25% 컨설팅
+    var totalSpend = (ci.credit + ci.debit + ci.cash) * 10000;
+    var thresholdMan = Math.round(ti.threshold / 10000);
+    var creditMan = ci.credit || 0;
+    if (!ti.overThreshold && totalSpend > 0) {
+      var gapMan = thresholdMan - Math.round(totalSpend / 10000);
+      h += '<div class="advice-box" style="margin-top:12px"><b>25% 문턱까지 ' + gapMan.toLocaleString() + '만원 남았어요</b><br>문턱까지는 <b>신용카드</b>로 채우세요. 혜택도 받고 문턱도 넘을 수 있어요.</div>';
+    } else if (ti.overThreshold) {
+      if (ci.credit > 0 && (ci.debit + ci.cash) === 0) {
+        h += '<div class="advice-box" style="margin-top:12px"><b>문턱을 넘었어요! 이제 체크카드·현금영수증으로 전환하세요</b><br>공제율이 <b>15% → 30%</b>로 2배! 같은 금액으로 더 많이 돌려받아요.</div>';
+      } else if (ci.debit > 0 || ci.cash > 0) {
+        h += '<div class="advice-box" style="margin-top:12px;background:var(--blue-bg)"><b style="color:var(--blue)">좋아요! 체크카드·현금영수증을 잘 활용하고 있어요</b><br>문턱 초과분은 30% 공제율이 적용돼요.</div>';
+      }
+    } else if (totalSpend === 0) {
+      h += '<div class="advice-box" style="margin-top:12px"><b>카드 절세 전략</b><br>25% 문턱(<b>' + thresholdMan.toLocaleString() + '만원</b>)까지는 <b>신용카드</b>로, 초과분은 <b>체크카드·현금영수증</b>으로 쓰면 최대 환급!</div>';
+    }
     // 문턱 + 한도
     h += '<div id="cardThresholdArea">' + renderCardThresholdHTML() + '</div>';
     var saving = calcCatSaving('card');
