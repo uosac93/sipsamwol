@@ -184,6 +184,33 @@ body{
 }
 .btn-save-cat:active{transform:scale(.97);opacity:.9}
 
+/* BADGE */
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;margin-left:8px;vertical-align:middle}
+.badge-me{background:var(--blue-bg);color:var(--blue)}
+.badge-spouse{background:#FFF0F0;color:var(--red)}
+
+/* ADVICE BOX */
+.advice-box{background:var(--bg2);border-radius:12px;padding:14px 16px;margin:12px 0;font-size:13px;color:var(--text2);line-height:1.6}
+.advice-box b{color:var(--blue);font-weight:700}
+
+/* CARD THRESHOLD */
+.threshold-section{margin:16px 0}
+.threshold-label{font-size:13px;color:var(--text3);margin-bottom:6px}
+.threshold-bar-bg{height:8px;background:var(--bg2);border-radius:4px;overflow:hidden}
+.threshold-bar-fill{height:100%;border-radius:4px;background:var(--blue);transition:width .4s}
+.threshold-bar-fill.over{background:var(--green)}
+.threshold-info{display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:var(--text3)}
+.threshold-info b{color:var(--blue);font-weight:700}
+.threshold-alert{font-size:13px;color:var(--blue);font-weight:600;margin-top:8px}
+.threshold-alert.done{color:var(--green)}
+
+/* LOAN LINK */
+.loan-link-btn{
+  border:none;background:none;font-family:inherit;font-size:14px;font-weight:600;
+  color:var(--blue);cursor:pointer;padding:12px 0;display:flex;align-items:center;gap:4px;
+}
+.loan-link-btn:active{opacity:.5}
+
 /* SETTINGS */
 .setting-group{margin-bottom:24px}
 .setting-label{font-size:13px;font-weight:600;color:var(--text3);margin-bottom:10px}
@@ -304,6 +331,11 @@ body{
       <input id="setSalary" class="setting-input" type="tel" inputmode="numeric" placeholder="세전 연봉">
     </div>
     <div class="setting-group">
+      <div class="setting-label">배우자 연봉 (만원)</div>
+      <input id="setSpouseSalary" class="setting-input" type="tel" inputmode="numeric" placeholder="없으면 비워두세요">
+      <div class="setting-hint">입력하면 카테고리별로 누가 유리한지 안내해 드려요</div>
+    </div>
+    <div class="setting-group">
       <div class="setting-label">원천징수 비율</div>
       <div class="rate-btns" id="setRateGroup">
         <button class="rate-btn" data-rate="80" onclick="setRateBtn(80)">80%</button>
@@ -334,7 +366,9 @@ body{
 // ===========================
 var salary = 0;
 var rate = 100;
+var spouseSalary = 0;
 var lastResult = null;
+var spouseResult = null;
 
 // 카테고리 입력값 (만원 단위)
 var catInputs = {
