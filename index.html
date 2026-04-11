@@ -35,33 +35,43 @@ body{
 /* SPLASH */
 .splash{
   position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;
-  background:var(--bg);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  max-width:440px;margin:0 auto;
+  background:linear-gradient(165deg,#1B64DA 0%,#3182F6 40%,#4A9AFF 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  max-width:440px;margin:0 auto;overflow:hidden;
 }
 .splash.fade-out{opacity:0;pointer-events:none;transition:opacity .4s ease-out}
-.splash-center{display:flex;flex-direction:column;align-items:center;margin-top:-40px}
-.splash-title{
-  font-size:48px;font-weight:900;color:var(--blue);letter-spacing:-2px;
-  opacity:0;animation:splashTitle .8s cubic-bezier(.16,1,.3,1) .2s forwards;
+.splash-bg-num{
+  position:absolute;font-size:280px;font-weight:900;color:rgba(255,255,255,.07);
+  letter-spacing:-12px;top:50%;left:50%;transform:translate(-50%,-55%);
+  pointer-events:none;user-select:none;
+  opacity:0;animation:splashBgNum 1.2s cubic-bezier(.16,1,.3,1) .05s forwards;
 }
-.splash-num{
-  font-size:13px;font-weight:700;color:var(--blue);letter-spacing:4px;text-transform:uppercase;
-  margin-bottom:16px;
-  opacity:0;animation:splashFade .6s ease-out .1s forwards;
+.splash-center{display:flex;flex-direction:column;align-items:center;margin-top:-20px;position:relative;z-index:1}
+.splash-tag{
+  font-size:12px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:3px;
+  margin-bottom:20px;
+  opacity:0;animation:splashFade .6s ease-out .3s forwards;
+}
+.splash-title{
+  font-size:52px;font-weight:900;color:#fff;letter-spacing:-2.5px;
+  opacity:0;animation:splashTitle .8s cubic-bezier(.16,1,.3,1) .15s forwards;
 }
 .splash-desc{
-  font-size:17px;font-weight:500;color:var(--text2);margin-top:16px;letter-spacing:-.3px;
-  opacity:0;animation:splashFade .6s ease-out .6s forwards;
+  font-size:16px;font-weight:500;color:rgba(255,255,255,.75);margin-top:14px;letter-spacing:-.2px;
+  opacity:0;animation:splashFade .6s ease-out .55s forwards;
 }
-.splash-bottom{position:absolute;bottom:48px;left:var(--pad);right:var(--pad);opacity:0;animation:splashSlideUp .6s cubic-bezier(.16,1,.3,1) .9s forwards}
+.splash-bottom{position:absolute;bottom:48px;left:var(--pad);right:var(--pad);opacity:0;animation:splashSlideUp .6s cubic-bezier(.16,1,.3,1) .85s forwards;z-index:1}
 .splash-start{
-  width:100%;height:56px;border:none;border-radius:16px;background:var(--blue);color:#fff;
+  width:100%;height:56px;border:none;border-radius:16px;background:#fff;color:var(--blue);
   font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;
   transition:transform .15s,box-shadow .15s;
-  box-shadow:0 4px 16px rgba(49,130,246,.3);
+  box-shadow:0 4px 20px rgba(0,0,0,.15);
 }
-.splash-start:active{transform:scale(.96);box-shadow:0 2px 8px rgba(49,130,246,.2)}
+.splash-start:active{transform:scale(.96);box-shadow:0 2px 10px rgba(0,0,0,.1)}
+@keyframes splashBgNum{
+  0%{opacity:0;transform:translate(-50%,-55%) scale(.7)}
+  100%{opacity:1;transform:translate(-50%,-55%) scale(1)}
+}
 @keyframes splashTitle{
   0%{opacity:0;transform:scale(.8) translateY(20px)}
   60%{opacity:1;transform:scale(1.02) translateY(-2px)}
@@ -423,10 +433,11 @@ body{
 
 <!-- SPLASH -->
 <div id="splash" class="splash">
+  <div class="splash-bg-num">13</div>
   <div class="splash-center">
-    <div class="splash-num">연말정산</div>
+    <div class="splash-tag">연말정산 미리보기</div>
     <div class="splash-title">십삼월</div>
-    <div class="splash-desc">올해 환급, 얼마나 받을 수 있을까?</div>
+    <div class="splash-desc">우리 가족 환급, 미리 준비하세요</div>
   </div>
   <div class="splash-bottom">
     <button class="splash-start" onclick="dismissSplash()">시작하기</button>
