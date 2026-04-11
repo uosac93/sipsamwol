@@ -85,7 +85,7 @@ body{
 .settings-btn svg{width:22px;height:22px}
 .result-label{font-size:15px;font-weight:500;color:var(--text3);animation:slideUp .5s ease-out both}
 .result-amount{
-  font-size:56px;font-weight:800;letter-spacing:-3px;color:var(--blue);margin-top:12px;line-height:1.15;
+  font-size:42px;font-weight:800;letter-spacing:-2px;color:var(--blue);margin-top:12px;line-height:1.15;
   animation:countUp .6s cubic-bezier(.16,1,.3,1) .2s both;
 }
 .result-amount .unit{font-size:28px;font-weight:700;margin-left:2px}
@@ -309,6 +309,14 @@ body{
 .rate-btn.active{border-color:var(--blue);background:var(--blue-bg);color:var(--blue)}
 .rate-btn:active{transform:scale(.96)}
 .setting-hint{font-size:12px;color:var(--text3);margin-top:6px;line-height:1.5}
+.toggle-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+.toggle-desc{font-size:14px;color:var(--text2)}
+.toggle-switch{position:relative;width:48px;height:28px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--line);border-radius:14px;transition:.3s}
+.toggle-slider:before{content:'';position:absolute;height:22px;width:22px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.toggle-switch input:checked+.toggle-slider{background:var(--blue)}
+.toggle-switch input:checked+.toggle-slider:before{transform:translateX(20px)}
 .btn-save{
   width:100%;height:52px;border:none;border-radius:14px;background:var(--blue);color:#fff;
   font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:8px;
@@ -468,6 +476,14 @@ body{
         <button class="rate-btn" data-rate="120" onclick="setRateBtn(120)">120%</button>
       </div>
       <div class="setting-hint">80%: 매달 세금을 적게 내고 환급도 적어요<br>120%: 매달 세금을 많이 내고 환급도 커져요</div>
+    </div>
+    <div class="setting-group">
+      <div class="setting-label">비과세 식대</div>
+      <div class="toggle-row">
+        <span class="toggle-desc">식대를 비과세로 받고 있나요?</span>
+        <label class="toggle-switch"><input type="checkbox" id="setNonTaxMeal" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="setting-hint">ON이면 월 20만원(연 240만원)을 비과세로 반영해요</div>
     </div>
     <button class="btn-save" onclick="saveSettings()">저장하고 다시 계산</button>
   </div>
@@ -1092,7 +1108,7 @@ function renderResult(r) {
   var el = document.getElementById('resultAmount');
   el.className = 'result-amount' + (pos ? '' : ' negative');
   el.innerHTML = '<span id="resultAmtNum">' + (pos ? '+' : '-') + '0</span><span class="unit">원</span>';
-  // 카운트업 애니메이션
+  // 카운트업 애니메이션 (원 단위)
   var numEl = document.getElementById('resultAmtNum');
   var prefix = pos ? '+' : '-';
   (function animateResult() {
@@ -1101,7 +1117,7 @@ function renderResult(r) {
     function step(ts) {
       if (!startTime) startTime = ts;
       var p = Math.min((ts - startTime) / dur, 1);
-      numEl.textContent = prefix + fmtAmt(Math.round(easeOutExpo(p) * amt));
+      numEl.textContent = prefix + Math.round(easeOutExpo(p) * amt).toLocaleString();
       if (p < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -1110,7 +1126,7 @@ function renderResult(r) {
   if (hasSpouse() && spouseResult) {
     var combinedRefund = r.refund + spouseResult.refund;
     var cpos = combinedRefund >= 0;
-    subText += '\n가족 합산 ' + (cpos ? '+' : '-') + fmtAmt(Math.abs(combinedRefund)) + '원';
+    subText += '\n가족 합산 ' + (cpos ? '+' : '-') + Math.abs(combinedRefund).toLocaleString() + '원';
   }
   document.getElementById('resultSub').textContent = subText;
   // 절세 유도 문구
@@ -1128,7 +1144,7 @@ function renderDetail(r) {
   var h = '';
   h += '<div class="detail-section-title">소득</div>';
   h += dRow('세전 연봉', fmtWon(salary * 10000));
-  h += dRow('비과세 (식대)', '- ' + fmtWon(2400000));
+  h += dRow('비과세 (식대)', nonTaxMeal ? '- ' + fmtWon(2400000) : '0원');
   h += dRow('총급여액', fmtWon(r.totalPay));
   h += '<div class="detail-divider"></div><div class="detail-section-title">공제</div>';
   h += dRow('근로소득공제', '- ' + fmtWon(r.eid));
@@ -1571,6 +1587,7 @@ function openSettings() {
   document.querySelectorAll('#setRateGroup .rate-btn').forEach(function(btn) {
     btn.classList.toggle('active', parseInt(btn.getAttribute('data-rate')) === rate);
   });
+  document.getElementById('setNonTaxMeal').checked = nonTaxMeal;
   openPanel('settingsPanel');
 }
 function openDetail() { openPanel('detailPanel'); }
@@ -1593,6 +1610,7 @@ function saveSettings() {
   }
   var ssv = document.getElementById('setSpouseSalary').value.replace(/[^0-9]/g, '');
   spouseSalary = ssv ? Number(ssv) : 0;
+  nonTaxMeal = document.getElementById('setNonTaxMeal').checked;
   closeAllPanels();
   recalculate();
   saveToLocal();
@@ -1636,7 +1654,7 @@ document.getElementById('setSpouseSalary').addEventListener('input', function() 
 function saveToLocal() {
   try {
     localStorage.setItem('sipsamwol_data', JSON.stringify({
-      salary: salary, rate: rate, spouseSalary: spouseSalary, catInputs: catInputs, catGoals: catGoals
+      salary: salary, rate: rate, spouseSalary: spouseSalary, nonTaxMeal: nonTaxMeal, catInputs: catInputs, catGoals: catGoals
     }));
   } catch(e) {}
 }
@@ -1650,6 +1668,7 @@ function loadFromLocal() {
     salary = d.salary;
     if (d.rate) rate = d.rate;
     if (d.spouseSalary) spouseSalary = d.spouseSalary;
+    if (d.nonTaxMeal !== undefined) nonTaxMeal = d.nonTaxMeal;
     if (d.catInputs) {
       for (var k in d.catInputs) {
         if (catInputs[k]) {
