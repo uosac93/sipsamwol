@@ -1396,16 +1396,13 @@ function getCatSteps(key, ans) {
     s.push({ type: 'multi', title: '어떤 주거비를\n내고 있나요?', key: 'housingTypes', options: [
       { label: '월세', value: 'rent' },
       { label: '전세 대출', value: 'jeonse' },
-      { label: '주택담보대출', value: 'mortgage' },
-      { label: '주택청약', value: 'subscription' },
-      { label: '해당 없음', value: 'none' }
+      { label: '주택담보대출', value: 'mortgage' }
     ]});
     var ht = ans.housingTypes || [];
-    if (ht.indexOf('none') >= 0 || ht.length === 0) { s.push({ type: 'done' }); return s; }
+    if (ht.length === 0) { s.push({ type: 'done' }); return s; }
     var housingFields = [];
     if (ht.indexOf('rent') >= 0) housingFields.push(CAT_META.housing.fields[0]);
     if (ht.indexOf('jeonse') >= 0 || ht.indexOf('mortgage') >= 0) housingFields.push(CAT_META.housing.fields[2]);
-    if (ht.indexOf('subscription') >= 0) housingFields.push(CAT_META.housing.fields[1]);
     if (housingFields.length > 0) s.push({ type: 'input', title: '금액을 입력해 주세요', fields: housingFields, extra: (ht.indexOf('jeonse') >= 0 || ht.indexOf('mortgage') >= 0) ? 'loanCompare' : null });
     s.push({ type: 'done' }); return s;
   }
@@ -1618,8 +1615,7 @@ function onFlowMulti(key, value) {
   catFlow.answers[key] = arr;
   if (key === 'donTypes') { var ci = catInputs.donation; ['hometown','political','religious','general'].forEach(function(t) { if (arr.indexOf(t) < 0) ci[t] = 0; }); }
   if (key === 'housingTypes') {
-    if (value === 'none') { catFlow.answers[key] = ['none']; }
-    else { var ni = arr.indexOf('none'); if (ni >= 0) arr.splice(ni, 1); catFlow.answers[key] = arr; }
+    catFlow.answers[key] = arr;
   }
   renderCatStep();
 }
