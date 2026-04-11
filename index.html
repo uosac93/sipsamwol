@@ -1504,21 +1504,18 @@ function renderCatStep() {
     var ci = catInputs.card, ti = getCardThresholdInfo();
     var tp = getTotalPay();
     var baseLimit = tp <= 70000000 ? 300 : (tp <= 120000000 ? 250 : 200);
-    h += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">';
-    h += '<div style="font-size:13px;color:var(--text3)">내 공제 한도 <b style="color:var(--blue)">' + baseLimit + '만원</b></div>';
-    h += '<button class="card-import-btn" style="width:auto;margin:0;height:36px;font-size:13px;padding:0 16px" onclick="openAuthPicker()">간편인증 불러오기</button>';
-    h += '</div>';
-    // 카드별 카드형 입력
+    // 카드별 입력 + 공제율 표시
     CAT_META.card.fields.forEach(function(f) {
       var val = ci[f.key] || 0;
-      var ded = ti.perCard[f.key];
+      var ratePct = Math.round(f.rate * 100);
       h += '<div class="card-field-row">';
       h += '<div class="card-field-top"><span class="card-field-name">' + f.label + '</span>';
-      if (val > 0 && ti.overThreshold) h += '<span class="card-field-deduct">' + fmtAmt(ded.deductible) + '원 공제</span>';
+      h += '<span style="font-size:12px;color:var(--text3)">' + ratePct + '% 공제</span>';
       h += '</div>';
       h += '<div class="card-field-input"><div class="cat-input-wrap"><input class="cat-input" type="tel" inputmode="numeric" data-field="' + f.key + '" value="' + (val > 0 ? val.toLocaleString() : '') + '" placeholder="0" oninput="onCatInput(this)"><span class="cat-input-unit">만원</span></div></div>';
       h += '</div>';
     });
+    h += '<div style="font-size:13px;color:var(--text3);margin-top:8px">공제 한도 <b style="color:var(--blue)">' + baseLimit + '만원</b> · 25% 문턱 <b style="color:var(--blue)">' + fmtAmt(ti.threshold) + '원</b></div>';
     // 문턱 + 한도
     h += '<div id="cardThresholdArea">' + renderCardThresholdHTML() + '</div>';
     var saving = calcCatSaving('card');
