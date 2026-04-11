@@ -1845,7 +1845,13 @@ function showToast(msg) {
 (function() {
   if (loadFromLocal() && salary >= 100) {
     salaryInput.value = salary.toLocaleString();
-    if (spouseSalary > 0) hasSpouseFlag = true;
+    calcBtn.disabled = false;
+    salaryHint.textContent = '월 약 ' + Math.round(salary / 12).toLocaleString() + '만원';
+    if (spouseSalary > 0) {
+      hasSpouseFlag = true;
+      document.getElementById('spouseSalarySection').style.display = 'block';
+      document.getElementById('spouseSalaryInput').value = spouseSalary.toLocaleString();
+    }
   }
 })();
 </script>
