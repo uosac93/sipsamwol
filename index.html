@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>십삼월</title>
+<title>십삼월 — Option B</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -297,55 +297,59 @@ body {
 }
 .subtype-item:active { background: #e5e8eb; }
 
-/* === Home === */
-.home-header {
-  padding: 64px var(--side) 0;
-  padding-bottom: 32px;
-  min-height: 200px;
-  display: flex; flex-direction: column; justify-content: flex-end;
+/* === Home — Option B: Card Layout === */
+.home-cards-wrap {
+  padding: 56px var(--side) 0;
+  display: flex; flex-direction: column; gap: 12px;
 }
-.home-profile-chip {
+
+/* Refund hero card */
+.home-refund-card {
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+  border-radius: 20px; padding: 28px 24px 24px;
+  position: relative; overflow: hidden;
+}
+.home-refund-card .home-profile-chip {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 14px; background: var(--bg2); border-radius: 8px;
-  margin-bottom: 32px; cursor: pointer; min-height: 36px;
-  width: fit-content;
+  padding: 6px 12px; background: rgba(255,255,255,0.7); border-radius: 8px;
+  margin-bottom: 20px; cursor: pointer; min-height: 32px;
+  width: fit-content; backdrop-filter: blur(8px);
 }
 .home-profile-chip span:first-child { font-size: 13px; font-weight: 500; color: var(--text2); }
 .home-profile-chip span:last-child { font-size: 13px; color: var(--text3); font-weight: 500; }
 
 .home-my-label { font-size: 13px; font-weight: 500; color: var(--text3); margin-bottom: 8px; line-height: 19.5px; }
 .home-my-amount {
-  font-size: 34px; font-weight: 700; letter-spacing: -1.5px; color: var(--text);
-  line-height: 46px;
+  font-size: 36px; font-weight: 800; letter-spacing: -1.5px; color: var(--text);
+  line-height: 44px;
 }
 .home-my-amount.negative { color: var(--red); }
 .home-my-amount.bump { transform: scale(1.02); }
 .home-my-unit { font-size: 16px; font-weight: 700; margin-left: 2px; }
-.home-my-sub { font-size: 13px; color: var(--text4); margin-top: 8px; font-weight: 400; line-height: 19.5px; }
+.home-my-sub { font-size: 13px; color: var(--text3); margin-top: 8px; font-weight: 400; line-height: 19.5px; }
 
-.home-section { padding: 0 var(--side); }
-.home-section-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; line-height: 25.5px; }
-.home-section-sub { font-size: 13px; color: var(--text3); margin-bottom: 16px; }
-
-/* Saving tips */
-.home-tips-section { margin-top: 0; padding: 24px var(--side) 0; border-top: none; background: transparent; }
-.home-tips-section::before { content: ''; display: block; height: 8px; background: var(--bg2); margin: 0 calc(-1 * var(--side)) 24px; }
-.home-tips-title { font-size: 13px; font-weight: 600; color: var(--text3); margin-bottom: 4px; line-height: 19.5px; }
-.home-tip-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--bg2); }
+/* Tips card */
+.home-tips-card {
+  background: var(--card); border-radius: 16px; padding: 20px;
+}
+.home-tips-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 16px; line-height: 22.5px; }
+.home-tip-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.04); }
 .home-tip-row:last-child { border-bottom: none; }
 .home-tip-text { font-size: 15px; color: var(--text); font-weight: 400; line-height: 22.5px; }
-.home-tip-amount { font-size: 15px; color: var(--text3); font-weight: 400; white-space: nowrap; line-height: 22.5px; }
+.home-tip-amount { font-size: 15px; color: var(--brand); font-weight: 600; white-space: nowrap; line-height: 22.5px; }
 
-/* Spouse toggle */
+/* Spouse card */
+.home-spouse-outer-card {
+  background: var(--card); border-radius: 16px; padding: 20px; overflow: hidden;
+}
 .spouse-toggle-btn {
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  width: 100%; padding: 16px 0; border: none; border-radius: 0;
-  background: transparent; font-size: 15px; font-weight: 500; color: var(--text);
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
+  width: 100%; padding: 0; border: none; border-radius: 0;
+  background: transparent; font-size: 15px; font-weight: 700; color: var(--text);
   font-family: inherit; cursor: pointer; transition: all 0.2s;
-  margin-top: 0; padding-top: 24px;
 }
 .spouse-toggle-btn:active { opacity: 0.5; }
-.spouse-toggle-btn svg { width: 16px; height: 16px; transition: transform 0.3s; }
+.spouse-toggle-btn svg { width: 16px; height: 16px; transition: transform 0.3s; color: var(--text3); }
 .spouse-toggle-btn.open svg { transform: rotate(180deg); }
 .spouse-body {
   max-height: 0; overflow: hidden; opacity: 0;
@@ -353,9 +357,8 @@ body {
 }
 .spouse-body.open { max-height: 2000px; opacity: 1; }
 
-/* Spouse card */
 .home-spouse-card {
-  padding: 16px 20px; background: var(--bg2); border-radius: 16px;
+  padding: 16px; background: var(--bg); border-radius: 12px; margin-top: 16px;
 }
 .home-spouse-label { font-size: 13px; font-weight: 600; color: var(--text3); margin-bottom: 10px; }
 .home-spouse-row { display: flex; align-items: center; gap: 8px; }
@@ -374,12 +377,31 @@ body {
 }
 .home-spouse-refund-val { font-weight: 700; color: var(--brand); font-size: 13px; }
 
-/* Family combined */
+/* Family combined card */
 .home-family-card {
-  padding: 20px; background: var(--bg2); border-radius: 16px;
+  padding: 20px; background: var(--bg); border-radius: 12px; margin-top: 12px;
 }
 .home-family-total-label { font-size: 15px; font-weight: 700; color: var(--text); }
 .home-family-total-value { font-size: 18px; font-weight: 800; color: var(--text); }
+
+/* Detail CTA card */
+.home-detail-card {
+  background: var(--card); border-radius: 16px; padding: 20px;
+  text-align: center;
+}
+
+/* Keep legacy section compat */
+.home-section { padding: 0; }
+.home-section-title { font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; line-height: 25.5px; }
+.home-section-sub { font-size: 13px; color: var(--text3); margin-bottom: 16px; }
+.section-divider { display: none; }
+
+/* Card stagger entrance */
+.card-stagger { opacity: 0; transform: translateY(16px); }
+.card-stagger.show {
+  opacity: 1; transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1);
+}
 
 /* Family optimization */
 .fopt-card {
@@ -411,10 +433,10 @@ body {
 .fopt-total-unit { font-size: 14px; font-weight: 700; margin-left: 2px; }
 .fopt-total-diff { font-size: 13px; font-weight: 700; color: var(--green); margin-top: 6px; min-height: 18px; }
 
-.home-detail-label { font-size: 13px; color: var(--text4); text-align: center; margin-bottom: 10px; }
+.home-detail-label { font-size: 13px; color: var(--text3); text-align: center; margin-bottom: 10px; }
 .home-detail-btn {
   width: 100%; height: 52px; border: none; border-radius: 12px;
-  background: var(--bg2); font-family: inherit; font-size: 15px;
+  background: var(--bg); font-family: inherit; font-size: 15px;
   font-weight: 600; color: var(--text2); cursor: pointer;
   transition: background 0.15s; display: flex; align-items: center; justify-content: center;
 }
@@ -4231,27 +4253,27 @@ function renderSimpleHome() {
 
   var container = document.getElementById('tabHomeContent');
 
-  // === Build HTML ===
-  var html = '';
+  // === Build Card-Based HTML ===
+  var html = '<div class="home-cards-wrap">';
 
-  // 1. "돌려받을 돈" header
-  html += '<div class="home-header">' +
-    '<div class="home-profile-chip stagger-in" onclick="editProfileFromHome()">' +
+  // Card 1: Refund hero card (gradient)
+  html += '<div class="home-refund-card card-stagger">' +
+    '<div class="home-profile-chip" onclick="editProfileFromHome()">' +
       '<span>연봉 ' + fmt(totalSalary) + '만원 · ' + simpleFamily + '명</span>' +
       '<span>수정</span>' +
     '</div>' +
-    '<div class="home-my-label stagger-in">' + (myPositive ? '돌려받을 돈' : '더 내야 할 돈') + '</div>' +
-    '<div class="home-my-amount stagger-in" id="homeMyAmount">' + mySign + '0<span class="home-my-unit">원</span></div>' +
-    '<div class="home-my-sub stagger-in" id="homeMyRefundSub"></div>' +
+    '<div class="home-my-label">' + (myPositive ? '돌려받을 돈' : '더 내야 할 돈') + '</div>' +
+    '<div class="home-my-amount" id="homeMyAmount">' + mySign + '0<span class="home-my-unit">원</span></div>' +
+    '<div class="home-my-sub" id="homeMyRefundSub"></div>' +
   '</div>';
 
-  // 2. "더 받을 수 있어요" 절세 추천 섹션 (심플 리스트)
+  // Card 2: Tips card
   var tips = buildSavingTips();
   if (tips.length > 0) {
-    html += '<div class="home-section home-tips-section">' +
-      '<div class="home-tips-title stagger-in">더 받을 수 있어요</div>';
-    tips.forEach(function(tip, idx) {
-      html += '<div class="home-tip-row stagger-in">' +
+    html += '<div class="home-tips-card card-stagger">' +
+      '<div class="home-tips-title">더 받을 수 있어요</div>';
+    tips.forEach(function(tip) {
+      html += '<div class="home-tip-row">' +
         '<span class="home-tip-text">' + tip.text + '</span>' +
         '<span class="home-tip-amount">최대 ' + fmt(tip.saving) + '만원</span>' +
       '</div>';
@@ -4259,49 +4281,46 @@ function renderSimpleHome() {
     html += '</div>';
   }
 
-  // 3. "배우자도 같이 해볼래요?" — 접기/펼치기
+  // Card 3: Spouse card (separate card)
   var spouseOpen = hasSpouse;
-  html += '<div style="height:8px;background:var(--bg2);margin:0;"></div>' +
-    '<div class="home-section" id="spouseSection">' +
-    '<button class="spouse-toggle-btn stagger-in' + (spouseOpen ? ' open' : '') + '" id="spouseToggleBtn" onclick="toggleSpouseSection()">' +
+  html += '<div class="home-spouse-outer-card card-stagger" id="spouseSection">' +
+    '<button class="spouse-toggle-btn' + (spouseOpen ? ' open' : '') + '" id="spouseToggleBtn" onclick="toggleSpouseSection()">' +
       '배우자도 같이 해볼래요?' +
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
     '</button>' +
     '<div class="spouse-body' + (spouseOpen ? ' open' : '') + '" id="spouseBody">' +
-      '<div style="padding-top:16px;">' +
-        '<div class="home-spouse-card">' +
-          '<div class="home-spouse-row">' +
-            '<input class="home-spouse-input" id="homeSpouseInput" type="text" inputmode="numeric" style="font-size:18px;" placeholder="배우자 연봉 입력" value="' + (hasSpouse ? Number(homeSpouseSalary).toLocaleString() : '') + '" oninput="onHomeSpouseInput(this)">' +
-            '<span class="home-spouse-unit">만원</span>' +
-          '</div>' +
-          (hasSpouse
-            ? '<div class="home-spouse-refund" style="margin-top:8px;"><span style="font-size:13px;color:var(--text3);">배우자 환급</span><span class="home-spouse-refund-val" id="homeSpRefundVal">' + (spRefund >= 0 ? '+' : '-') + fmt(Math.abs(spRefund)) + '원</span></div>'
-            : ''
-          ) +
-        '</div>';
+      '<div class="home-spouse-card">' +
+        '<div class="home-spouse-row">' +
+          '<input class="home-spouse-input" id="homeSpouseInput" type="text" inputmode="numeric" style="font-size:18px;" placeholder="배우자 연봉 입력" value="' + (hasSpouse ? Number(homeSpouseSalary).toLocaleString() : '') + '" oninput="onHomeSpouseInput(this)">' +
+          '<span class="home-spouse-unit">만원</span>' +
+        '</div>' +
+        (hasSpouse
+          ? '<div class="home-spouse-refund" style="margin-top:8px;"><span style="font-size:13px;color:var(--text3);">배우자 환급</span><span class="home-spouse-refund-val" id="homeSpRefundVal">' + (spRefund >= 0 ? '+' : '-') + fmt(Math.abs(spRefund)) + '원</span></div>'
+          : ''
+        ) +
+      '</div>';
 
-  // 4. Family combined — 합산 금액만 표시
+  // Family combined inside spouse card
   if (hasSpouse) {
     var famSign = familyRefund >= 0 ? '+' : '-';
-    html += '<div class="home-family-card" id="homeFamilyCard" style="margin-top:16px;text-align:center;padding:20px;">' +
+    html += '<div class="home-family-card" id="homeFamilyCard" style="text-align:center;">' +
         '<div style="font-size:13px;font-weight:600;color:var(--text3);margin-bottom:4px;">우리 가족 합산</div>' +
         '<div class="home-family-total-value" id="homeFamTotal" style="font-size:24px;">' + famSign + fmt(Math.abs(familyRefund)) + '<span style="font-size:14px;font-weight:700;margin-left:2px;">원</span></div>' +
       '</div>';
 
-    // 5. Optimization suggestions
     html += renderFamilyOptimization(suggestions, familyRefund);
   }
 
-  html += '</div>' + // close spouse padding div
-    '</div>' + // close spouse-body
-  '</div>'; // close spouseSection
+  html += '</div>' + // close spouse-body
+  '</div>'; // close spouse outer card
 
-  // 6. "더 정확하게 알고 싶다면" detail button
-  html += '<div style="height:8px;background:var(--bg2);margin:0;"></div>' +
-    '<div class="home-section" style="padding-bottom:40px; padding-top:24px;">' +
-    '<div class="home-detail-label stagger-in">더 정확하게 알고 싶다면</div>' +
-    '<button class="home-detail-btn stagger-in" onclick="openDetailModeSheet()">상세 계산하기</button>' +
+  // Card 4: Detail CTA card
+  html += '<div class="home-detail-card card-stagger">' +
+    '<div class="home-detail-label">더 정확하게 알고 싶다면</div>' +
+    '<button class="home-detail-btn" onclick="openDetailModeSheet()">상세 계산하기</button>' +
   '</div>';
+
+  html += '</div>'; // close home-cards-wrap
 
   container.innerHTML = html;
 
@@ -4332,11 +4351,11 @@ function renderSimpleHome() {
     requestAnimationFrame(animateMyRefund);
   }
 
-  // Stagger entrance
-  var staggerEls = document.querySelectorAll('#tabHomeContent .stagger-in');
-  staggerEls.forEach(function(el) { el.classList.remove('show'); });
-  staggerEls.forEach(function(el, i) {
-    setTimeout(function() { el.classList.add('show'); }, 60 + i * 50);
+  // Card stagger entrance (0.1s interval)
+  var cardEls = document.querySelectorAll('#tabHomeContent .card-stagger');
+  cardEls.forEach(function(el) { el.classList.remove('show'); });
+  cardEls.forEach(function(el, i) {
+    setTimeout(function() { el.classList.add('show'); }, 80 + i * 100);
   });
 }
 
