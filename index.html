@@ -37,46 +37,52 @@ body{
 /* SPLASH */
 .splash{
   position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;
-  background:linear-gradient(165deg,#1B64DA 0%,#3182F6 40%,#4A9AFF 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--bg);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
   max-width:440px;margin:0 auto;overflow:hidden;
 }
 .splash.fade-out{opacity:0;pointer-events:none;transition:opacity .4s ease-out}
-.splash-bg-num{
-  position:absolute;font-size:280px;font-weight:900;color:rgba(255,255,255,.07);
-  letter-spacing:-12px;top:50%;left:50%;transform:translate(-50%,-55%);
-  pointer-events:none;user-select:none;
-  opacity:0;animation:splashBgNum 1.2s cubic-bezier(.16,1,.3,1) .05s forwards;
-}
-.splash-center{display:flex;flex-direction:column;align-items:center;margin-top:-20px;position:relative;z-index:1}
-.splash-tag{
-  font-size:12px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:3px;
-  margin-bottom:20px;
-  opacity:0;animation:splashFade .6s ease-out .3s forwards;
+.splash-center{display:flex;flex-direction:column;align-items:center;margin-top:-40px;position:relative;z-index:1}
+.splash-hero{
+  font-size:120px;font-weight:900;letter-spacing:-6px;line-height:1;
+  background:linear-gradient(135deg,#1B64DA,#3182F6,#4A9AFF);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  opacity:0;animation:splashHero .9s cubic-bezier(.16,1,.3,1) .1s forwards;
 }
 .splash-title{
-  font-size:52px;font-weight:900;color:#fff;letter-spacing:-2.5px;
-  opacity:0;animation:splashTitle .8s cubic-bezier(.16,1,.3,1) .15s forwards;
+  font-size:28px;font-weight:800;color:var(--text);letter-spacing:-1px;margin-top:4px;
+  opacity:0;animation:splashFade .6s ease-out .4s forwards;
+}
+.splash-title-accent{
+  background:linear-gradient(135deg,#1B64DA,#3182F6);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .splash-desc{
-  font-size:16px;font-weight:500;color:rgba(255,255,255,.75);margin-top:14px;letter-spacing:-.2px;
-  opacity:0;animation:splashFade .6s ease-out .55s forwards;
+  font-size:15px;font-weight:500;color:var(--text3);margin-top:12px;letter-spacing:-.2px;
+  opacity:0;animation:splashFade .6s ease-out .6s forwards;
 }
-.splash-bottom{position:absolute;bottom:48px;left:var(--pad);right:var(--pad);opacity:0;animation:splashSlideUp .6s cubic-bezier(.16,1,.3,1) .85s forwards;z-index:1}
+.splash-refund{
+  margin-top:32px;
+  opacity:0;animation:splashFade .6s ease-out .8s forwards;
+}
+.splash-refund-label{font-size:13px;font-weight:600;color:var(--text3)}
+.splash-refund-amount{
+  font-size:32px;font-weight:900;letter-spacing:-1.5px;margin-top:4px;
+  background:linear-gradient(135deg,#1B64DA,#3182F6);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.splash-bottom{position:absolute;bottom:48px;left:var(--pad);right:var(--pad);opacity:0;animation:splashSlideUp .6s cubic-bezier(.16,1,.3,1) 1s forwards;z-index:1}
 .splash-start{
-  width:100%;height:56px;border:none;border-radius:16px;background:#fff;color:var(--blue);
+  width:100%;height:56px;border:none;border-radius:16px;background:var(--blue);color:#fff;
   font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;
   transition:transform .15s,box-shadow .15s;
-  box-shadow:0 4px 20px rgba(0,0,0,.15);
+  box-shadow:0 4px 16px rgba(49,130,246,.3);
 }
-.splash-start:active{transform:scale(.96);box-shadow:0 2px 10px rgba(0,0,0,.1)}
-@keyframes splashBgNum{
-  0%{opacity:0;transform:translate(-50%,-55%) scale(.7)}
-  100%{opacity:1;transform:translate(-50%,-55%) scale(1)}
-}
-@keyframes splashTitle{
-  0%{opacity:0;transform:scale(.8) translateY(20px)}
-  60%{opacity:1;transform:scale(1.02) translateY(-2px)}
+.splash-start:active{transform:scale(.96);box-shadow:0 2px 8px rgba(49,130,246,.2)}
+@keyframes splashHero{
+  0%{opacity:0;transform:scale(.6) translateY(30px)}
+  60%{opacity:1;transform:scale(1.03) translateY(-3px)}
   100%{opacity:1;transform:scale(1) translateY(0)}
 }
 @keyframes splashFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -436,14 +442,17 @@ body{
 
 <!-- SPLASH -->
 <div id="splash" class="splash">
-  <div class="splash-bg-num">13</div>
   <div class="splash-center">
-    <div class="splash-tag">연말정산</div>
-    <div class="splash-title">십삼월</div>
-    <div class="splash-desc">13번째 월급, 미리 준비하세요</div>
+    <div class="splash-hero">13</div>
+    <div class="splash-title"><span class="splash-title-accent">십삼월</span>의 월급</div>
+    <div class="splash-desc">연말정산, 미리 준비하면 더 받아요</div>
+    <div class="splash-refund">
+      <div class="splash-refund-label">평균 환급액</div>
+      <div class="splash-refund-amount" id="splashRefund">+0원</div>
+    </div>
   </div>
   <div class="splash-bottom">
-    <button class="splash-start" onclick="dismissSplash()">시작하기</button>
+    <button class="splash-start" onclick="dismissSplash()">내 환급액 확인하기</button>
   </div>
 </div>
 
@@ -635,6 +644,22 @@ body{
 // ===========================
 // SPLASH
 // ===========================
+(function splashCountUp() {
+  var target = 1230000, dur = 1200, el = document.getElementById('splashRefund');
+  if (!el) return;
+  setTimeout(function() {
+    var start = null;
+    function ease(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      el.textContent = '+' + Math.round(ease(p) * target).toLocaleString() + '원';
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }, 1000);
+})();
+
 function dismissSplash() {
   var el = document.getElementById('splash');
   el.classList.add('fade-out');
