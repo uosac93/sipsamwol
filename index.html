@@ -22,10 +22,16 @@ body{
   overflow-x:hidden;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);
 }
 .screen{display:none;min-height:100vh;flex-direction:column}
-.screen.active{display:flex}
+.screen.active{display:flex;animation:fadeIn .3s ease-out}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes countUp{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes staggerIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes checkPop{0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes fillBar{from{width:0}}
+
+/* APP NAME */
+.app-name{font-size:14px;font-weight:700;color:var(--blue);text-align:center;padding-top:16px}
 
 /* INPUT */
 .input-screen{flex:1;display:flex;flex-direction:column;padding:0 var(--pad)}
@@ -65,11 +71,11 @@ body{
 .result-screen{position:relative;background:var(--bg)}
 .result-fullscreen{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:0 var(--pad);min-height:100vh;position:relative;
+  padding:0 var(--pad);min-height:calc(100vh - 140px);
 }
 .result-top-bar{
-  position:absolute;top:16px;left:var(--pad);right:var(--pad);
   display:flex;justify-content:space-between;align-items:center;
+  padding:0 var(--pad);margin-bottom:8px;
   animation:fadeIn .4s ease-out .8s both;
 }
 .reset-btn{border:none;background:none;font-family:inherit;font-size:14px;font-weight:500;color:var(--text3);cursor:pointer;padding:8px 0}
@@ -85,15 +91,16 @@ body{
 .result-amount .unit{font-size:28px;font-weight:700;margin-left:2px}
 .result-amount.negative{color:var(--red)}
 .result-sub{font-size:14px;color:var(--text3);margin-top:16px;animation:slideUp .6s ease-out .4s both;white-space:pre-line}
-.result-actions{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:32px;animation:slideUp .6s ease-out .6s both}
-.view-tips-btn{
-  border:none;background:none;font-family:inherit;font-size:15px;font-weight:600;color:var(--blue);
-  cursor:pointer;padding:12px 16px;display:flex;align-items:center;gap:6px;
+.result-actions{display:flex;flex-direction:column;gap:10px;margin-top:32px;width:100%;animation:slideUp .6s ease-out .6s both}
+.action-card{
+  width:100%;background:var(--bg2);border:none;border-radius:14px;padding:18px 20px;
+  font-family:inherit;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+  transition:transform .15s;
 }
-.view-tips-btn svg{width:16px;height:16px}
-.view-tips-btn:active{opacity:.5}
-.detail-mode-btn{border:none;background:none;font-family:inherit;font-size:14px;font-weight:500;color:var(--text3);cursor:pointer;padding:8px 16px}
-.detail-mode-btn:active{opacity:.5}
+.action-card:active{transform:scale(.98)}
+.action-card-title{font-size:15px;font-weight:600;color:var(--text)}
+.action-card-sub{font-size:13px;color:var(--text3);margin-top:2px}
+.action-card-arrow{font-size:16px;color:var(--text4)}
 
 /* PANELS */
 .panel-overlay{
@@ -130,8 +137,13 @@ body{
 
 .cat-card{
   background:var(--bg);border-radius:14px;padding:18px 20px;margin-bottom:10px;cursor:pointer;
-  transition:transform .15s;
+  transition:transform .15s;animation:staggerIn .4s ease-out both;
 }
+.cat-card:nth-child(2){animation-delay:.05s}
+.cat-card:nth-child(3){animation-delay:.1s}
+.cat-card:nth-child(4){animation-delay:.15s}
+.cat-card:nth-child(5){animation-delay:.2s}
+.cat-card:nth-child(6){animation-delay:.25s}
 .cat-card:active{transform:scale(.98)}
 .cat-card-top{display:flex;justify-content:space-between;align-items:center}
 .cat-card-name{font-size:15px;font-weight:600;color:var(--text)}
@@ -204,7 +216,8 @@ body{
   font-family:inherit;cursor:pointer;margin-bottom:10px;transition:all .15s;
   text-align:left;padding:0 20px;display:flex;align-items:center;
 }
-.choice-btn:active{transform:scale(.97)}
+.choice-btn:active{transform:scale(.97);transition:transform .1s}
+.choice-btn{transition:all .2s cubic-bezier(.16,1,.3,1)}
 .choice-btn.selected{border-color:var(--blue);background:var(--blue-bg);color:var(--blue)}
 .flow-info-box{background:var(--bg2);border-radius:14px;padding:20px;margin:24px 0}
 .flow-info-text{font-size:14px;color:var(--text2);line-height:1.6}
@@ -223,6 +236,7 @@ body{
 .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;margin-left:8px;vertical-align:middle}
 .badge-me{background:var(--blue-bg);color:var(--blue)}
 .badge-spouse{background:#FFF0F0;color:var(--red)}
+.badge-plan{background:#FFF8E1;color:#F59F00}
 
 /* ADVICE BOX */
 .advice-box{background:var(--bg2);border-radius:12px;padding:14px 16px;margin:12px 0;font-size:13px;color:var(--text2);line-height:1.6}
@@ -238,6 +252,21 @@ body{
 .threshold-info b{color:var(--blue);font-weight:700}
 .threshold-alert{font-size:13px;color:var(--blue);font-weight:600;margin-top:8px}
 .threshold-alert.done{color:var(--green)}
+
+/* CARD LIMIT TRACKER */
+.limit-tracker{margin:16px 0}
+.limit-tracker-title{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px}
+.limit-item{margin-bottom:14px}
+.limit-item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.limit-item-name{font-size:13px;font-weight:600;color:var(--text2)}
+.limit-item-amount{font-size:13px;font-weight:700;color:var(--blue)}
+.limit-item-amount.full{color:var(--green)}
+.limit-bar-bg{height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.limit-bar-fill{height:100%;border-radius:3px;background:var(--blue);transition:width .6s cubic-bezier(.16,1,.3,1);animation:fillBar .6s cubic-bezier(.16,1,.3,1)}
+.limit-bar-fill.full{background:var(--green)}
+.limit-item-msg{font-size:12px;margin-top:4px}
+.limit-item-msg.done{color:var(--green);font-weight:600}
+.limit-item-msg.remain{color:var(--text3)}
 
 /* CARD IMPORT */
 .card-import-btn{
@@ -309,6 +338,7 @@ body{
 <!-- INPUT SCREEN -->
 <div id="screen-input" class="screen active">
   <div class="input-screen">
+    <div class="app-name">십삼월</div>
     <div class="step-bar">
       <div class="step-dots">
         <div class="step-num active">1</div>
@@ -340,7 +370,7 @@ body{
 
 <!-- RESULT SCREEN -->
 <div id="screen-result" class="screen">
-  <div class="result-fullscreen">
+  <div style="padding:0 var(--pad)">
     <div class="step-bar" id="resultStepBar">
       <div class="step-dots">
         <div class="step-num done">1</div>
@@ -353,22 +383,27 @@ body{
       </div>
       <div class="step-label">2단계 — 환급 확인</div>
     </div>
-    <div class="result-top-bar" style="position:relative;top:0;margin-bottom:8px">
-      <button class="reset-btn" onclick="goBack()">← 다시 계산</button>
-      <button class="settings-btn" onclick="openSettings()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      </button>
-    </div>
+  </div>
+  <div class="result-top-bar">
+    <button class="reset-btn" onclick="goBack()">← 다시 계산</button>
+    <button class="settings-btn" onclick="openSettings()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </div>
+  <div class="result-fullscreen">
     <div class="result-label" id="resultLabel">예상 환급액</div>
     <div id="resultAmount" class="result-amount"></div>
     <div id="resultSub" class="result-sub"></div>
     <div id="tipNudge" class="result-sub" style="color:var(--blue);font-weight:600;margin-top:24px;animation:slideUp .7s ease-out .7s both"></div>
     <div class="result-actions">
-      <button class="view-tips-btn" onclick="openTips()">
-        절세 방법 보기
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <button class="action-card" onclick="openTips()">
+        <div><div class="action-card-title">더 돌려받기</div><div class="action-card-sub">항목별로 얼마나 돌려받는지 확인</div></div>
+        <span class="action-card-arrow">›</span>
       </button>
-      <button class="detail-mode-btn" onclick="openDetail()">상세 계산 내역 보기</button>
+      <button class="action-card" onclick="openDetail()">
+        <div><div class="action-card-title">상세 계산 내역</div><div class="action-card-sub">세금 계산 과정 자세히 보기</div></div>
+        <span class="action-card-arrow">›</span>
+      </button>
     </div>
   </div>
 </div>
@@ -379,8 +414,20 @@ body{
 <!-- TIPS PANEL (5 카테고리) -->
 <div id="tipsPanel" class="bottom-panel">
   <div class="panel-handle-area" onclick="closeAllPanels()"><div class="panel-handle"></div></div>
+  <div class="step-bar" style="padding-top:4px;padding-bottom:8px">
+    <div class="step-dots">
+      <div class="step-num done">1</div>
+      <div class="step-line active"></div>
+      <div class="step-num done">2</div>
+      <div class="step-line active"></div>
+      <div class="step-num active">3</div>
+      <div class="step-line"></div>
+      <div class="step-num">4</div>
+    </div>
+    <div class="step-label">3단계 — 항목 입력</div>
+  </div>
   <div class="panel-header">
-    <div class="panel-title">절세 방법</div>
+    <div class="panel-title">더 돌려받기</div>
     <button class="panel-close" onclick="closeAllPanels()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
   <div id="tipsContent" class="panel-content"></div>
@@ -445,6 +492,7 @@ body{
 var salary = 0;
 var rate = 100;
 var spouseSalary = 0;
+var nonTaxMeal = true; // 비과세 식대 토글
 var lastResult = null;
 var spouseResult = null;
 
@@ -640,7 +688,7 @@ function lookupWithholding(pay) {
 function calcSimpleRefund(sal, fam) {
   var annual = sal * 10000;
   if (annual <= 0) return {refund:0,withheld:0,finalTax:0,totalPay:0,taxable:0,computed:0,eid:0,personal:0,socialIns:0,specialDed:0,earnedCredit:0,standardCredit:0,incomeTaxFinal:0,localTax:0,monthlyWithheld:0,earnedIncome:0};
-  var nonTax = 2400000;
+  var nonTax = nonTaxMeal ? 2400000 : 0;
   var tp = Math.max(annual - nonTax, 0);
   var eid = earnedIncomeDeduction(tp);
   var ei = tp - eid;
@@ -860,11 +908,11 @@ function getFamilyAdvice(catKey) {
     // 세율 높은 쪽이 공제율 높으니 유리
     var myPR = myTP <= 55000000 ? 0.15 : 0.12;
     var spPR = spTP <= 55000000 ? 0.15 : 0.12;
-    if (myPR > spPR) return { who: 'me', reason: '공제율이 ' + Math.round(myPR*100) + '%로 더 높아요' };
-    if (spPR > myPR) return { who: 'spouse', reason: '배우자 공제율이 ' + Math.round(spPR*100) + '%로 더 높아요' };
+    if (myPR > spPR) return { who: 'me', reason: '본인이 더 많이 돌려받아요' };
+    if (spPR > myPR) return { who: 'spouse', reason: '배우자가 더 많이 돌려받아요' };
     // 공제율 같으면 세율 높은 쪽
-    if (myMR >= spMR) return { who: 'me', reason: '적용 세율이 더 높아서 절세 효과가 커요' };
-    return { who: 'spouse', reason: '배우자 적용 세율이 더 높아서 절세 효과가 커요' };
+    if (myMR >= spMR) return { who: 'me', reason: '본인이 더 많이 돌려받아요' };
+    return { who: 'spouse', reason: '배우자가 더 많이 돌려받아요' };
   }
 
   if (catKey === 'living') {
@@ -875,8 +923,8 @@ function getFamilyAdvice(catKey) {
 
   if (catKey === 'donation') {
     // 세율 높은 쪽이 유리
-    if (myMR >= spMR) return { who: 'me', reason: '적용 세율이 더 높아서 공제 효과가 커요' };
-    return { who: 'spouse', reason: '배우자 적용 세율이 더 높아서 공제 효과가 커요' };
+    if (myMR >= spMR) return { who: 'me', reason: '본인 명의로 기부하면 더 많이 돌려받아요' };
+    return { who: 'spouse', reason: '배우자 명의로 기부하면 더 많이 돌려받아요' };
   }
 
   return null;
@@ -921,6 +969,11 @@ function getCardThresholdInfo() {
     overThreshold: totalSpend > threshold,
     deduction: totalDed,
     baseLimit: baseLimit,
+    baseDed: baseDed,
+    marketDed: totalSpend > threshold ? marketDed : 0,
+    marketLimit: 3000000,
+    transitDed: totalSpend > threshold ? transitDed : 0,
+    transitLimit: 3000000,
     totalLimit: totalLimit,
     limitPct: baseLimit > 0 ? Math.min(Math.round(baseDed / baseLimit * 100), 100) : 0,
     limitReached: baseDed >= baseLimit,
@@ -982,11 +1035,29 @@ var CAT_META = {
 };
 
 // ===========================
+// COUNTUP ANIMATION
+// ===========================
+function animateCountUp(el, targetVal, suffix, duration) {
+  suffix = suffix || '원';
+  duration = duration || 600;
+  var start = 0, startTime = null;
+  function easeOutExpo(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    var progress = Math.min((ts - startTime) / duration, 1);
+    var val = Math.round(easeOutExpo(progress) * targetVal);
+    el.textContent = fmtAmt(val) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  if (targetVal === 0) { el.textContent = '0' + suffix; return; }
+  requestAnimationFrame(step);
+}
+
+// ===========================
 // FORMAT
 // ===========================
 function fmtAmt(w) {
-  if (Math.abs(w) >= 10000) return Math.round(w / 10000).toLocaleString() + '만';
-  return w.toLocaleString();
+  return Math.round(w).toLocaleString();
 }
 function fmtWon(w) { return Math.round(w).toLocaleString() + '원'; }
 
@@ -1020,7 +1091,21 @@ function renderResult(r) {
   document.getElementById('resultLabel').textContent = pos ? '예상 환급액' : '추가 납부 예상액';
   var el = document.getElementById('resultAmount');
   el.className = 'result-amount' + (pos ? '' : ' negative');
-  el.innerHTML = (pos ? '+' : '-') + fmtAmt(amt) + '<span class="unit">원</span>';
+  el.innerHTML = '<span id="resultAmtNum">' + (pos ? '+' : '-') + '0</span><span class="unit">원</span>';
+  // 카운트업 애니메이션
+  var numEl = document.getElementById('resultAmtNum');
+  var prefix = pos ? '+' : '-';
+  (function animateResult() {
+    var dur = 800, startTime = null;
+    function easeOutExpo(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var p = Math.min((ts - startTime) / dur, 1);
+      numEl.textContent = prefix + fmtAmt(Math.round(easeOutExpo(p) * amt));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  })();
   var subText = '연봉 ' + salary.toLocaleString() + '만원 · 원천징수 ' + rate + '% 기준';
   if (hasSpouse() && spouseResult) {
     var combinedRefund = r.refund + spouseResult.refund;
@@ -1032,9 +1117,9 @@ function renderResult(r) {
   var totalCatSaving = calcAllCatSavings();
   var nudge = document.getElementById('tipNudge');
   if (totalCatSaving > 0) {
-    nudge.textContent = '절세 항목으로 ' + fmtAmt(totalCatSaving) + '원 더 돌려받을 수 있어요';
+    nudge.textContent = '추가로 ' + fmtAmt(totalCatSaving) + '원 더 돌려받을 수 있어요';
   } else {
-    nudge.textContent = '공제 항목을 입력하면 더 돌려받을 수 있어요';
+    nudge.textContent = '아래에서 항목을 입력하면 더 돌려받을 수 있어요';
   }
   renderDetail(r);
 }
@@ -1081,7 +1166,7 @@ function goBack() { closeAllPanels(); showScreen('input'); salaryInput.focus(); 
 // ===========================
 function renderTipsPanel() {
   var totalSaving = calcAllCatSavings();
-  var h = '<div class="tips-total"><div class="tips-total-label">내 절세 예상액</div><div class="tips-total-value">';
+  var h = '<div class="tips-total"><div class="tips-total-label">추가로 돌려받는 금액</div><div class="tips-total-value">';
   h += totalSaving > 0 ? fmtAmt(totalSaving) + '원' : '항목을 입력해 보세요';
   h += '</div></div>';
 
@@ -1103,7 +1188,7 @@ function renderTipsPanel() {
     }
     h += '</span><span class="cat-card-arrow">›</span></div>';
     h += '<div class="cat-card-saving ' + (hasInput ? '' : 'empty') + '">';
-    h += hasInput ? fmtAmt(saving) + '원 절세' : meta.desc;
+    h += hasInput ? fmtAmt(saving) + '원 돌려받아요' : meta.desc;
     h += '</div>';
 
     if (hasInput && maxSaving > 0) {
@@ -1117,6 +1202,11 @@ function renderTipsPanel() {
   });
 
   document.getElementById('tipsContent').innerHTML = h;
+  // 총액 카운트업
+  if (totalSaving > 0) {
+    var tv = document.querySelector('.tips-total-value');
+    if (tv) animateCountUp(tv, totalSaving, '원', 600);
+  }
 }
 
 // ===========================
@@ -1174,45 +1264,45 @@ function getCatSteps(key, ans) {
       if (ans.livingType === 'rent') s.push({ type: 'input', title: '월세를 얼마나 내나요?', sub: tp <= 70000000 ? '월세로 돌려받을 수 있어요' : '연봉 7천만원 초과 시 혜택이 없어요', fields: [CAT_META.housing.fields[0]] });
       else if (ans.livingType === 'jeonse') s.push({ type: 'input', title: '전세대출 이자를\n얼마나 내나요?', sub: '대출이자로 돌려받을 수 있어요', fields: [CAT_META.housing.fields[2]] });
       s.push({ type: 'choice', title: '주택청약에\n넣고 있나요?', sub: '청약 납입액으로도 돌려받아요', key: 'hasSubscription', options: [
-        { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }
+        { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '시작할 예정이에요', value: 'plan' }
       ]});
-      if (ans.hasSubscription === 'yes') s.push({ type: 'input', title: '주택청약 납입액을\n입력해 주세요', sub: '올해 넣은 총 금액이에요', fields: [CAT_META.housing.fields[1]] });
+      if (ans.hasSubscription === 'yes' || ans.hasSubscription === 'plan') s.push({ type: 'input', title: ans.hasSubscription === 'plan' ? '청약에 얼마나\n넣을 예정인가요?' : '주택청약 납입액을\n입력해 주세요', sub: ans.hasSubscription === 'plan' ? '예상 금액으로 얼마나 돌려받는지 확인해요' : '올해 넣은 총 금액이에요', fields: [CAT_META.housing.fields[1]] });
     } else if (ans.hasHouse === 'one') {
-      s.push({ type: 'choice', title: '주택담보대출이\n있으세요?', sub: '대출이자로 돌려받을 수 있어요', key: 'hasLoan', options: [
-        { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }
+      s.push({ type: 'choice', title: '주택담보대출이\n있나요?', sub: '대출이자로 돌려받을 수 있어요', key: 'hasLoan', options: [
+        { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '받을 예정이에요', value: 'plan' }
       ]});
-      if (ans.hasLoan === 'yes') s.push({ type: 'input', title: '대출이자를 얼마나\n내고 있나요?', sub: '올해 낸 이자 총액이에요', fields: [CAT_META.housing.fields[2]] });
+      if (ans.hasLoan === 'yes' || ans.hasLoan === 'plan') s.push({ type: 'input', title: ans.hasLoan === 'plan' ? '대출이자를 얼마나\n낼 예정인가요?' : '대출이자를 얼마나\n내고 있나요?', sub: ans.hasLoan === 'plan' ? '예상 금액으로 얼마나 돌려받는지 확인해요' : '올해 낸 이자 총액이에요', fields: [CAT_META.housing.fields[2]] });
     }
     s.push({ type: 'done' }); return s;
   }
   if (key === 'pension') {
     s.push({ type: 'choice', title: '연금저축이나 IRP에\n넣고 있나요?', sub: '넣은 만큼 돌려받아요', key: 'hasPension', options: [
-      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }
+      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '시작할 예정이에요', value: 'plan' }
     ]});
-    if (ans.hasPension === 'yes') s.push({ type: 'input', title: '연금 납입액을\n입력해 주세요', sub: '합산 900만원까지 돌려받아요', fields: [CAT_META.pension.fields[0], CAT_META.pension.fields[1]] });
+    if (ans.hasPension === 'yes' || ans.hasPension === 'plan') s.push({ type: 'input', title: ans.hasPension === 'plan' ? '얼마나 넣을\n예정인가요?' : '연금 납입액을\n입력해 주세요', sub: ans.hasPension === 'plan' ? '예상 금액으로 얼마나 돌려받는지 확인해요' : '합산 900만원까지 돌려받아요', fields: [CAT_META.pension.fields[0], CAT_META.pension.fields[1]] });
     s.push({ type: 'choice', title: '보장성 보험에\n가입했나요?', sub: '보험료로도 돌려받아요', key: 'hasInsurance', options: [
-      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }
+      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '가입할 예정이에요', value: 'plan' }
     ]});
-    if (ans.hasInsurance === 'yes') s.push({ type: 'input', title: '보험료를\n입력해 주세요', sub: '연간 납입액 기준', fields: [CAT_META.pension.fields[2]] });
+    if (ans.hasInsurance === 'yes' || ans.hasInsurance === 'plan') s.push({ type: 'input', title: ans.hasInsurance === 'plan' ? '보험료를 얼마나\n낼 예정인가요?' : '보험료를\n입력해 주세요', sub: ans.hasInsurance === 'plan' ? '예상 금액으로 얼마나 돌려받는지 확인해요' : '연간 납입액 기준', fields: [CAT_META.pension.fields[2]] });
     s.push({ type: 'done' }); return s;
   }
   if (key === 'living') {
     s.push({ type: 'choice', title: '올해 교육비\n지출이 있나요?', sub: '학비로 돌려받을 수 있어요', key: 'hasEducation', options: [
-      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }
+      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '지출 예정이에요', value: 'plan' }
     ]});
-    if (ans.hasEducation === 'yes') s.push({ type: 'input', title: '교육비를\n입력해 주세요', sub: '연간 지출액 기준', fields: [CAT_META.living.fields[0]] });
+    if (ans.hasEducation === 'yes' || ans.hasEducation === 'plan') s.push({ type: 'input', title: ans.hasEducation === 'plan' ? '교육비를 얼마나\n쓸 예정인가요?' : '교육비를\n입력해 주세요', sub: ans.hasEducation === 'plan' ? '예상 금액으로 얼마나 돌려받는지 확인해요' : '연간 지출액 기준', fields: [CAT_META.living.fields[0]] });
     s.push({ type: 'choice', title: '의료비 지출이\n있나요?', sub: '병원비가 많으면 돌려받을 수 있어요', key: 'hasMedical', options: [
-      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }
+      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '지출 예정이에요', value: 'plan' }
     ]});
-    if (ans.hasMedical === 'yes') s.push({ type: 'input', title: '의료비를\n입력해 주세요', sub: '연간 지출액 기준', fields: [CAT_META.living.fields[1]], extra: 'medicalAdvice' });
+    if (ans.hasMedical === 'yes' || ans.hasMedical === 'plan') s.push({ type: 'input', title: ans.hasMedical === 'plan' ? '의료비를 얼마나\n쓸 예정인가요?' : '의료비를\n입력해 주세요', sub: ans.hasMedical === 'plan' ? '예상 금액으로 얼마나 돌려받는지 확인해요' : '연간 지출액 기준', fields: [CAT_META.living.fields[1]], extra: 'medicalAdvice' });
     s.push({ type: 'done' }); return s;
   }
   if (key === 'donation') {
     s.push({ type: 'choice', title: '올해 기부한 적\n있나요?', sub: '기부한 만큼 돌려받아요', key: 'hasDonation', options: [
-      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }
+      { label: '네', value: 'yes' }, { label: '아니요', value: 'no' }, { label: '할 예정이에요', value: 'plan' }
     ]});
-    if (ans.hasDonation === 'yes') {
-      s.push({ type: 'multi', title: '어디에 기부했나요?', sub: '해당하는 항목을 모두 선택하세요', key: 'donTypes', options: [
+    if (ans.hasDonation === 'yes' || ans.hasDonation === 'plan') {
+      s.push({ type: 'multi', title: ans.hasDonation === 'plan' ? '어디에 기부할\n예정인가요?' : '어디에 기부했나요?', sub: '해당하는 항목을 모두 선택하세요', key: 'donTypes', options: [
         { label: '고향사랑기부금', value: 'hometown' }, { label: '정치자금 기부금', value: 'political' },
         { label: '종교단체 기부금', value: 'religious' }, { label: '일반 기부금', value: 'general' }
       ]});
@@ -1262,18 +1352,18 @@ function renderCatStep() {
     if (st.extra === 'medicalAdvice' && hasSpouse()) {
       var myTP = getTotalPay(), spTP = getSpouseTP();
       var ln = myTP <= spTP ? '본인' : '배우자', lt = Math.min(myTP, spTP) * 0.03;
-      h += '<div class="advice-box"><b>의료비는 가족 것을 한 사람에게 몰아서 공제받을 수 있어요.</b><br>';
-      h += '소득이 낮은 <b>' + ln + '</b> 명의로 몰면 3% 문턱(' + fmtAmt(lt) + '원)을 빨리 넘어서 공제 효과가 커요.<br>';
-      h += '부부, 자녀, 부모님 의료비 모두 한쪽으로 몰아서 공제받을 수 있어요.</div>';
+      h += '<div class="advice-box"><b>의료비는 가족 것을 한 사람에게 몰아서 돌려받을 수 있어요.</b><br>';
+      h += '소득이 낮은 <b>' + ln + '</b> 명의로 몰면 기준(' + fmtAmt(lt) + '원)을 빨리 넘어서 더 많이 돌려받아요.<br>';
+      h += '부부, 자녀, 부모님 의료비 모두 한쪽으로 몰아서 돌려받을 수 있어요.</div>';
     }
     var saving = calcCatSaving(catFlow.cat);
-    h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
+    h += '<div class="cat-result-box"><div class="cat-result-label">돌려받는 금액</div>';
     h += '<div class="cat-result-value" id="catSavingDisplay">' + fmtAmt(saving) + '원</div></div>';
     h += '<button class="btn-save-cat" onclick="nextFlowStep()">다음</button>';
   }
   if (st.type === 'cardInput') {
     // 카드 사용 내역 불러오기 버튼
-    h += '<button class="card-import-btn" onclick="showToast(\'토스 연동 후 자동으로 불러올 수 있어요\')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>카드 사용 내역 불러오기</button>';
+    h += '<button class="card-import-btn" onclick="showToast(\'토스 연동 후 자동으로 불러올 수 있어요\')"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#0064FF"/><path d="M5.5 7.5H14.5V9H11V15H9V9H5.5V7.5Z" fill="white"/></svg>토스에서 불러오기</button>';
     var ci = catInputs.card, ti = getCardThresholdInfo();
     // 카드별 입력 필드
     CAT_META.card.fields.forEach(function(f) {
@@ -1282,13 +1372,13 @@ function renderCatStep() {
       h += '<div class="card-field-row">';
       h += '<div class="card-field-info"><div class="card-field-name">' + f.label + '</div><div class="card-field-rate">' + f.hint + '</div></div>';
       h += '<div class="card-field-input"><div class="cat-input-wrap"><input class="cat-input" type="tel" inputmode="numeric" data-field="' + f.key + '" value="' + (val > 0 ? val.toLocaleString() : '') + '" placeholder="0" oninput="onCatInput(this)"><span class="cat-input-unit">만원</span></div>';
-      if (val > 0 && ti.overThreshold) h += '<div class="card-field-deduct">공제 ' + fmtAmt(ded.deductible) + '원</div>';
+      if (val > 0 && ti.overThreshold) h += '<div class="card-field-deduct">' + fmtAmt(ded.deductible) + '원 돌려받아요</div>';
       h += '</div></div>';
     });
     // 문턱 + 한도
     h += '<div id="cardThresholdArea">' + renderCardThresholdHTML() + '</div>';
     var saving = calcCatSaving('card');
-    h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
+    h += '<div class="cat-result-box"><div class="cat-result-label">돌려받는 금액</div>';
     h += '<div class="cat-result-value" id="catSavingDisplay">' + fmtAmt(saving) + '원</div></div>';
     h += '<button class="btn-save-cat" onclick="nextFlowStep()">다음</button>';
   }
@@ -1301,34 +1391,58 @@ function renderCatStep() {
 
 function renderCardThresholdHTML() {
   var ti = getCardThresholdInfo();
-  var h = '<div class="threshold-section"><div class="threshold-label">총급여 25% 문턱 현황</div>';
+  var h = '<div class="threshold-section"><div class="threshold-label">얼마나 써야 돌려받나요?</div>';
   h += '<div class="threshold-bar-bg"><div class="threshold-bar-fill' + (ti.overThreshold ? ' over' : '') + '" style="width:' + ti.thresholdPct + '%"></div></div>';
-  h += '<div class="threshold-info"><span>사용액 ' + fmtAmt(ti.totalSpend) + '원</span><span>문턱 <b>' + fmtAmt(ti.threshold) + '원</b></span></div>';
+  h += '<div class="threshold-info"><span>총 사용액 ' + fmtAmt(ti.totalSpend) + '원</span><span>기준 <b>' + fmtAmt(ti.threshold) + '원</b></span></div>';
   if (ti.overThreshold) {
-    h += '<div class="threshold-alert done">문턱을 넘었어요! 공제가 시작돼요</div>';
-    if (ti.limitReached) h += '<div class="threshold-alert done">기본 한도 ' + fmtAmt(ti.baseLimit) + '원에 도달했어요</div>';
-    else h += '<div class="threshold-alert">기본 한도(' + fmtAmt(ti.baseLimit) + '원)까지 ' + ti.limitPct + '% 채웠어요</div>';
+    h += '<div class="threshold-alert done">기준을 넘었어요! 돌려받기 시작해요</div>';
   } else if (ti.totalSpend > 0) {
-    h += '<div class="threshold-alert">' + fmtAmt(ti.threshold - ti.totalSpend) + '원 더 쓰면 공제가 시작돼요</div>';
+    h += '<div class="threshold-alert">' + fmtAmt(ti.threshold - ti.totalSpend) + '원 더 쓰면 돌려받기 시작해요</div>';
   }
-  h += '</div>'; return h;
+  h += '</div>';
+  // 3개 한도 트래커
+  if (ti.overThreshold) {
+    h += '<div class="limit-tracker"><div class="limit-tracker-title">한도별 현황</div>';
+    h += renderLimitItem('신용·체크·현금', ti.baseDed, ti.baseLimit);
+    h += renderLimitItem('전통시장 추가', ti.marketDed, ti.marketLimit);
+    h += renderLimitItem('대중교통 추가', ti.transitDed, ti.transitLimit);
+    h += '</div>';
+  }
+  return h;
+}
+
+function renderLimitItem(name, ded, limit) {
+  var pct = limit > 0 ? Math.min(Math.round(ded / limit * 100), 100) : 0;
+  var isFull = pct >= 100;
+  var remain = Math.max(limit - ded, 0);
+  var h = '<div class="limit-item"><div class="limit-item-header">';
+  h += '<span class="limit-item-name">' + name + '</span>';
+  h += '<span class="limit-item-amount' + (isFull ? ' full' : '') + '">' + fmtAmt(ded) + '원 / ' + fmtAmt(limit) + '원</span></div>';
+  h += '<div class="limit-bar-bg"><div class="limit-bar-fill' + (isFull ? ' full' : '') + '" style="width:' + pct + '%"></div></div>';
+  if (isFull) h += '<div class="limit-item-msg done">한도 달성 ✓</div>';
+  else if (ded > 0) h += '<div class="limit-item-msg remain">' + fmtAmt(remain) + '원 남았어요</div>';
+  h += '</div>';
+  return h;
 }
 
 function renderCatSummary() {
   var key = catFlow.cat, meta = CAT_META[key], saving = calcCatSaving(key), maxSaving = getMaxCatSaving(key);
   var h = '<div class="flow-step">' + meta.name + ' 결과</div>';
+  // 시뮬레이션 뱃지
+  var isPlan = Object.keys(catFlow.answers).some(function(k) { return catFlow.answers[k] === 'plan'; });
+  if (isPlan) h += '<div style="margin-bottom:12px"><span class="badge badge-plan">시뮬레이션</span> 예정 금액 기준 예상 결과예요</div>';
   var advice = getFamilyAdvice(key);
   if (advice) {
     h += '<div class="advice-box"><span class="badge ' + (advice.who === 'me' ? 'badge-me' : 'badge-spouse') + '">';
     h += (advice.who === 'me' ? '본인이 유리' : '배우자가 유리') + '</span> ' + advice.reason + '</div>';
   }
-  h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
+  h += '<div class="cat-result-box"><div class="cat-result-label">돌려받는 금액</div>';
   h += '<div class="cat-result-value">' + fmtAmt(saving) + '원</div></div>';
   if (maxSaving > 0) {
     var pct = Math.min(Math.round(saving / maxSaving * 100), 100), isFull = pct >= 100;
     if (saving < maxSaving) h += '<div style="font-size:13px;color:var(--text3);margin-top:-8px;margin-bottom:12px">최대 ' + fmtAmt(maxSaving) + '원까지 가능해요</div>';
     h += '<div class="cat-card-progress" style="margin:0 0 16px"><div class="progress-bar-bg"><div class="progress-bar-fill' + (isFull ? ' full' : '') + '" style="width:' + pct + '%"></div></div>';
-    h += '<div class="progress-info"><span class="progress-label">최대 절세 가능액 대비</span><span class="progress-pct' + (isFull ? ' full' : '') + '">' + pct + '%</span></div></div>';
+    h += '<div class="progress-info"><span class="progress-label">최대 가능 금액 대비</span><span class="progress-pct' + (isFull ? ' full' : '') + '">' + pct + '%</span></div></div>';
   }
   var ci = catInputs[key], hasAny = false;
   meta.fields.forEach(function(f) { if (ci[f.key] > 0) hasAny = true; });
@@ -1415,7 +1529,7 @@ function onCatInput(el) {
         var pc = ti.perCard[fk];
         if (pc && catInputs.card[fk] > 0) {
           var d = document.createElement('div'); d.className = 'card-field-deduct';
-          d.textContent = '공제 ' + fmtAmt(pc.deductible) + '원';
+          d.textContent = fmtAmt(pc.deductible) + '원 돌려받아요';
           wrap.appendChild(d);
         }
       });
@@ -1423,126 +1537,6 @@ function onCatInput(el) {
   }
 }
 
-/* OLD CODE REMOVED - START
-  PLACEHOLDER_if (advice) {
-    h += '<span class="badge ' + (advice.who === 'me' ? 'badge-me' : 'badge-spouse') + '">';
-    h += advice.who === 'me' ? '본인이 유리' : '배우자가 유리';
-    h += '</span>';
-  }
-  h += '</div>';
-  if (advice) {
-    h += '<div class="advice-box">' + advice.reason + '</div>';
-  } else {
-    h += '<div style="font-size:14px;color:var(--text3);margin-bottom:24px">' + meta.desc + '</div>';
-  }
-
-  meta.fields.forEach(function(f) {
-    var val = ci[f.key] || 0;
-    h += '<div class="cat-input-group">';
-    h += '<div class="cat-input-label">' + f.label + '</div>';
-    h += '<div class="cat-input-hint">' + f.hint + '</div>';
-    h += '<div class="cat-input-wrap">';
-    h += '<input class="cat-input" type="tel" inputmode="numeric" data-field="' + f.key + '" value="' + (val > 0 ? val.toLocaleString() : '') + '" oninput="onCatInput(this)">';
-    h += '<span class="cat-input-unit">' + f.unit + '</span>';
-    h += '</div></div>';
-  });
-
-  // 카드: 25% 문턱 현황
-  if (key === 'card') {
-    var ti = getCardThresholdInfo();
-    h += '<div class="threshold-section">';
-    h += '<div class="threshold-label">총급여 25% 문턱 현황</div>';
-    h += '<div class="threshold-bar-bg"><div class="threshold-bar-fill' + (ti.overThreshold ? ' over' : '') + '" style="width:' + ti.thresholdPct + '%"></div></div>';
-    h += '<div class="threshold-info"><span>사용액 ' + fmtAmt(ti.totalSpend) + '원</span><span>문턱 <b>' + fmtAmt(ti.threshold) + '원</b></span></div>';
-    if (ti.overThreshold) {
-      h += '<div class="threshold-alert done">문턱을 넘었어요! 공제가 시작돼요</div>';
-      if (ti.limitReached) {
-        h += '<div class="threshold-alert done">공제 한도 ' + fmtAmt(ti.limit) + '원에 도달했어요</div>';
-      } else {
-        h += '<div class="threshold-alert">공제 한도까지 ' + ti.limitPct + '% 채웠어요. 체크카드나 현금영수증을 늘려보세요</div>';
-      }
-    } else if (ti.totalSpend > 0) {
-      var remaining = ti.threshold - ti.totalSpend;
-      h += '<div class="threshold-alert">' + fmtAmt(remaining) + '원 더 쓰면 공제가 시작돼요</div>';
-    }
-    h += '</div>';
-  }
-
-  // 주택/주거: 대출 금리 비교 버튼
-  if (key === 'housing') {
-    h += '<div style="margin-top:8px;text-align:center">';
-    h += '<button class="loan-link-btn" onclick="showToast(\'토스에서 대출 금리 비교가 가능해요\')">더 낮은 금리 확인하기 →</button>';
-    h += '</div>';
-  }
-
-  // 생활비(의료비): 가족 몰아주기 안내
-  if (key === 'living' && hasSpouse()) {
-    var myTP = getTotalPay();
-    var spTP = getSpouseTP();
-    var lowerName = myTP <= spTP ? '본인' : '배우자';
-    var lowerThreshold = Math.min(myTP, spTP) * 0.03;
-    h += '<div class="advice-box"><b>의료비는 가족 것을 한 사람에게 몰아서 공제받을 수 있어요.</b><br>';
-    h += '소득이 낮은 <b>' + lowerName + '</b> 명의로 몰면 3% 문턱(' + fmtAmt(lowerThreshold) + '원)을 빨리 넘어서 공제 효과가 커요.<br>';
-    h += '부부, 자녀, 부모님 의료비 모두 한쪽으로 몰아서 공제받을 수 있어요.</div>';
-  }
-
-  h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
-  h += '<div class="cat-result-value" id="catSavingDisplay">' + (saving > 0 ? fmtAmt(saving) + '원' : '금액을 입력해 주세요') + '</div></div>';
-
-  // 목표 설정
-  h += '<div class="goal-section">';
-  h += '<div class="goal-title">절세 목표 설정</div>';
-  h += '<div class="goal-input-wrap">';
-  h += '<input class="goal-input" type="tel" inputmode="numeric" id="goalInput" value="' + (goal > 0 ? goal.toLocaleString() : '') + '" oninput="onGoalInput(this)">';
-  h += '<span class="goal-unit">만원</span>';
-  h += '</div>';
-  h += '<div class="goal-msg" id="goalMsg">' + getGoalMsg(key) + '</div>';
-  h += '</div>';
-
-  h += '<button class="btn-save-cat" onclick="saveCatDetail()">저장</button>';
-
-  document.getElementById('catDetailContent').innerHTML = h;
-
-  // 패널 전환: tips 닫고 catDetail 열기
-  document.getElementById('tipsPanel').classList.remove('show');
-  document.getElementById('catDetailPanel').classList.add('show');
-}
-
-function onCatInput(el) {
-  var v = el.value.replace(/[^0-9]/g, '');
-  if (v.length > 6) v = v.slice(0, 6);
-  el.value = v ? Number(v).toLocaleString() : '';
-  var field = el.getAttribute('data-field');
-  catInputs[currentCat][field] = Number(v) || 0;
-  var saving = calcCatSaving(currentCat);
-  var display = document.getElementById('catSavingDisplay');
-  if (display) display.textContent = saving > 0 ? fmtAmt(saving) + '원' : '금액을 입력해 주세요';
-  var gm = document.getElementById('goalMsg');
-  if (gm) gm.innerHTML = getGoalMsg(currentCat);
-}
-
-function onGoalInput(el) {
-  var v = el.value.replace(/[^0-9]/g, '');
-  if (v.length > 6) v = v.slice(0, 6);
-  el.value = v ? Number(v).toLocaleString() : '';
-  catGoals[currentCat] = Number(v) || 0;
-  var gm = document.getElementById('goalMsg');
-  if (gm) gm.innerHTML = getGoalMsg(currentCat);
-}
-
-function getGoalMsg(key) {
-  var saving = calcCatSaving(key);
-  var goal = catGoals[key] * 10000;
-  if (goal <= 0) return '목표를 설정하면 진행률을 확인할 수 있어요';
-  if (saving >= goal) return '<b class="done">목표를 달성했어요!</b>';
-  var remain = goal - saving;
-  return '목표까지 <b>' + fmtAmt(remain) + '원</b> 더 필요해요';
-}
-
-function saveCatDetail() {
-  saveToLocal();
-  backToTips();
-OLD_END */
 
 function backToTips() {
   document.getElementById('catDetailPanel').classList.remove('show');
@@ -1688,11 +1682,6 @@ function showToast(msg) {
 // INIT
 // ===========================
 (function() {
-  if (loadFromLocal()) {
-    salaryInput.value = salary.toLocaleString();
-    calcBtn.disabled = false;
-    salaryHint.textContent = '월 약 ' + Math.round(salary / 12).toLocaleString() + '만원';
-  }
   salaryInput.focus();
 })();
 </script>
