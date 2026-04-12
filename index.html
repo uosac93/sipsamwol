@@ -1053,17 +1053,17 @@ function renderFamilyView() {
     detail += '<div style="width:44px;height:26px;border-radius:13px;background:'+(d.disabled?'var(--blue)':'var(--line)')+';position:relative;transition:background .2s"><div style="width:22px;height:22px;border-radius:50%;background:#fff;position:absolute;top:2px;left:'+(d.disabled?'20px':'2px')+';transition:left .2s"></div></div>';
     detail += '</div>';
 
-    // 부모 소득
-    if (d.type === 'parent') {
+    // 소득 조건 (자녀/부모 공통)
+    if (d.type === 'child' || d.type === 'parent') {
       detail += '<div style="padding:14px 0;border-bottom:1px solid var(--line)">';
       detail += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
-      detail += '<span style="font-size:15px;font-weight:600;color:var(--text2)">등록 가능</span>';
+      detail += '<span style="font-size:15px;font-weight:600;color:var(--text2)">소득 조건</span>';
       detail += '<div style="display:flex;gap:6px">';
-      detail += '<button onclick="onFamilyEligible('+i+',true)" style="width:52px;height:36px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;background:'+(d.eligible?'var(--blue)':'var(--bg2)')+';color:'+(d.eligible?'#fff':'var(--text4)')+';touch-action:manipulation">네</button>';
-      detail += '<button onclick="onFamilyEligible('+i+',false)" style="width:60px;height:36px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;background:'+(!d.eligible?'var(--text3)':'var(--bg2)')+';color:'+(!d.eligible?'#fff':'var(--text4)')+';touch-action:manipulation">아니요</button>';
+      detail += '<button onclick="onFamilyEligible('+i+',true)" style="width:52px;height:36px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;background:'+(d.eligible?'var(--blue)':'var(--bg2)')+';color:'+(d.eligible?'#fff':'var(--text4)')+';touch-action:manipulation">충족</button>';
+      detail += '<button onclick="onFamilyEligible('+i+',false)" style="width:60px;height:36px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;background:'+(!d.eligible?'var(--text3)':'var(--bg2)')+';color:'+(!d.eligible?'#fff':'var(--text4)')+';touch-action:manipulation">초과</button>';
       detail += '</div></div>';
-      detail += '<div style="font-size:12px;color:var(--text4);line-height:1.6">월급 500만 · 연금 516만 · 사업 100만 · 기타 750만원 이하</div>';
-      if (!d.eligible) detail += '<div style="font-size:12px;color:var(--red);margin-top:4px;font-weight:500">소득 초과</div>';
+      detail += '<div style="font-size:12px;color:var(--text4);line-height:1.6">소득금액 100만원 또는 총급여 500만원 이하</div>';
+      if (!d.eligible) detail += '<div style="font-size:12px;color:var(--red);margin-top:4px;font-weight:500">소득 초과 — 공제 불가</div>';
       detail += '</div>';
     }
 
