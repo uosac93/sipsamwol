@@ -910,7 +910,10 @@ function renderFamilyList() {
     // 헤더 + 출생연도 한 줄
     detail += '<div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--line)">';
     detail += '<div style="display:flex;align-items:center;gap:6px">' + detailIcon + '<span style="font-size:15px;font-weight:700">' + label + '</span>';
-    detail += '<input type="tel" inputmode="numeric" value="' + d.birthYear + '" onchange="onFamilyYear(' + i + ',this.value)" style="width:52px;height:28px;border:none;border-bottom:1.5px solid var(--blue);border-radius:0;background:transparent;padding:0;font-size:15px;font-weight:700;font-family:inherit;text-align:center;color:var(--blue);outline:none;margin-left:4px">';
+    var yearSelect = '<select onchange="onFamilyYear(' + i + ',this.value)" style="border:none;border-bottom:1.5px solid var(--blue);border-radius:0;background:transparent;padding:0 2px;font-size:15px;font-weight:700;font-family:inherit;color:var(--blue);outline:none;margin-left:4px;-webkit-appearance:none">';
+    for (var y = 2026; y >= 1940; y--) { yearSelect += '<option value="' + y + '"' + (y === d.birthYear ? ' selected' : '') + '>' + y + '</option>'; }
+    yearSelect += '</select>';
+    detail += yearSelect;
     detail += '<span style="font-size:13px;color:var(--text3)">만 ' + age + '세</span></div>';
     detail += '<button onclick="removeFamily(' + i + ')" style="border:none;background:none;color:var(--text4);font-size:12px;cursor:pointer;font-family:inherit">삭제</button>';
     detail += '</div>';
