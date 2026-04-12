@@ -1856,8 +1856,22 @@ function showScreen(id) {
   document.getElementById('screen-' + id).classList.add('active');
 }
 
+function getFamilyCount() {
+  var count = 1; // 본인
+  dependents.forEach(function(d) {
+    if (d.eligible) {
+      var age = 2026 - d.birthYear;
+      if (d.type === 'child' && age <= 20) count++;
+      else if (d.type === 'parent' && age >= 60) count++;
+      else if (d.type === 'spouse') count++;
+    }
+  });
+  return count;
+}
+
 function calculate() {
-  lastResult = calcSimpleRefund(salary, 1);
+  var fam = getFamilyCount();
+  lastResult = calcSimpleRefund(salary, fam);
   if (hasSpouse()) spouseResult = calcSimpleRefund(spouseSalary, 1);
   else spouseResult = null;
   renderResult(lastResult);
@@ -1866,7 +1880,8 @@ function calculate() {
 }
 
 function recalculate() {
-  lastResult = calcSimpleRefund(salary, 1);
+  var fam = getFamilyCount();
+  lastResult = calcSimpleRefund(salary, fam);
   if (hasSpouse()) spouseResult = calcSimpleRefund(spouseSalary, 1);
   else spouseResult = null;
   renderResult(lastResult);
