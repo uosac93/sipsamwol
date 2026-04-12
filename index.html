@@ -508,7 +508,7 @@ body{
     </div>
     <div id="familyTab" style="margin-bottom:12px"></div>
     <div id="familyTree" style="margin-bottom:12px"></div>
-    <div id="familyAddBtns" style="display:flex;gap:8px;margin-bottom:12px"></div>
+    <div id="familyAddBtns"></div>
     <div id="familyList" style="margin-bottom:16px"></div>
     <div style="padding:28px 0 0">
       <button class="btn-primary" onclick="goToResult()">환급액 확인하기</button>
@@ -788,6 +788,17 @@ function addFamily(type) {
   renderFamilyList();
 }
 
+var addMenuOpen = false;
+function toggleAddMenu() {
+  addMenuOpen = !addMenuOpen;
+  var el = document.getElementById('familyAddBtns');
+  if (addMenuOpen) {
+    el.innerHTML = '<div style="display:flex;gap:8px;margin-top:10px;animation:fadeSlideIn .2s ease-out"><button onclick="addFamily(\'child\');addMenuOpen=false" style="flex:1;height:40px;border:none;border-radius:10px;background:var(--blue);color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">자녀</button><button onclick="addFamily(\'parent\');addMenuOpen=false" style="flex:1;height:40px;border:none;border-radius:10px;background:var(--blue);color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">부모</button></div>';
+  } else {
+    el.innerHTML = '';
+  }
+}
+
 function setFamilyTab(who) {
   familyOwnerTab = who;
   familyEditIdx = -1;
@@ -854,20 +865,20 @@ function renderFamilyList() {
       '</button>';
   }
 
+  var addCircle = '<button id="addCircleBtn" onclick="toggleAddMenu()" style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;border:2px dashed var(--line);border-radius:12px;background:transparent;cursor:pointer;font-size:22px;color:var(--text4);font-family:inherit;transition:all .15s">+</button>';
+
   var tree = '';
+  tree += '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">';
   if (currentDeps.length > 0) {
-    tree += '<div style="display:flex;flex-wrap:wrap;gap:8px">';
     currentDeps.forEach(function(d) { var idx = dependents.indexOf(d); tree += depChip(d, idx); });
-    tree += '</div>';
-  } else {
-    tree += '<div style="text-align:center;color:var(--text4);font-size:13px;padding:16px 0">부양가족이 없어요</div>';
+  }
+  tree += addCircle;
+  tree += '</div>';
   }
   document.getElementById('familyTree').innerHTML = tree;
 
-  // 추가 버튼
-  var addBtns = '<button class="choice-btn" style="height:44px;justify-content:center;margin:0;flex:1;font-size:13px" onclick="addFamily(\'child\')">+ 자녀</button>';
-  addBtns += '<button class="choice-btn" style="height:44px;justify-content:center;margin:0;flex:1;font-size:13px" onclick="addFamily(\'parent\')">+ 부모</button>';
-  document.getElementById('familyAddBtns').innerHTML = addBtns;
+  // 추가 메뉴 (토글)
+  document.getElementById('familyAddBtns').innerHTML = '';
 
   // 상세 편집 (선택된 가족)
   var detail = '';
