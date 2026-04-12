@@ -1706,8 +1706,8 @@ function renderTipsPanel() {
     if (hasSpouse() && key === 'medical') {
       var owner = catOwner[key];
       h += '<div style="display:flex;gap:4px;margin-top:8px">';
-      h += '<button onclick="setCatOwner(\'medical\',\'me\')" style="flex:1;height:28px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='me'?'var(--blue)':'var(--line)') + ';color:' + (owner==='me'?'#fff':'var(--text4)') + '">본인에게 몰기</button>';
-      h += '<button onclick="setCatOwner(\'medical\',\'spouse\')" style="flex:1;height:28px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='spouse'?'var(--blue)':'var(--line)') + ';color:' + (owner==='spouse'?'#fff':'var(--text4)') + '">배우자에게 몰기</button>';
+      h += '<button onclick="setCatOwner(\'medical\',\'me\')" style="flex:1;height:24px;border:none;border-radius:6px;font-size:10px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='me'?'var(--blue)':'transparent') + ';color:' + (owner==='me'?'#fff':'var(--text4)') + '">본인</button>';
+      h += '<button onclick="setCatOwner(\'medical\',\'spouse\')" style="flex:1;height:24px;border:none;border-radius:6px;font-size:10px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='spouse'?'var(--blue)':'transparent') + ';color:' + (owner==='spouse'?'#fff':'var(--text4)') + '">배우자</button>';
       h += '</div>';
     }
     h += '</div>';
@@ -1773,6 +1773,12 @@ function getCatSteps(key, ans) {
     if (ht.indexOf('jeonse') >= 0 || ht.indexOf('mortgage') >= 0) housingFields.push(CAT_META.housing.fields[2]);
     if (ht.indexOf('subscription') >= 0) housingFields.push(CAT_META.housing.fields[1]);
     if (housingFields.length > 0) s.push({ type: 'input', title: '금액을 입력해 주세요', fields: housingFields, extra: (ht.indexOf('jeonse') >= 0 || ht.indexOf('mortgage') >= 0) ? 'loanCompare' : null });
+    if (hasSpouseFlag) {
+      s.push({ type: 'choice', title: '누구 명의인가요?', sub: '명의자 기준으로 공제가 적용돼요', key: 'housingOwner', options: [
+        { label: '본인', value: 'me' },
+        { label: '배우자', value: 'spouse' }
+      ]});
+    }
     s.push({ type: 'done' }); return s;
   }
   if (key === 'pension') {
@@ -2057,6 +2063,12 @@ function onCatInput(el) {
 function setCatOwner(key, who) {
   catOwner[key] = who;
   recalculate();
+}
+
+function onHousingOwner() {
+  if (catFlow.answers.housingOwner) {
+    catOwner.housing = catFlow.answers.housingOwner;
+  }
 }
 
 function backToTips() {
