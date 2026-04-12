@@ -471,7 +471,7 @@ body{
 
 <!-- SPOUSE CHOICE SCREEN -->
 <div id="screen-spouse" class="screen active">
-  <div class="spouse-choice-screen">
+  <div class="input-screen">
     <div class="step-bar">
       <div class="step-progress">
         <div class="step-progress-seg active"></div>
@@ -480,12 +480,13 @@ body{
         <div class="step-progress-seg"></div>
       </div>
     </div>
-    <div class="spouse-choice-body">
-      <div class="spouse-choice-title">배우자가 있나요?</div>
-      <div class="spouse-choice-btns">
-        <button class="spouse-choice-btn" onclick="chooseSpouse(true)">네</button>
-        <button class="spouse-choice-btn" onclick="chooseSpouse(false)">아니요</button>
-      </div>
+    <div class="input-top">
+      <div class="input-title">결혼하셨어요?</div>
+      <div class="input-sub">배우자 공제와 맞벌이 절세에 필요해요</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="choice-btn" onclick="chooseSpouse(false)">아직이에요</button>
+      <button class="choice-btn" onclick="chooseSpouse(true)">네, 했어요</button>
     </div>
   </div>
 </div>
