@@ -860,7 +860,7 @@ function renderFamilyList() {
     detail += '<div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-radius:12px;padding:14px 16px;margin-bottom:12px">';
     detail += '<span style="font-size:14px;font-weight:600;color:var(--text2)">출생연도</span>';
     detail += '<div style="display:flex;align-items:center;gap:8px">';
-    detail += '<input type="tel" inputmode="numeric" value="' + d.birthYear + '" onchange="onFamilyYear(' + i + ',this.value)" style="width:80px;height:40px;border:none;border-radius:10px;background:var(--bg);padding:0 12px;font-size:20px;font-weight:800;font-family:inherit;text-align:center;color:var(--blue)">';
+    detail += '<input type="tel" inputmode="numeric" value="' + d.birthYear + '" onchange="onFamilyYear(' + i + ',this.value)" style="width:90px;height:44px;border:none;border-bottom:2px solid var(--blue);border-radius:0;background:transparent;padding:0;font-size:24px;font-weight:800;font-family:inherit;text-align:center;color:var(--text);outline:none">';
     detail += '<span style="font-size:14px;color:var(--text3);font-weight:600">' + age + '세</span>';
     detail += '</div></div>';
     if (!ageOk) detail += '<div style="font-size:12px;color:var(--red);font-weight:500;margin-top:-8px;margin-bottom:12px;padding:0 4px">' + (d.type === 'child' ? '20세 초과 — 공제 대상 아님' : '60세 미만 — 공제 대상 아님') + '</div>';
