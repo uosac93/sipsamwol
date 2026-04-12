@@ -1279,7 +1279,7 @@ function getCardThresholdInfo() {
 // ===========================
 var CAT_META = {
   card: {
-    name: '카드', icon: 'credit-card', color: '#3182F6', bg: '#E8F3FF',
+    name: '카드', icon: 'credit-card', color: '#3182F6',
     desc: '카드·현금영수증 소득공제',
     fields: [
       { key: 'credit', label: '신용카드', unit: '만원', rate: 0.15 },
@@ -1293,7 +1293,7 @@ var CAT_META = {
     ]
   },
   housing: {
-    name: '주거', icon: 'home', color: '#12B886', bg: '#E6FCF5',
+    name: '주거', icon: 'home', color: '#3182F6',
     desc: '월세·대출이자·청약',
     fields: [
       { key: 'rent', label: '월세 (월)', unit: '만원' },
@@ -1302,7 +1302,7 @@ var CAT_META = {
     ]
   },
   pension: {
-    name: '연금', icon: 'piggy-bank', color: '#7950F2', bg: '#F3F0FF',
+    name: '연금', icon: 'piggy-bank', color: '#3182F6',
     desc: '연금저축·IRP 세액공제',
     fields: [
       { key: 'pensionSaving', label: '연금저축 (연)', unit: '만원' },
@@ -1310,7 +1310,7 @@ var CAT_META = {
     ]
   },
   insurance: {
-    name: '보험', icon: 'shield', color: '#7950F2', bg: '#F3F0FF',
+    name: '보험', icon: 'shield', color: '#3182F6',
     desc: '보장성보험 세액공제',
     fields: [
       { key: 'insuranceGen', label: '보장성보험 (연)', unit: '만원' },
@@ -1318,7 +1318,7 @@ var CAT_META = {
     ]
   },
   education: {
-    name: '교육', icon: 'graduation-cap', color: '#12B886', bg: '#E6FCF5',
+    name: '교육', icon: 'graduation-cap', color: '#3182F6',
     desc: '교육비 세액공제',
     fields: [
       { key: 'eduSelf', label: '본인 교육비 (연)', unit: '만원' },
@@ -1327,7 +1327,7 @@ var CAT_META = {
     ]
   },
   medical: {
-    name: '의료', icon: 'stethoscope', color: '#12B886', bg: '#E6FCF5',
+    name: '의료', icon: 'stethoscope', color: '#3182F6',
     desc: '의료비 세액공제',
     fields: [
       { key: 'medSelf', label: '본인·65세·장애인', unit: '만원' },
@@ -1337,7 +1337,7 @@ var CAT_META = {
     ]
   },
   donation: {
-    name: '기부금', icon: 'heart', color: '#FF6B6B', bg: '#FFF0F0',
+    name: '기부금', icon: 'heart', color: '#3182F6',
     desc: '기부금 세액공제',
     fields: [
       { key: 'hometown', label: '고향사랑기부금', unit: '만원' },
@@ -1525,11 +1525,10 @@ function renderTipsPanel() {
     var advice = hasSpouse() ? getFamilyAdvice(key) : null;
 
     var isLast = i === cats.length - 1 && cats.length % 2 === 1;
-    var catBg = meta.bg || 'var(--bg2)';
-    h += '<div style="background:' + catBg + ';border-radius:14px;padding:14px 16px;transition:transform .15s' + (isLast ? ';grid-column:1/-1' : '') + '">';
+    h += '<div style="background:var(--bg2);border-radius:14px;padding:14px 16px;transition:transform .15s' + (isLast ? ';grid-column:1/-1' : '') + '">';
     h += '<div onclick="openCatDetail(\'' + key + '\')" style="cursor:pointer">';
     var catColor = meta.color || 'var(--blue)';
-    h += '<div style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--text)"><i data-lucide="' + (meta.icon||'') + '" style="width:18px;height:18px;color:' + catColor + '"></i>' + meta.name + '</div>';
+    h += '<div style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--text)"><i data-lucide="' + (meta.icon||'') + '" style="width:18px;height:18px;color:var(--text)"></i>' + meta.name + '</div>';
     if (hasInput) {
       h += '<div style="font-size:18px;font-weight:900;color:' + catColor + ';margin-top:6px">' + fmtAmt(saving) + '<span style="font-size:12px;font-weight:600">원</span></div>';
     } else {
