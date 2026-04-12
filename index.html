@@ -788,12 +788,20 @@ function addFamily(type) {
 var addMenuOpen = false;
 function toggleAddMenu() {
   addMenuOpen = !addMenuOpen;
+  updateAddMenu();
+}
+function updateAddMenu() {
   var el = document.getElementById('familyAddBtns');
+  if (!el) return;
   if (addMenuOpen) {
-    el.innerHTML = '<div style="display:flex;gap:8px;margin-top:10px;animation:fadeSlideIn .2s ease-out"><button onclick="addFamily(\'child\');addMenuOpen=false" style="flex:1;height:40px;border:none;border-radius:10px;background:var(--blue);color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">자녀</button><button onclick="addFamily(\'parent\');addMenuOpen=false" style="flex:1;height:40px;border:none;border-radius:10px;background:var(--blue);color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">부모</button></div>';
+    el.innerHTML = '<div style="display:flex;gap:8px;margin-top:10px;animation:fadeSlideIn .2s ease-out"><button onclick="addFamilyAndClose(\'child\')" style="flex:1;height:40px;border:none;border-radius:10px;background:var(--blue);color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">자녀</button><button onclick="addFamilyAndClose(\'parent\')" style="flex:1;height:40px;border:none;border-radius:10px;background:var(--blue);color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">부모</button></div>';
   } else {
     el.innerHTML = '';
   }
+}
+function addFamilyAndClose(type) {
+  addMenuOpen = false;
+  addFamily(type);
 }
 
 function setFamilyTab(who) {
@@ -883,8 +891,8 @@ function renderFamilyList() {
   }
   document.getElementById('familyTree').innerHTML = tree;
 
-  // 추가 메뉴 (토글)
-  document.getElementById('familyAddBtns').innerHTML = '';
+  // 추가 메뉴 상태 유지
+  updateAddMenu();
 
   // 상세 편집 (선택된 가족)
   var detail = '';
