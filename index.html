@@ -1482,53 +1482,27 @@ function renderTipsPanel() {
   h += '<div style="font-size:12px;color:var(--text3);margin-top:6px">' + fmtAmt(totalSaving) + '원 / ' + fmtAmt(totalMax) + '원</div>';
   h += '</div>';
 
-  // 카테고리 카드 (D+E: 프로그레스 + 탭 상세)
-  cats.forEach(function(key) {
+  // 카테고리 2열 그리드 + 유불리 통합
+  h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
+  cats.forEach(function(key, i) {
     var meta = CAT_META[key];
     var saving = calcCatSaving(key);
-    var maxSaving = getMaxCatSaving(key);
     var hasInput = saving > 0;
-    var pct = maxSaving > 0 ? Math.min(Math.round(saving / maxSaving * 100), 100) : 0;
+    var advice = hasSpouse() ? getFamilyAdvice(key) : null;
 
-    h += '<div class="cat-card" style="padding:0;overflow:hidden">';
-    h += '<div onclick="openCatDetail(\'' + key + '\')" style="padding:16px 20px">';
-    h += '<div class="cat-card-top"><span class="cat-card-name">' + meta.name;
-    if (hasInput) h += '<span class="cat-card-amt">' + fmtAmt(saving) + '원</span>';
-    h += '</span><span class="cat-card-arrow">›</span></div>';
+    h += '<div onclick="openCatDetail(\'' + key + '\')" style="background:var(--bg2);border-radius:14px;padding:14px 16px;cursor:pointer;transition:transform .15s' + (i === cats.length - 1 && cats.length % 2 === 1 ? ';grid-column:1/-1' : '') + '">';
+    h += '<div style="font-size:14px;font-weight:700;color:var(--text)">' + meta.name + '</div>';
     if (hasInput) {
-      h += '<div style="margin-top:8px"><div class="progress-bar-bg"><div class="progress-bar-fill' + (pct >= 100 ? ' full' : '') + '" style="width:' + pct + '%"></div></div>';
-      h += '<div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:var(--text4)"><span>최대 ' + fmtAmt(maxSaving) + '원</span><span>' + pct + '%</span></div></div>';
-    }
-    h += '</div></div>';
-  });
-
-  // 16. 배우자 유불리 스위치 (배우자 있을 때만)
-  if (hasSpouse()) {
-    h += '<div style="background:var(--bg2);border-radius:14px;padding:16px;margin-top:16px">';
-    h += '<div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px">카테고리별 누가 유리?</div>';
-    cats.forEach(function(key) {
-      var advice = getFamilyAdvice(key);
-      if (advice) {
-        h += '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px">';
-        h += '<span style="color:var(--text3)">' + CAT_META[key].name + '</span>';
-        h += '<span style="color:var(--blue);font-weight:600">' + (advice.who === 'me' ? '본인 유리' : '배우자 유리') + '</span></div>';
-      }
-    });
-    h += '</div>';
-  }
-
-  // 19. 가족 최적화 대시보드 (배우자 있을 때만)
-  if (hasSpouse() && lastResult && spouseResult) {
-    var myTP = lastResult.totalPay, spTP = spouseResult ? spouseResult.totalPay : 0;
-    h += '<div style="background:var(--blue-bg);border-radius:14px;padding:16px;margin-top:12px">';
-    h += '<div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:8px">가족 절세 최적화</div>';
-    if (myTP > spTP) {
-      h += '<div style="font-size:13px;color:var(--text2);line-height:1.6">의료비·카드는 소득 낮은 <b style="color:var(--blue)">배우자</b>에게 몰고, 연금·기부는 세율 높은 <b style="color:var(--blue)">본인</b>이 유리해요.</div>';
+      h += '<div style="font-size:18px;font-weight:900;color:var(--blue);margin-top:6px">' + fmtAmt(saving) + '<span style="font-size:12px;font-weight:600">원</span></div>';
     } else {
-      h += '<div style="font-size:13px;color:var(--text2);line-height:1.6">의료비·카드는 소득 낮은 <b style="color:var(--blue)">본인</b>에게 몰고, 연금·기부는 세율 높은 <b style="color:var(--blue)">배우자</b>가 유리해요.</div>';
+      h += '<div style="font-size:13px;color:var(--text4);margin-top:6px">입력하기 ›</div>';
+    }
+    if (advice) {
+      h += '<div style="font-size:11px;font-weight:600;color:' + (advice.who === 'me' ? 'var(--blue)' : 'var(--text3)') + ';margin-top:4px">' + (advice.who === 'me' ? '본인 유리' : '배우자 유리') + '</div>';
     }
     h += '</div>';
-  }
+  });
+  h += '</div>';
 
 
   // 14. 작년 vs 올해 (간이 추정)
