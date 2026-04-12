@@ -690,6 +690,7 @@ var childCount = 0; // 자녀 수
 var isMarried2024 = false; // 2024~2026 혼인신고 여부
 var lastResult = null;
 var spouseResult = null;
+var catOwner = { card: 'me', housing: 'me', pension: 'me', living: 'me', donation: 'me' };
 
 // 카테고리 입력값 (만원 단위)
 var catInputs = {
@@ -1106,15 +1107,29 @@ function calcCatSaving(catKey) {
   return 0;
 }
 
+function calcCatSavingAs(catKey, who) {
+  // 본인 기준이면 그대로, 배우자 기준이면 배우자 세율로 계산
+  if (who === 'me') return calcCatSaving(catKey);
+  // 배우자 세율로 계산
+  var spMR = getSpouseMR();
+  var tp = getSpouseTP();
+  var ci = catInputs[catKey];
+  // 간이 계산: 본인 절세액에서 세율 비율로 환산
+  var mySaving = calcCatSaving(catKey);
+  var myMR = getMRate();
+  if (myMR === 0) return mySaving;
+  return Math.round(mySaving * (spMR / myMR));
+}
+
 function calcAllCatSavings() {
   var total = 0;
-  ['card','housing','pension','living','donation'].forEach(function(k) { total += calcCatSaving(k); });
-  // 자녀 세액공제 (1명 15만, 2명 35만, 3명+ 35만+30만씩)
+  ['card','housing','pension','living','donation'].forEach(function(k) {
+    total += calcCatSavingAs(k, catOwner[k]);
+  });
   if (childCount >= 1) {
     var childCredit = childCount === 1 ? 150000 : (childCount === 2 ? 350000 : 350000 + (childCount - 2) * 300000);
     total += Math.round(childCredit * 1.1);
   }
-  // 결혼 세액공제 (2024~2026 혼인신고, 1인 50만원)
   if (isMarried2024) total += Math.round(500000 * 1.1);
   return total;
 }
@@ -1490,15 +1505,22 @@ function renderTipsPanel() {
     var hasInput = saving > 0;
     var advice = hasSpouse() ? getFamilyAdvice(key) : null;
 
-    h += '<div onclick="openCatDetail(\'' + key + '\')" style="background:var(--bg2);border-radius:14px;padding:14px 16px;cursor:pointer;transition:transform .15s' + (i === cats.length - 1 && cats.length % 2 === 1 ? ';grid-column:1/-1' : '') + '">';
+    var isLast = i === cats.length - 1 && cats.length % 2 === 1;
+    h += '<div style="background:var(--bg2);border-radius:14px;padding:14px 16px;transition:transform .15s' + (isLast ? ';grid-column:1/-1' : '') + '">';
+    h += '<div onclick="openCatDetail(\'' + key + '\')" style="cursor:pointer">';
     h += '<div style="font-size:14px;font-weight:700;color:var(--text)">' + meta.name + '</div>';
     if (hasInput) {
       h += '<div style="font-size:18px;font-weight:900;color:var(--blue);margin-top:6px">' + fmtAmt(saving) + '<span style="font-size:12px;font-weight:600">원</span></div>';
     } else {
       h += '<div style="font-size:13px;color:var(--text4);margin-top:6px">입력하기 ›</div>';
     }
-    if (advice) {
-      h += '<div style="font-size:11px;font-weight:600;color:' + (advice.who === 'me' ? 'var(--blue)' : 'var(--text3)') + ';margin-top:4px">' + (advice.who === 'me' ? '본인 유리' : '배우자 유리') + '</div>';
+    h += '</div>';
+    if (hasSpouse()) {
+      var owner = catOwner[key];
+      h += '<div style="display:flex;gap:4px;margin-top:8px">';
+      h += '<button onclick="setCatOwner(\'' + key + '\',\'me\')" style="flex:1;height:28px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='me'?'var(--blue)':'var(--line)') + ';color:' + (owner==='me'?'#fff':'var(--text3)') + '">본인</button>';
+      h += '<button onclick="setCatOwner(\'' + key + '\',\'spouse\')" style="flex:1;height:28px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='spouse'?'var(--blue)':'var(--line)') + ';color:' + (owner==='spouse'?'#fff':'var(--text3)') + '">배우자</button>';
+      h += '</div>';
     }
     h += '</div>';
   });
@@ -1868,6 +1890,11 @@ function onCatInput(el) {
   }
 }
 
+
+function setCatOwner(key, who) {
+  catOwner[key] = who;
+  recalculate();
+}
 
 function backToTips() {
   closeAllPanels();
