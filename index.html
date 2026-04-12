@@ -674,7 +674,7 @@ var catInputs = {
   card: { credit: 0, debit: 0, cash: 0 },
   housing: { rent: 0, subscription: 0, loanInterest: 0 },
   pension: { pensionSaving: 0, irp: 0, insurance: 0 },
-  living: { education: 0, medical: 0 },
+  living: { eduSelf: 0, eduChild: 0, eduCollege: 0, medSelf: 0, medFamily: 0, medInfertility: 0 },
   donation: { hometown: 0, political: 0, religious: 0, general: 0 }
 };
 
@@ -999,14 +999,23 @@ function calcCatSaving(catKey) {
 
   if (catKey === 'living') {
     var saving = 0;
-    // 교육비 15% 세액공제 (대학 900만원 한도)
-    if (ci.education > 0) {
-      saving += Math.round(Math.min(ci.education * 10000, 9000000) * 0.15 * 1.1);
-    }
-    // 의료비 15% 세액공제 (총급여 3% 초과분)
-    if (ci.medical > 0) {
-      var medExcess = Math.max(ci.medical * 10000 - tp * 0.03, 0);
-      if (medExcess > 0) saving += Math.round(medExcess * 0.15 * 1.1);
+    // 교육비 15% 세액공제 (대상별 한도)
+    if (ci.eduSelf > 0) saving += Math.round(ci.eduSelf * 10000 * 0.15 * 1.1); // 본인: 한도 없음
+    if (ci.eduChild > 0) saving += Math.round(Math.min(ci.eduChild * 10000, 3000000) * 0.15 * 1.1); // 초중고: 300만원
+    if (ci.eduCollege > 0) saving += Math.round(Math.min(ci.eduCollege * 10000, 9000000) * 0.15 * 1.1); // 대학: 900만원
+    // 의료비 세액공제 (총급여 3% 초과분)
+    var totalMed = (ci.medSelf + ci.medFamily + ci.medInfertility) * 10000;
+    var medThreshold = tp * 0.03;
+    var medExcess = Math.max(totalMed - medThreshold, 0);
+    if (medExcess > 0) {
+      // 난임시술비 30%, 본인·65세·장애인 한도없음 15%, 부양가족 700만원 한도 15%
+      var infertAmt = Math.min(ci.medInfertility * 10000, medExcess);
+      var remainExcess = medExcess - infertAmt;
+      var selfAmt = Math.min(ci.medSelf * 10000, remainExcess);
+      var famAmt = Math.min(Math.min(ci.medFamily * 10000, 7000000), Math.max(remainExcess - selfAmt, 0));
+      saving += Math.round(infertAmt * 0.30 * 1.1);
+      saving += Math.round(selfAmt * 0.15 * 1.1);
+      saving += Math.round(famAmt * 0.15 * 1.1);
     }
     return saving;
   }
@@ -1144,11 +1153,12 @@ function getCardThresholdInfo() {
     var creditOver = ci.credit * 10000 - usedFromCredit;
     var debitOver = ci.debit * 10000 - usedFromDebit;
     var cashOver = ci.cash * 10000 - usedFromCash;
-    baseDed = creditOver * 0.15 + debitOver * 0.30 + cashOver * 0.30;
-    baseDed = Math.min(baseDed, baseLimit);
-    perCard.credit = { amount: ci.credit * 10000, deduction: Math.round(creditOver * 0.15), taxSaving: Math.round(creditOver * 0.15 * mr * 1.1) };
-    perCard.debit = { amount: ci.debit * 10000, deduction: Math.round(debitOver * 0.30), taxSaving: Math.round(debitOver * 0.30 * mr * 1.1) };
-    perCard.cash = { amount: ci.cash * 10000, deduction: Math.round(cashOver * 0.30), taxSaving: Math.round(cashOver * 0.30 * mr * 1.1) };
+    var rawDed = creditOver * 0.15 + debitOver * 0.30 + cashOver * 0.30;
+    baseDed = Math.min(rawDed, baseLimit);
+    var capRatio = rawDed > 0 ? baseDed / rawDed : 0;
+    perCard.credit = { amount: ci.credit * 10000, deduction: Math.round(creditOver * 0.15 * capRatio), taxSaving: Math.round(creditOver * 0.15 * capRatio * mr * 1.1) };
+    perCard.debit = { amount: ci.debit * 10000, deduction: Math.round(debitOver * 0.30 * capRatio), taxSaving: Math.round(debitOver * 0.30 * capRatio * mr * 1.1) };
+    perCard.cash = { amount: ci.cash * 10000, deduction: Math.round(cashOver * 0.30 * capRatio), taxSaving: Math.round(cashOver * 0.30 * capRatio * mr * 1.1) };
   } else {
     perCard.credit = { amount: ci.credit * 10000, deduction: 0, taxSaving: 0 };
     perCard.debit = { amount: ci.debit * 10000, deduction: 0, taxSaving: 0 };
@@ -1204,8 +1214,12 @@ var CAT_META = {
     name: '교육/의료',
     desc: '교육비·의료비 세액공제',
     fields: [
-      { key: 'education', label: '교육비 (연)', unit: '만원' },
-      { key: 'medical', label: '의료비 (연)', unit: '만원' }
+      { key: 'eduSelf', label: '본인 교육비 (연)', unit: '만원' },
+      { key: 'eduChild', label: '초중고 자녀 (연)', unit: '만원' },
+      { key: 'eduCollege', label: '대학생 자녀 (연)', unit: '만원' },
+      { key: 'medSelf', label: '본인·65세·장애인 의료비', unit: '만원' },
+      { key: 'medFamily', label: '부양가족 의료비', unit: '만원' },
+      { key: 'medInfertility', label: '난임시술비', unit: '만원' }
     ]
   },
   donation: {
@@ -1446,8 +1460,8 @@ function getCatSteps(key, ans) {
     s.push({ type: 'done' }); return s;
   }
   if (key === 'living') {
-    s.push({ type: 'input', title: '2026년 교육비에\n얼마 정도 쓰게 돼요?', fields: [CAT_META.living.fields[0]] });
-    s.push({ type: 'input', title: '2026년 의료비에\n얼마 정도 쓰게 돼요?', fields: [CAT_META.living.fields[1]], extra: 'medicalAdvice' });
+    s.push({ type: 'input', title: '교육비를\n입력해 주세요', sub: '본인 한도 없음 · 초중고 300만원 · 대학 900만원', fields: [CAT_META.living.fields[0], CAT_META.living.fields[1], CAT_META.living.fields[2]] });
+    s.push({ type: 'input', title: '의료비를\n입력해 주세요', sub: '총급여 3%(' + fmtAmt(Math.round(getTotalPay() * 0.03)) + '원) 초과분부터 공제', fields: [CAT_META.living.fields[3], CAT_META.living.fields[4], CAT_META.living.fields[5]], extra: 'medicalAdvice' });
     s.push({ type: 'done' }); return s;
   }
   if (key === 'donation') {
@@ -1488,6 +1502,10 @@ function renderCatStep() {
     if (selected.length > 0) h += '<button class="btn-save-cat" style="margin-top:16px" onclick="nextFlowStep()">다음</button>';
   }
   if (st.type === 'input') {
+    // 절세액 맨 위
+    var saving = calcCatSaving(catFlow.cat);
+    h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
+    h += '<div class="cat-result-value" id="catSavingDisplay">' + fmtAmt(saving) + '원</div></div>';
     var ci = catInputs[catFlow.cat];
     st.fields.forEach(function(f) {
       var val = ci[f.key] || 0;
@@ -1506,15 +1524,16 @@ function renderCatStep() {
       h += '소득이 낮은 <b>' + ln + '</b> 명의로 몰면 기준(' + fmtAmt(lt) + '원)을 빨리 넘어서 더 많이 돌려받아요.<br>';
       h += '부부, 자녀, 부모님 의료비 모두 한쪽으로 몰아서 돌려받을 수 있어요.</div>';
     }
-    var saving = calcCatSaving(catFlow.cat);
-    h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
-    h += '<div class="cat-result-value" id="catSavingDisplay">' + fmtAmt(saving) + '원</div></div>';
     h += '<button class="btn-save-cat" onclick="nextFlowStep()">다음</button>';
   }
   if (st.type === 'cardInput') {
     var ci = catInputs.card, ti = getCardThresholdInfo();
     var tp = getTotalPay();
     var baseLimit = tp <= 70000000 ? 300 : (tp <= 120000000 ? 250 : 200);
+    // 절세액 맨 위
+    var saving = calcCatSaving('card');
+    h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
+    h += '<div class="cat-result-value" id="catSavingDisplay">' + fmtAmt(saving) + '원</div></div>';
     // 카드별 입력 + 공제율 표시
     CAT_META.card.fields.forEach(function(f) {
       var val = ci[f.key] || 0;
@@ -1545,9 +1564,6 @@ function renderCatStep() {
     }
     // 문턱 + 한도
     h += '<div id="cardThresholdArea">' + renderCardThresholdHTML() + '</div>';
-    var saving = calcCatSaving('card');
-    h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
-    h += '<div class="cat-result-value" id="catSavingDisplay">' + fmtAmt(saving) + '원</div></div>';
     h += '<button class="btn-save-cat" onclick="nextFlowStep()">다음</button>';
   }
   if (st.type === 'info') {
