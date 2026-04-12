@@ -714,12 +714,8 @@ function toggleAddMenu() {
 function updateAddMenu() {
   var el = document.getElementById('familyAddBtns');
   if (!el) return;
-  if (addMenuOpen) {
-    el.innerHTML = '<div style="display:flex;gap:8px;animation:fadeSlideIn .2s ease-out"><button onclick="addFamilyAndClose(\'child\')" style="flex:1;padding:14px;border:none;border-radius:12px;background:var(--bg2);font-size:15px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:center;touch-action:manipulation"><i data-lucide="baby" style="width:20px;height:20px;color:var(--blue);display:block;margin:0 auto 4px"></i>자녀</button><button onclick="addFamilyAndClose(\'parent\')" style="flex:1;padding:14px;border:none;border-radius:12px;background:var(--bg2);font-size:15px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:center;touch-action:manipulation"><i data-lucide="user-round" style="width:20px;height:20px;color:var(--blue);display:block;margin:0 auto 4px"></i>부모</button></div>';
-    if (window.lucide) lucide.createIcons();
-  } else {
-    el.innerHTML = '';
-  }
+  el.innerHTML = '<div style="display:flex;gap:8px"><button onclick="addFamilyAndClose(\'child\')" style="flex:1;padding:14px;border:none;border-radius:12px;background:var(--bg2);font-size:15px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:center;touch-action:manipulation"><i data-lucide="baby" style="width:20px;height:20px;color:var(--blue);display:block;margin:0 auto 4px"></i>자녀</button><button onclick="addFamilyAndClose(\'parent\')" style="flex:1;padding:14px;border:none;border-radius:12px;background:var(--bg2);font-size:15px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:center;touch-action:manipulation"><i data-lucide="user-round" style="width:20px;height:20px;color:var(--blue);display:block;margin:0 auto 4px"></i>부모</button></div>';
+  if (window.lucide) lucide.createIcons();
 }
 function addFamilyAndClose(type) {
   addMenuOpen = false;
