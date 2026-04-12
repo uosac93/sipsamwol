@@ -1824,9 +1824,9 @@ function renderCatStep() {
     var selected = catFlow.answers[st.key] || [];
     st.options.forEach(function(opt) {
       var isSel = selected.indexOf(opt.value) >= 0;
-      h += '<button class="choice-btn' + (isSel ? ' selected' : '') + '" onclick="onFlowMulti(\'' + st.key + '\',\'' + opt.value + '\')">' + opt.label + '</button>';
+      h += '<button class="choice-btn' + (isSel ? ' selected' : '') + '" data-multi="' + opt.value + '" onclick="onFlowMulti(\'' + st.key + '\',\'' + opt.value + '\')">' + opt.label + '</button>';
     });
-    if (selected.length > 0) h += '<button class="btn-save-cat" style="margin-top:16px" onclick="nextFlowStep()">다음</button>';
+    h += '<button id="multiNextBtn" class="btn-save-cat" style="margin-top:16px;display:' + (selected.length > 0 ? 'block' : 'none') + '" onclick="nextFlowStep()">다음</button>';
   }
   if (st.type === 'input') {
     // 절세액 맨 위
@@ -2010,7 +2010,7 @@ function onFlowChoice(key, value) {
   catFlow.step++; renderCatStep();
 }
 
-function onFlowMulti(key, value) {
+function onFlowMulti(key, value, el) {
   var arr = catFlow.answers[key] || []; var idx = arr.indexOf(value);
   if (idx >= 0) arr.splice(idx, 1); else arr.push(value);
   catFlow.answers[key] = arr;
@@ -2022,7 +2022,13 @@ function onFlowMulti(key, value) {
     if (arr.indexOf('subscription') < 0) ci.subscription = 0;
     catFlow.answers[key] = arr;
   }
-  renderCatStep();
+  // DOM 직접 업데이트 (리렌더링 방지 — 터치 이슈 해결)
+  document.querySelectorAll('.choice-btn[data-multi]').forEach(function(btn) {
+    var v = btn.getAttribute('data-multi');
+    btn.classList.toggle('selected', arr.indexOf(v) >= 0);
+  });
+  var nextBtn = document.getElementById('multiNextBtn');
+  if (nextBtn) nextBtn.style.display = arr.length > 0 ? 'block' : 'none';
 }
 
 function nextFlowStep() {
