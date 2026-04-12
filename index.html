@@ -1392,16 +1392,7 @@ function renderResult(r) {
     }
     requestAnimationFrame(step);
   })();
-  // 배우자 결과: 한 줄로 심플하게
-  if (hasSpouse() && spouseResult) {
-    var myAmt = Math.round(Math.abs(r.refund));
-    var spAmt = Math.round(Math.abs(spouseResult.refund));
-    var mySign = r.refund >= 0 ? '+' : '-';
-    var spSign = spouseResult.refund >= 0 ? '+' : '-';
-    spArea.innerHTML = '<div class="spouse-breakdown">본인 ' + mySign + myAmt.toLocaleString() + '원 · 배우자 ' + spSign + spAmt.toLocaleString() + '원</div>';
-  } else {
-    spArea.innerHTML = '';
-  }
+  spArea.innerHTML = '';
   renderDetail(r);
   renderTipsPanel();
 }
@@ -1489,17 +1480,24 @@ function renderTipsPanel() {
     h += '</div>';
   }
 
-  // 카테고리 카드
+  // 카테고리 카드 (D+E: 프로그레스 + 탭 상세)
   cats.forEach(function(key) {
     var meta = CAT_META[key];
     var saving = calcCatSaving(key);
+    var maxSaving = getMaxCatSaving(key);
     var hasInput = saving > 0;
+    var pct = maxSaving > 0 ? Math.min(Math.round(saving / maxSaving * 100), 100) : 0;
 
-    h += '<div class="cat-card" onclick="openCatDetail(\'' + key + '\')">';
+    h += '<div class="cat-card" style="padding:0;overflow:hidden">';
+    h += '<div onclick="openCatDetail(\'' + key + '\')" style="padding:16px 20px">';
     h += '<div class="cat-card-top"><span class="cat-card-name">' + meta.name;
     if (hasInput) h += '<span class="cat-card-amt">' + fmtAmt(saving) + '원</span>';
     h += '</span><span class="cat-card-arrow">›</span></div>';
-    h += '</div>';
+    if (hasInput) {
+      h += '<div style="margin-top:8px"><div class="progress-bar-bg"><div class="progress-bar-fill' + (pct >= 100 ? ' full' : '') + '" style="width:' + pct + '%"></div></div>';
+      h += '<div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:var(--text4)"><span>최대 ' + fmtAmt(maxSaving) + '원</span><span>' + pct + '%</span></div></div>';
+    }
+    h += '</div></div>';
   });
 
   // 16. 배우자 유불리 스위치 (배우자 있을 때만)
