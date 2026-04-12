@@ -854,14 +854,18 @@ function renderFamilyView() {
 
     // 소득 조건 (자녀/부모 공통)
     if (d.type === 'child' || d.type === 'parent') {
-      detail += '<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line)">';
-      detail += '<div><span style="font-size:15px;font-weight:600;color:var(--text2)">소득 조건</span>';
-      if (!d.eligible) detail += '<div style="font-size:12px;color:var(--red);margin-top:2px;font-weight:500">소득 초과 — 공제 불가</div>';
-      detail += '</div>';
+      var hintId = 'incomeHint'+i;
+      detail += '<div style="padding:14px 0;border-bottom:1px solid var(--line)">';
+      detail += '<div style="display:flex;align-items:center;justify-content:space-between">';
+      detail += '<div style="display:flex;align-items:center;gap:6px"><span style="font-size:15px;font-weight:600;color:var(--text2)">소득 조건</span>';
+      detail += '<span onclick="var h=document.getElementById(\''+hintId+'\');h.style.display=h.style.display===\'none\'?\'block\':\'none\'" style="width:18px;height:18px;border-radius:50%;background:var(--bg2);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text4);cursor:pointer">?</span></div>';
       detail += '<div style="display:flex;gap:6px;width:136px">';
       detail += '<button onclick="onFamilyEligible('+i+',true)" style="flex:1;height:36px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;background:'+(d.eligible?'var(--blue)':'var(--bg2)')+';color:'+(d.eligible?'#fff':'var(--text4)')+';touch-action:manipulation">충족</button>';
       detail += '<button onclick="onFamilyEligible('+i+',false)" style="flex:1;height:36px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;background:'+(!d.eligible?'var(--text3)':'var(--bg2)')+';color:'+(!d.eligible?'#fff':'var(--text4)')+';touch-action:manipulation">초과</button>';
       detail += '</div></div>';
+      if (!d.eligible) detail += '<div style="font-size:12px;color:var(--red);margin-top:6px;font-weight:500">소득 초과 — 공제 불가</div>';
+      detail += '<div id="'+hintId+'" style="display:none;margin-top:8px;padding:10px 12px;background:var(--bg2);border-radius:10px;font-size:13px;color:var(--text3);line-height:1.5">연간 소득금액 100만원 이하<br>또는 총급여 500만원 이하일 때<br>부양가족 공제를 받을 수 있어요</div>';
+      detail += '</div>';
     }
 
     // 배분
