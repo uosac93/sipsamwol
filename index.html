@@ -768,7 +768,7 @@ function goToFamily() {
 }
 
 function goToResult() {
-  childCount = dependents.filter(function(d) { return d.type === 'child' && d.eligible && (2026 - d.birthYear) <= 20; }).length;
+  childCount = dependents.filter(function(d) { return d.type === 'child' && d.eligible && d.owner === 'me' && (2026 - d.birthYear) <= 20; }).length;
   calculate();
 }
 
@@ -1546,9 +1546,9 @@ function getFamilyCount() {
 
 function calculate() {
   var fam = getFamilyCount();
-  childCount = dependents.filter(function(d) { return d.type === 'child' && d.eligible && (2026 - d.birthYear) <= 20; }).length;
+  childCount = dependents.filter(function(d) { return d.type === 'child' && d.eligible && d.owner === 'me' && (2026 - d.birthYear) <= 20; }).length;
   lastResult = calcSimpleRefund(salary, fam);
-  if (hasSpouse()) { var spFam = 1 + dependents.filter(function(d){ return d.owner === 'spouse' && d.eligible && (d.type === 'child' ? (2026-d.birthYear) <= 20 : (2026-d.birthYear) >= 60); }).length; spouseResult = calcSimpleRefund(spouseSalary, spFam); }
+  if (hasSpouse()) { var spFam = 1 + dependents.filter(function(d){ return d.owner === 'spouse' && d.eligible && d.type !== 'spouse' && (d.type === 'child' ? (2026-d.birthYear) <= 20 : (2026-d.birthYear) >= 60); }).length; spouseResult = calcSimpleRefund(spouseSalary, spFam); }
   else spouseResult = null;
   renderResult(lastResult);
   showScreen('result');
@@ -1557,9 +1557,9 @@ function calculate() {
 
 function recalculate() {
   var fam = getFamilyCount();
-  childCount = dependents.filter(function(d) { return d.type === 'child' && d.eligible && (2026 - d.birthYear) <= 20; }).length;
+  childCount = dependents.filter(function(d) { return d.type === 'child' && d.eligible && d.owner === 'me' && (2026 - d.birthYear) <= 20; }).length;
   lastResult = calcSimpleRefund(salary, fam);
-  if (hasSpouse()) { var spFam = 1 + dependents.filter(function(d){ return d.owner === 'spouse' && d.eligible && (d.type === 'child' ? (2026-d.birthYear) <= 20 : (2026-d.birthYear) >= 60); }).length; spouseResult = calcSimpleRefund(spouseSalary, spFam); }
+  if (hasSpouse()) { var spFam = 1 + dependents.filter(function(d){ return d.owner === 'spouse' && d.eligible && d.type !== 'spouse' && (d.type === 'child' ? (2026-d.birthYear) <= 20 : (2026-d.birthYear) >= 60); }).length; spouseResult = calcSimpleRefund(spouseSalary, spFam); }
   else spouseResult = null;
   renderResult(lastResult);
 }
