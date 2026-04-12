@@ -1099,8 +1099,8 @@ function calcCatSaving(catKey) {
       saving += Math.min(pt, 100000) * 1.1;
       if (pt > 100000) {
         var over = pt - 100000;
-        if (over <= 30000000) saving += Math.round(over * 0.15 * 1.1);
-        else saving += Math.round(30000000 * 0.15 * 1.1) + Math.round((over - 30000000) * 0.25 * 1.1);
+        if (over <= 29900000) saving += Math.round(over * 0.15 * 1.1);
+        else saving += Math.round(29900000 * 0.15 * 1.1) + Math.round((over - 29900000) * 0.25 * 1.1);
       }
     }
     // 법정·지정 기부금: 1천만원까지 15%, 초과 30%
