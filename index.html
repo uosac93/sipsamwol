@@ -968,15 +968,15 @@ function calcCatSaving(catKey) {
 
   if (catKey === 'housing') {
     var saving = 0;
-    // 월세 세액공제 (총급여 7천만 이하)
-    if (tp <= 70000000 && ci.rent > 0) {
-      var rentAmt = Math.min(ci.rent * 12 * 10000, 7500000);
+    // 월세 세액공제 (총급여 8천만 이하, 2025년~)
+    if (tp <= 80000000 && ci.rent > 0) {
+      var rentAmt = Math.min(ci.rent * 12 * 10000, 10000000);
       var rentRate = tp <= 55000000 ? 0.17 : 0.15;
-      saving += Math.round(rentAmt * rentRate);
+      saving += Math.round(rentAmt * rentRate * 1.1);
     }
     // 주택청약 소득공제 (총급여 7천만 이하, 무주택)
     if (tp <= 70000000 && ci.subscription > 0) {
-      var subAmt = Math.min(ci.subscription * 10000, 2400000);
+      var subAmt = Math.min(ci.subscription * 10000, 3000000);
       saving += Math.round(subAmt * 0.4 * mr * 1.1);
     }
     // 대출이자 소득공제
@@ -992,10 +992,10 @@ function calcCatSaving(catKey) {
     var pensionRate = tp <= 55000000 ? 0.15 : 0.12;
     // 연금저축 + IRP 합산 900만원 한도
     var pensionTotal = Math.min((ci.pensionSaving + ci.irp) * 10000, 9000000);
-    saving += Math.round(pensionTotal * pensionRate);
+    saving += Math.round(pensionTotal * pensionRate * 1.1);
     // 보장성보험 100만원 한도, 12%
     if (ci.insurance > 0) {
-      saving += Math.round(Math.min(ci.insurance * 10000, 1000000) * 0.12);
+      saving += Math.round(Math.min(ci.insurance * 10000, 1000000) * 0.12 * 1.1);
     }
     return saving;
   }
@@ -1004,39 +1004,47 @@ function calcCatSaving(catKey) {
     var saving = 0;
     // 교육비 15% 세액공제 (대학 900만원 한도)
     if (ci.education > 0) {
-      saving += Math.round(Math.min(ci.education * 10000, 9000000) * 0.15);
+      saving += Math.round(Math.min(ci.education * 10000, 9000000) * 0.15 * 1.1);
     }
     // 의료비 15% 세액공제 (총급여 3% 초과분)
     if (ci.medical > 0) {
       var medExcess = Math.max(ci.medical * 10000 - tp * 0.03, 0);
-      if (medExcess > 0) saving += Math.round(medExcess * 0.15);
+      if (medExcess > 0) saving += Math.round(medExcess * 0.15 * 1.1);
     }
     return saving;
   }
 
   if (catKey === 'donation') {
     var saving = 0;
-    // 고향사랑기부금: 10만원까지 전액, 초과분 15%
+    // 고향사랑기부금: 10만원 전액, 10~20만원 40%, 20만원 초과 15% (한도 2000만원)
     if (ci.hometown > 0) {
       var ht = ci.hometown * 10000;
-      saving += Math.min(ht, 100000);
-      if (ht > 100000) saving += Math.round((Math.min(ht, 5000000) - 100000) * 0.15);
+      saving += Math.min(ht, 100000) * 1.1;
+      if (ht > 100000 && ht <= 200000) saving += Math.round((ht - 100000) * 0.40 * 1.1);
+      else if (ht > 200000) {
+        saving += Math.round(100000 * 0.40 * 1.1);
+        saving += Math.round((Math.min(ht, 20000000) - 200000) * 0.15 * 1.1);
+      }
     }
-    // 정치자금: 10만원까지 전액, 초과분 15%/25%
+    // 정치자금: 10만원 전액, 초과~3천만원 15%, 3천만원 초과 25%
     if (ci.political > 0) {
       var pt = ci.political * 10000;
-      saving += Math.min(pt, 100000);
-      if (pt > 100000) saving += Math.round((pt - 100000) * 0.15);
+      saving += Math.min(pt, 100000) * 1.1;
+      if (pt > 100000) {
+        var over = pt - 100000;
+        if (over <= 30000000) saving += Math.round(over * 0.15 * 1.1);
+        else saving += Math.round(30000000 * 0.15 * 1.1) + Math.round((over - 30000000) * 0.25 * 1.1);
+      }
     }
     // 종교기부금: 15%
     if (ci.religious > 0) {
-      saving += Math.round(ci.religious * 10000 * 0.15);
+      saving += Math.round(ci.religious * 10000 * 0.15 * 1.1);
     }
     // 일반기부금: 1천만원까지 15%, 초과 30%
     if (ci.general > 0) {
       var ga = ci.general * 10000;
-      if (ga <= 10000000) saving += Math.round(ga * 0.15);
-      else saving += 1500000 + Math.round((ga - 10000000) * 0.30);
+      if (ga <= 10000000) saving += Math.round(ga * 0.15 * 1.1);
+      else saving += Math.round(10000000 * 0.15 * 1.1) + Math.round((ga - 10000000) * 0.30 * 1.1);
     }
     return saving;
   }
@@ -1638,10 +1646,10 @@ function renderCatSummary() {
 function getMaxCatSaving(key) {
   var tp = getTotalPay(), mr = getMRate();
   if (key === 'card') { var bl = tp <= 70000000 ? 3000000 : (tp <= 120000000 ? 2500000 : 2000000); return Math.round(bl * mr * 1.1); }
-  if (key === 'housing') { var m = 0; if (tp <= 70000000) m += Math.round(7500000 * 0.17); if (tp <= 70000000) m += Math.round(2400000 * 0.4 * mr * 1.1); m += Math.round(20000000 * mr * 1.1); return m; }
-  if (key === 'pension') { var pr = tp <= 55000000 ? 0.15 : 0.12; return Math.round(9000000 * pr + 1000000 * 0.12); }
-  if (key === 'living') return Math.round(9000000 * 0.15 + 7000000 * 0.15);
-  if (key === 'donation') return Math.round(5000000 * 0.15 + 100000);
+  if (key === 'housing') { var m = 0; if (tp <= 80000000) m += Math.round(10000000 * 0.17 * 1.1); if (tp <= 70000000) m += Math.round(3000000 * 0.4 * mr * 1.1); m += Math.round(20000000 * mr * 1.1); return m; }
+  if (key === 'pension') { var pr = tp <= 55000000 ? 0.15 : 0.12; return Math.round(9000000 * pr * 1.1 + 1000000 * 0.12 * 1.1); }
+  if (key === 'living') return Math.round(9000000 * 0.15 * 1.1 + 7000000 * 0.15 * 1.1);
+  if (key === 'donation') return Math.round(20000000 * 0.15 * 1.1 + 100000 * 1.1);
   return 0;
 }
 
