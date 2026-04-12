@@ -165,12 +165,12 @@ body{
 }
 .panel-overlay.show{background:rgba(0,0,0,.4);pointer-events:auto}
 .bottom-panel{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);
+  position:fixed;bottom:0;left:0;right:0;margin:0 auto;transform:translateY(100%);
   width:100%;max-width:440px;background:var(--bg);border-radius:20px 20px 0 0;
   z-index:101;max-height:90vh;overflow-y:auto;overflow-x:hidden;
   transition:transform .4s cubic-bezier(.16,1,.3,1);-webkit-overflow-scrolling:touch;
 }
-.bottom-panel.show{transform:translateX(-50%) translateY(0)}
+.bottom-panel.show{transform:translateY(0)}
 .panel-handle-area{display:flex;justify-content:center;padding:12px 0 4px;cursor:pointer}
 .panel-handle{width:32px;height:3px;border-radius:1.5px;background:var(--text4)}
 .panel-header{padding:8px var(--pad) 16px;display:flex;justify-content:space-between;align-items:center}
@@ -2180,7 +2180,7 @@ document.getElementById('setSpouseSalary').addEventListener('input', function() 
   p.addEventListener('touchmove', function(e) {
     if(!dr) return;
     cy=e.touches[0].clientY-sy;
-    if(cy>0){p.style.transform='translateX(-50%) translateY('+cy+'px)';e.preventDefault();}
+    if(cy>0){p.style.transform='translateY('+cy+'px)';e.preventDefault();}
   }, {passive:false});
   p.addEventListener('touchend', function() {
     if(!dr) return; dr=false;
