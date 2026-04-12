@@ -1538,8 +1538,8 @@ function renderTipsPanel() {
     if (hasSpouse()) {
       var owner = catOwner[key];
       h += '<div style="display:flex;gap:4px;margin-top:8px">';
-      h += '<button onclick="setCatOwner(\'' + key + '\',\'me\')" style="flex:1;height:28px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='me'?'var(--blue-bg)':'transparent') + ';color:' + (owner==='me'?'var(--blue)':'var(--text4)') + '">본인</button>';
-      h += '<button onclick="setCatOwner(\'' + key + '\',\'spouse\')" style="flex:1;height:28px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='spouse'?'var(--blue-bg)':'transparent') + ';color:' + (owner==='spouse'?'var(--blue)':'var(--text4)') + '">배우자</button>';
+      h += '<button onclick="setCatOwner(\'' + key + '\',\'me\')" style="flex:1;height:28px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='me'?'var(--blue)':'var(--line)') + ';color:' + (owner==='me'?'#fff':'var(--text4)') + '">본인</button>';
+      h += '<button onclick="setCatOwner(\'' + key + '\',\'spouse\')" style="flex:1;height:28px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='spouse'?'var(--blue)':'var(--line)') + ';color:' + (owner==='spouse'?'#fff':'var(--text4)') + '">배우자</button>';
       h += '</div>';
     }
     h += '</div>';
