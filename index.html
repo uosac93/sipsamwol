@@ -2326,7 +2326,8 @@ function getMaxCatSaving(key) {
   var tp = getTotalPay(), mr = getMRate();
   if (key === 'card') { var bl = getCardBaseLimit(tp); return Math.round(bl * mr * 1.1); }
   if (key === 'housing') { var m = 0; if (tp <= 80000000) m += Math.round(10000000 * 0.17 * 1.1); if (tp <= 70000000) m += Math.round(3000000 * 0.4 * mr * 1.1); m += Math.round(20000000 * mr * 1.1); return m; }
-  if (key === 'pension') { var pr = tp <= 55000000 ? 0.15 : 0.12; return Math.round(9000000 * pr * 1.1 + 1000000 * 0.12 * 1.1 + 1000000 * 0.15 * 1.1); }
+  if (key === 'pension') { var pr = tp <= 55000000 ? 0.15 : 0.12; return Math.round(9000000 * pr * 1.1); }
+  if (key === 'insurance') return Math.round(1000000 * 0.12 * 1.1 + 1000000 * 0.15 * 1.1);
   if (key === 'education') return Math.round(9000000 * 0.15 * 1.1);
   if (key === 'medical') return Math.round(7000000 * 0.15 * 1.1);
   if (key === 'donation') return Math.round(20000000 * 0.15 * 1.1 + 100000 * 1.1);
@@ -2473,7 +2474,7 @@ function saveSettings() {
   }
   var ssv = document.getElementById('setSpouseSalary').value.replace(/[^0-9]/g, '');
   spouseSalary = ssv ? Number(ssv) : 0;
-  hasSpouseFlag = spouseSalary > 0;
+  if (spouseSalary > 0) hasSpouseFlag = true;
   nonTaxMeal = document.getElementById('setNonTaxMeal').checked;
   isMarried2024 = document.getElementById('setMarried').checked;
   closeAllPanels();
