@@ -471,13 +471,21 @@ body{
 
 <!-- SPOUSE CHOICE SCREEN -->
 <div id="screen-spouse" class="screen active">
-  <div class="input-screen">
-    <div style="display:flex;justify-content:flex-end;padding:16px 0 24px"><span style="font-size:14px;font-weight:600;color:var(--text4)">1/4</span></div>
-    <div class="input-title" style="font-size:28px;margin-bottom:10px">결혼하셨어요?</div>
-    <div class="input-sub" style="margin-bottom:32px">배우자 공제와 맞벌이 절세에 필요해요</div>
-    <div style="display:flex;flex-direction:column;gap:12px">
-      <button onclick="chooseSpouse(false)" style="width:100%;padding:18px 20px;border:2px solid var(--input-line);border-radius:14px;background:#fff;font-size:17px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;transition:all .2s;touch-action:manipulation">아직이에요</button>
-      <button onclick="chooseSpouse(true)" style="width:100%;padding:18px 20px;border:2px solid var(--input-line);border-radius:14px;background:#fff;font-size:17px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;transition:all .2s;touch-action:manipulation">네, 했어요</button>
+  <div class="spouse-choice-screen">
+    <div class="step-bar">
+      <div class="step-progress">
+        <div class="step-progress-seg active"></div>
+        <div class="step-progress-seg"></div>
+        <div class="step-progress-seg"></div>
+        <div class="step-progress-seg"></div>
+      </div>
+    </div>
+    <div class="spouse-choice-body">
+      <div class="spouse-choice-title">배우자가 있나요?</div>
+      <div class="spouse-choice-btns">
+        <button class="spouse-choice-btn" onclick="chooseSpouse(true)">네</button>
+        <button class="spouse-choice-btn" onclick="chooseSpouse(false)">아니요</button>
+      </div>
     </div>
   </div>
 </div>
