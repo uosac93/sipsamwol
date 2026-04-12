@@ -762,7 +762,7 @@ salaryInput.addEventListener('input', function() {
 });
 
 salaryInput.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && salary >= 100) calculate();
+  if (e.key === 'Enter' && salary >= 100) goToFamily();
 });
 
 function chooseSpouse(val) {
@@ -1872,7 +1872,7 @@ function getFamilyCount() {
 function calculate() {
   var fam = getFamilyCount();
   lastResult = calcSimpleRefund(salary, fam);
-  if (hasSpouse()) spouseResult = calcSimpleRefund(spouseSalary, 1);
+  if (hasSpouse()) { var spFam = 1 + dependents.filter(function(d){ return d.owner === 'spouse' && d.eligible && (d.type === 'child' ? (2026-d.birthYear) <= 20 : (2026-d.birthYear) >= 60); }).length; spouseResult = calcSimpleRefund(spouseSalary, spFam); }
   else spouseResult = null;
   renderResult(lastResult);
   showScreen('result');
@@ -1882,7 +1882,7 @@ function calculate() {
 function recalculate() {
   var fam = getFamilyCount();
   lastResult = calcSimpleRefund(salary, fam);
-  if (hasSpouse()) spouseResult = calcSimpleRefund(spouseSalary, 1);
+  if (hasSpouse()) { var spFam = 1 + dependents.filter(function(d){ return d.owner === 'spouse' && d.eligible && (d.type === 'child' ? (2026-d.birthYear) <= 20 : (2026-d.birthYear) >= 60); }).length; spouseResult = calcSimpleRefund(spouseSalary, spFam); }
   else spouseResult = null;
   renderResult(lastResult);
 }
@@ -2373,7 +2373,7 @@ function prevFlowStep() {
 
 function editCatFlow() { catFlow.step = 0; catFlow.history = []; renderCatStep(); }
 
-function saveCatAndReturn() { saveToLocal(); backToTips(); showToast('저장했어요'); }
+function saveCatAndReturn() { saveToLocal(); recalculate(); backToTips(); showToast('저장했어요'); }
 
 function onCatInput(el) {
   var v = el.value.replace(/[^0-9]/g, '');
