@@ -671,7 +671,7 @@ var spouseResult = null;
 
 // 카테고리 입력값 (만원 단위)
 var catInputs = {
-  card: { credit: 0, debit: 0, cash: 0 },
+  card: { credit: 0, debit: 0, cash: 0, market: 0, transport: 0, culture: 0 },
   housing: { rent: 0, subscription: 0, loanInterest: 0 },
   pension: { pensionSaving: 0, irp: 0, insurance: 0 },
   living: { eduSelf: 0, eduChild: 0, eduCollege: 0, medSelf: 0, medFamily: 0, medInfertility: 0 },
@@ -947,19 +947,35 @@ function calcCatSaving(catKey) {
 
   if (catKey === 'card') {
     var threshold = tp * 0.25;
-    var totalSpend = (ci.credit + ci.debit + ci.cash) * 10000;
+    var totalSpend = (ci.credit + ci.debit + ci.cash + (ci.market||0) + (ci.transport||0) + (ci.culture||0)) * 10000;
     if (totalSpend <= threshold) return 0;
+    // 문턱 소진 순서: 신용카드 → 체크카드 → 현금 → 전통시장 → 대중교통 → 문화체육
     var usedFromCredit = Math.min(ci.credit * 10000, threshold);
     var remain = threshold - usedFromCredit;
     var usedFromDebit = Math.min(ci.debit * 10000, remain); remain -= usedFromDebit;
-    var usedFromCash = Math.min(ci.cash * 10000, remain);
+    var usedFromCash = Math.min(ci.cash * 10000, remain); remain -= usedFromCash;
+    var usedFromMarket = Math.min((ci.market||0) * 10000, remain); remain -= usedFromMarket;
+    var usedFromTransport = Math.min((ci.transport||0) * 10000, remain); remain -= usedFromTransport;
+    var usedFromCulture = Math.min((ci.culture||0) * 10000, remain);
     var creditOver = ci.credit * 10000 - usedFromCredit;
     var debitOver = ci.debit * 10000 - usedFromDebit;
     var cashOver = ci.cash * 10000 - usedFromCash;
+    var marketOver = (ci.market||0) * 10000 - usedFromMarket;
+    var transportOver = (ci.transport||0) * 10000 - usedFromTransport;
+    var cultureOver = (ci.culture||0) * 10000 - usedFromCulture;
+    // 기본 한도
     var baseLimit = tp <= 70000000 ? 3000000 : (tp <= 120000000 ? 2500000 : 2000000);
     var baseDed = creditOver * 0.15 + debitOver * 0.30 + cashOver * 0.30;
     baseDed = Math.min(baseDed, baseLimit);
-    return Math.round(baseDed * mr * 1.1);
+    // 추가 한도: 전통시장+대중교통 200만원, 7천만 이하 시 문화체육 포함 300만원
+    var extraDed = marketOver * 0.40 + transportOver * 0.40;
+    var extraLimit = 2000000;
+    if (tp <= 70000000) {
+      extraDed += cultureOver * 0.30;
+      extraLimit = 3000000;
+    }
+    extraDed = Math.min(extraDed, extraLimit);
+    return Math.round((baseDed + extraDed) * mr * 1.1);
   }
 
   if (catKey === 'housing') {
@@ -1138,7 +1154,7 @@ function getFamilyAdvice(catKey) {
 function getCardThresholdInfo() {
   var tp = getTotalPay();
   var ci = catInputs.card;
-  var totalSpend = (ci.credit + ci.debit + ci.cash) * 10000;
+  var totalSpend = (ci.credit + ci.debit + ci.cash + (ci.market||0) + (ci.transport||0) + (ci.culture||0)) * 10000;
   var threshold = tp * 0.25;
   var baseLimit = tp <= 70000000 ? 3000000 : (tp <= 120000000 ? 2500000 : 2000000);
 
@@ -1190,6 +1206,11 @@ var CAT_META = {
       { key: 'credit', label: '신용카드', unit: '만원', rate: 0.15 },
       { key: 'debit', label: '체크카드', unit: '만원', rate: 0.30 },
       { key: 'cash', label: '현금영수증', unit: '만원', rate: 0.30 }
+    ],
+    extraFields: [
+      { key: 'market', label: '전통시장', unit: '만원', rate: 0.40 },
+      { key: 'transport', label: '대중교통', unit: '만원', rate: 0.40 },
+      { key: 'culture', label: '문화·체육비', unit: '만원', rate: 0.30 }
     ]
   },
   housing: {
@@ -1534,18 +1555,27 @@ function renderCatStep() {
     var saving = calcCatSaving('card');
     h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
     h += '<div class="cat-result-value" id="catSavingDisplay">' + fmtAmt(saving) + '원</div></div>';
-    // 카드별 입력 + 공제율 표시
-    CAT_META.card.fields.forEach(function(f) {
+    // 기본 카드 입력
+    function renderCardField(f) {
       var val = ci[f.key] || 0;
       var ratePct = Math.round(f.rate * 100);
-      h += '<div class="card-field-row">';
-      h += '<div class="card-field-top"><span class="card-field-name">' + f.label + '</span>';
-      h += '<span style="font-size:12px;color:var(--text3)">' + ratePct + '% 공제</span>';
-      h += '</div>';
-      h += '<div class="card-field-input"><div class="cat-input-wrap"><input class="cat-input" type="tel" inputmode="numeric" data-field="' + f.key + '" value="' + (val > 0 ? val.toLocaleString() : '') + '" placeholder="0" oninput="onCatInput(this)"><span class="cat-input-unit">만원</span></div></div>';
-      h += '</div>';
-    });
-    h += '<div style="font-size:13px;color:var(--text3);margin-top:8px">신용/체크/현금 합산 한도 <b style="color:var(--blue)">' + baseLimit + '만원</b> · 25% 문턱 <b style="color:var(--blue)">' + fmtAmt(ti.threshold) + '원</b></div>';
+      var r = '<div class="card-field-row">';
+      r += '<div class="card-field-top"><span class="card-field-name">' + f.label + '</span>';
+      r += '<span style="font-size:12px;color:var(--text3)">' + ratePct + '%</span>';
+      r += '</div>';
+      r += '<div class="card-field-input"><div class="cat-input-wrap"><input class="cat-input" type="tel" inputmode="numeric" data-field="' + f.key + '" value="' + (val > 0 ? val.toLocaleString() : '') + '" placeholder="0" oninput="onCatInput(this)"><span class="cat-input-unit">만원</span></div></div>';
+      r += '</div>';
+      return r;
+    }
+    CAT_META.card.fields.forEach(function(f) { h += renderCardField(f); });
+    // 추가 항목 토글
+    var hasExtra = (ci.market||0) > 0 || (ci.transport||0) > 0 || (ci.culture||0) > 0;
+    h += '<div style="margin-top:12px"><button class="choice-btn" style="height:44px;font-size:14px;justify-content:center;margin:0" onclick="document.getElementById(\'cardExtra\').style.display=document.getElementById(\'cardExtra\').style.display===\'none\'?\'block\':\'none\'">전통시장 · 대중교통 · 문화체육비 ' + (hasExtra ? '▲' : '▼') + '</button></div>';
+    h += '<div id="cardExtra" style="display:' + (hasExtra ? 'block' : 'none') + '">';
+    CAT_META.card.extraFields.forEach(function(f) { h += renderCardField(f); });
+    h += '<div style="font-size:12px;color:var(--text3);margin-top:4px">추가 한도: 전통시장+대중교통 200만원' + (tp <= 70000000 ? ', 문화체육 포함 300만원' : '') + '</div>';
+    h += '</div>';
+    h += '<div style="font-size:13px;color:var(--text3);margin-top:12px">기본 한도 <b style="color:var(--blue)">' + baseLimit + '만원</b> · 25% 문턱 <b style="color:var(--blue)">' + fmtAmt(ti.threshold) + '원</b></div>';
     // 25% 컨설팅
     var totalSpend = (ci.credit + ci.debit + ci.cash) * 10000;
     var thresholdMan = Math.round(ti.threshold / 10000);
@@ -1816,8 +1846,10 @@ document.getElementById('setSpouseSalary').addEventListener('input', function() 
 ['settingsPanel','detailPanel','catDetailPanel'].forEach(function(pid) {
   var p = document.getElementById(pid);
   if (!p) return;
+  var handle = p.querySelector('.panel-handle-area');
+  if (!handle) return;
   var sy=0,cy=0,dr=false;
-  p.addEventListener('touchstart', function(e) { if(p.scrollTop<=0){sy=e.touches[0].clientY;dr=true;} });
+  handle.addEventListener('touchstart', function(e) { sy=e.touches[0].clientY;dr=true; });
   p.addEventListener('touchmove', function(e) {
     if(!dr) return;
     cy=e.touches[0].clientY-sy;
