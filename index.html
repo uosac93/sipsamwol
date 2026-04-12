@@ -836,44 +836,54 @@ var familyOwnerTab = 'me';
 function renderFamilyList() {
   var year = 2026;
 
-  // 탭+트리 시각화
-  // 탭: 본인/배우자 선택
-  var tab = '';
+  // 트리 시각화
+  document.getElementById('familyTab').innerHTML = '';
   var isSpouseDependent = dependents.some(function(d) { return d.type === 'spouse'; });
-  if (hasSpouseFlag && !isSpouseDependent) {
-    tab += '<div style="display:flex;gap:6px">';
-    tab += '<button onclick="setFamilyTab(\'me\')" style="flex:1;height:52px;border:none;border-radius:14px;font-family:inherit;cursor:pointer;font-size:14px;font-weight:700;background:' + (familyOwnerTab==='me'?'var(--blue)':'var(--bg2)') + ';color:' + (familyOwnerTab==='me'?'#fff':'var(--text3)') + '">본인<br><span style="font-size:11px;font-weight:500">' + salary.toLocaleString() + '만원</span></button>';
-    tab += '<button onclick="setFamilyTab(\'spouse\')" style="flex:1;height:52px;border:none;border-radius:14px;font-family:inherit;cursor:pointer;font-size:14px;font-weight:700;background:' + (familyOwnerTab==='spouse'?'var(--blue)':'var(--bg2)') + ';color:' + (familyOwnerTab==='spouse'?'#fff':'var(--text3)') + '">배우자<br><span style="font-size:11px;font-weight:500">' + spouseSalary.toLocaleString() + '만원</span></button>';
-    tab += '</div>';
-  }
-  document.getElementById('familyTab').innerHTML = tab;
-
-  // 선택한 쪽 부양가족 칩
-  var currentDeps = hasSpouseFlag && !isSpouseDependent
-    ? dependents.filter(function(d) { return d.owner === familyOwnerTab; })
-    : dependents;
+  var myDeps = dependents.filter(function(d) { return d.owner === 'me' && d.eligible; });
+  var spDeps = dependents.filter(function(d) { return d.owner === 'spouse' && d.eligible; });
 
   function depChip(d, idx) {
     var age = year - d.birthYear;
     var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'user-round');
     var label = d.type === 'spouse' ? '배우자' : age + '세';
     var typeLabel = d.type === 'spouse' ? '' : (d.type === 'child' ? '자녀' : '부모');
-    return '<button onclick="editFamily(' + idx + ')" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 14px;background:' + (familyEditIdx === idx ? 'var(--blue)' : 'var(--bg2)') + ';border:none;border-radius:12px;cursor:pointer;font-family:inherit;min-width:60px;transition:all .15s">' +
-      '<i data-lucide="' + iconName + '" style="width:22px;height:22px;color:' + (familyEditIdx === idx ? '#fff' : 'var(--text2)') + '"></i>' +
-      '<span style="font-size:12px;font-weight:700;color:' + (familyEditIdx === idx ? '#fff' : 'var(--text)') + '">' + label + '</span>' +
+    return '<button onclick="editFamily(' + idx + ')" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 12px;background:' + (familyEditIdx === idx ? 'var(--blue)' : 'var(--bg)') + ';border:none;border-radius:10px;cursor:pointer;font-family:inherit;min-width:52px;transition:all .15s">' +
+      '<i data-lucide="' + iconName + '" style="width:20px;height:20px;color:' + (familyEditIdx === idx ? '#fff' : 'var(--text2)') + '"></i>' +
+      '<span style="font-size:11px;font-weight:700;color:' + (familyEditIdx === idx ? '#fff' : 'var(--text)') + '">' + label + '</span>' +
       (typeLabel ? '<span style="font-size:9px;color:' + (familyEditIdx === idx ? 'rgba(255,255,255,.7)' : 'var(--text4)') + '">' + typeLabel + '</span>' : '') +
       '</button>';
   }
 
-  var addCircle = '<button id="addCircleBtn" onclick="toggleAddMenu()" style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;border:2px dashed var(--line);border-radius:12px;background:transparent;cursor:pointer;font-size:22px;color:var(--text4);font-family:inherit;transition:all .15s">+</button>';
+  function addBtn(who) {
+    return '<button onclick="familyOwnerTab=\'' + who + '\';toggleAddMenu()" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:2px dashed var(--line);border-radius:10px;background:transparent;cursor:pointer;font-size:18px;color:var(--text4);font-family:inherit">+</button>';
+  }
+
+  function renderBranch(title, sal, deps, who) {
+    var h = '<div style="flex:1;background:var(--bg2);border-radius:14px;padding:14px;text-align:center">';
+    h += '<div style="font-size:13px;font-weight:700;color:' + (who === 'me' ? 'var(--blue)' : 'var(--text3)') + ';margin-bottom:2px">' + title + '</div>';
+    h += '<div style="font-size:11px;color:var(--text4);margin-bottom:10px">' + sal.toLocaleString() + '만원</div>';
+    if (deps.length > 0) {
+      h += '<div style="width:1px;height:8px;background:var(--line);margin:0 auto"></div>';
+      h += '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:6px">';
+      deps.forEach(function(d) { h += depChip(d, dependents.indexOf(d)); });
+      h += addBtn(who);
+      h += '</div>';
+    } else {
+      h += '<div style="margin-top:8px">' + addBtn(who) + '</div>';
+    }
+    h += '</div>';
+    return h;
+  }
 
   var tree = '';
-  tree += '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">';
-  if (currentDeps.length > 0) {
-    currentDeps.forEach(function(d) { var idx = dependents.indexOf(d); tree += depChip(d, idx); });
+  if (hasSpouseFlag && !isSpouseDependent) {
+    tree += '<div style="display:flex;gap:10px">';
+    tree += renderBranch('본인', salary, myDeps, 'me');
+    tree += renderBranch('배우자', spouseSalary, spDeps, 'spouse');
+    tree += '</div>';
+  } else {
+    tree += renderBranch('본인', salary, dependents.filter(function(d){return d.eligible;}), 'me');
   }
-  tree += addCircle;
-  tree += '</div>';
   document.getElementById('familyTree').innerHTML = tree;
 
   // 추가 메뉴 (토글)
