@@ -171,7 +171,6 @@ body{
   z-index:101;max-height:90vh;overflow:hidden auto;
   transition:transform .4s cubic-bezier(.16,1,.3,1);
 }
-.bottom-panel *{max-width:100%}
 .bottom-panel.show{transform:translateY(0)}
 .panel-handle-area{display:flex;justify-content:center;padding:12px 0 4px;cursor:pointer}
 .panel-handle{width:32px;height:3px;border-radius:1.5px;background:var(--text4)}
@@ -316,8 +315,8 @@ body{
 .card-field-top{display:flex;flex-direction:column;gap:2px;min-width:0}
 .card-field-name{font-size:15px;font-weight:600;color:var(--text)}
 .card-field-deduct{font-size:12px;color:var(--blue);font-weight:600}
-.card-field-input{width:150px;position:relative;flex-shrink:0}
-.card-field-input .cat-input{text-align:right;padding-right:40px;height:44px;font-size:18px;font-weight:800;border:none;border-radius:10px;background:var(--bg2)}
+.card-field-input{width:140px;position:relative;flex-shrink:0}
+.card-field-input .cat-input{text-align:right;padding-right:6px;height:44px;font-size:18px;font-weight:800;border:none;border-radius:10px;background:var(--bg2)}
 .card-field-input .cat-input:focus{background:var(--blue-bg)}
 .card-field-input .cat-input-unit{font-size:13px}
 
@@ -372,12 +371,12 @@ body{
 
 /* TOAST */
 .toast{
-  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+  position:fixed;bottom:80px;left:0;right:0;margin:0 auto;transform:translateY(20px);
   background:var(--text);color:#fff;padding:12px 24px;border-radius:12px;
   font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:all .3s;
-  z-index:200;max-width:360px;text-align:center;
+  z-index:200;max-width:360px;text-align:center;width:fit-content;
 }
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.show{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
