@@ -772,7 +772,6 @@ function chooseSpouse(val) {
 function addFamily(type) {
   dependents.push({ type: type, birthYear: type === 'child' ? 2020 : 1960, eligible: true, owner: familyOwnerTab, disabled: false });
   familyEditIdx = dependents.length - 1;
-  renderFamilyList();
 }
 
 var addMenuOpen = false;
@@ -798,13 +797,13 @@ function addFamilyAndClose(type) {
 function setFamilyTab(who) {
   familyOwnerTab = who;
   familyEditIdx = -1;
-  renderFamilyList();
+  renderFamilyFlow();
 }
 
 function removeFamily(idx) {
   dependents.splice(idx, 1);
   familyEditIdx = -1;
-  renderFamilyList();
+  renderFamilyFlow();
 }
 
 function onFamilyYear(idx, val) {
@@ -813,17 +812,17 @@ function onFamilyYear(idx, val) {
 
 function onFamilyEligible(idx, val) {
   dependents[idx].eligible = val;
-  renderFamilyList();
+  renderFamilyFlow();
 }
 
 function onFamilyDisabled(idx, val) {
   dependents[idx].disabled = val;
-  renderFamilyList();
+  renderFamilyFlow();
 }
 
 function onFamilyOwner(idx, who) {
   dependents[idx].owner = who;
-  renderFamilyList();
+  renderFamilyFlow();
 }
 
 var familyEditIdx = -1;
@@ -949,7 +948,7 @@ function renderFamilyList() {
 
 function editFamily(idx) {
   familyEditIdx = familyEditIdx === idx ? -1 : idx;
-  renderFamilyList();
+  renderFamilyFlow();
 }
 
 var familyStep = 'ask-child'; // ask-child, child-count, child-year, ask-parent, parent-year, parent-income, assign, summary
@@ -1091,17 +1090,13 @@ function setParentYear() {
 }
 
 function checkSpouseDependent() {
-  // 배우자 급여 500만 이하면 자동으로 부양가족 추가
   var existing = dependents.filter(function(d) { return d.type === 'spouse'; });
   if (hasSpouseFlag && spouseSalary > 0 && spouseSalary <= 500) {
     if (existing.length === 0) {
       dependents.unshift({ type: 'spouse', birthYear: 1990, eligible: true, owner: 'me', disabled: false });
-      renderFamilyList();
     }
   } else {
-    // 500만 초과하면 배우자 부양가족 제거
     dependents = dependents.filter(function(d) { return d.type !== 'spouse'; });
-    renderFamilyList();
   }
 }
 
