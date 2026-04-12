@@ -852,7 +852,7 @@ function renderFamilyList() {
     var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'user-round');
     var label = d.type === 'spouse' ? '배우자' : age + '세';
     var typeLabel = d.type === 'spouse' ? '' : (d.type === 'child' ? '자녀' : '부모');
-    return '<button onclick="editFamily(' + idx + ')" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 12px;background:' + (familyEditIdx === idx ? 'var(--blue)' : 'var(--bg)') + ';border:none;border-radius:10px;cursor:pointer;font-family:inherit;min-width:52px;transition:all .15s">' +
+    return '<button onclick="editFamily(' + idx + ')" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 12px;background:' + (familyEditIdx === idx ? 'var(--blue)' : 'var(--bg)') + ';border:none;border-radius:10px;cursor:pointer;font-family:inherit;min-width:52px;transition:all .15s;animation:springIn .4s ease-out both">' +
       '<i data-lucide="' + iconName + '" style="width:20px;height:20px;color:' + (familyEditIdx === idx ? '#fff' : 'var(--text2)') + '"></i>' +
       '<span style="font-size:11px;font-weight:700;color:' + (familyEditIdx === idx ? '#fff' : 'var(--text)') + '">' + label + '</span>' +
       (typeLabel ? '<span style="font-size:9px;color:' + (familyEditIdx === idx ? 'rgba(255,255,255,.7)' : 'var(--text4)') + '">' + typeLabel + '</span>' : '') +
@@ -864,7 +864,7 @@ function renderFamilyList() {
   }
 
   function renderBranch(title, sal, deps, who) {
-    var h = '<div style="flex:1;background:var(--bg2);border-radius:14px;padding:14px;text-align:center">';
+    var h = '<div style="flex:1;background:var(--bg2);border-radius:14px;padding:14px;text-align:center;animation:fadeSlideIn .4s ease-out both">';
     h += '<div style="font-size:13px;font-weight:700;color:' + (who === 'me' ? 'var(--blue)' : 'var(--text3)') + ';margin-bottom:2px">' + title + '</div>';
     h += '<div style="font-size:11px;color:var(--text4);margin-bottom:10px">' + sal.toLocaleString() + '만원</div>';
     if (deps.length > 0) {
