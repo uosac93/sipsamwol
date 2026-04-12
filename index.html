@@ -1212,16 +1212,20 @@ function calcCatSaving(catKey) {
 
   if (catKey === 'medical') {
     var saving = 0;
-    if (ci.medPostpartum > 0) saving += Math.round(Math.min(ci.medPostpartum * 10000, 2000000) * 0.15 * 1.1);
-    var totalMed = (ci.medSelf + ci.medFamily + ci.medInfertility) * 10000;
+    var ppAmt = Math.min((ci.medPostpartum || 0) * 10000, 2000000); // 산후조리원 200만 캡
+    var totalMed = ((ci.medSelf || 0) + (ci.medFamily || 0) + (ci.medInfertility || 0)) * 10000 + ppAmt;
     var medThreshold = tp * 0.03;
     var medExcess = Math.max(totalMed - medThreshold, 0);
     if (medExcess > 0) {
-      var infertAmt = Math.min(ci.medInfertility * 10000, medExcess);
+      // 우선순위: 난임(30%) → 산후조리원(15%) → 본인(15%,무한) → 부양가족(15%,700만캡)
+      var infertAmt = Math.min((ci.medInfertility || 0) * 10000, medExcess);
       var remainExcess = medExcess - infertAmt;
-      var selfAmt = Math.min(ci.medSelf * 10000, remainExcess);
-      var famAmt = Math.min(Math.min(ci.medFamily * 10000, 7000000), Math.max(remainExcess - selfAmt, 0));
+      var ppDeduct = Math.min(ppAmt, remainExcess);
+      remainExcess -= ppDeduct;
+      var selfAmt = Math.min((ci.medSelf || 0) * 10000, remainExcess);
+      var famAmt = Math.min(Math.min((ci.medFamily || 0) * 10000, 7000000), Math.max(remainExcess - selfAmt, 0));
       saving += Math.round(infertAmt * 0.30 * 1.1);
+      saving += Math.round(ppDeduct * 0.15 * 1.1);
       saving += Math.round(selfAmt * 0.15 * 1.1);
       saving += Math.round(famAmt * 0.15 * 1.1);
     }
@@ -1283,7 +1287,7 @@ function calcAllCatSavings() {
     else total += calcCatSaving(k);
   });
   if (childCount >= 1) {
-    var childCredit = childCount === 1 ? 150000 : (childCount === 2 ? 350000 : 350000 + (childCount - 2) * 300000);
+    var childCredit = childCount === 1 ? 250000 : (childCount === 2 ? 550000 : 550000 + (childCount - 2) * 400000);
     total += Math.round(childCredit * 1.1);
   }
   if (isMarried2024) total += Math.round(500000 * 1.1);
@@ -1536,8 +1540,8 @@ function getFamilyCount() {
   dependents.forEach(function(d) {
     if (d.eligible && d.owner === 'me') {
       var age = 2026 - d.birthYear;
-      if (d.type === 'child' && age <= 20) count++;
-      else if (d.type === 'parent' && age >= 60) count++;
+      if (d.type === 'child' && (age <= 20 || d.disabled)) count++;
+      else if (d.type === 'parent' && (age >= 60 || d.disabled)) count++;
       else if (d.type === 'spouse') count++;
     }
   });
@@ -1548,7 +1552,7 @@ function calculate() {
   var fam = getFamilyCount();
   childCount = dependents.filter(function(d) { return d.type === 'child' && d.eligible && d.owner === 'me' && (2026 - d.birthYear) <= 20; }).length;
   lastResult = calcSimpleRefund(salary, fam);
-  if (hasSpouse()) { var spFam = 1 + dependents.filter(function(d){ return d.owner === 'spouse' && d.eligible && d.type !== 'spouse' && (d.type === 'child' ? (2026-d.birthYear) <= 20 : (2026-d.birthYear) >= 60); }).length; spouseResult = calcSimpleRefund(spouseSalary, spFam); }
+  if (hasSpouse()) { var spFam = 1 + dependents.filter(function(d){ return d.owner === 'spouse' && d.eligible && d.type !== 'spouse' && (d.type === 'child' ? ((2026-d.birthYear) <= 20 || d.disabled) : ((2026-d.birthYear) >= 60 || d.disabled)); }).length; spouseResult = calcSimpleRefund(spouseSalary, spFam); }
   else spouseResult = null;
   renderResult(lastResult);
   showScreen('result');
@@ -1559,7 +1563,7 @@ function recalculate() {
   var fam = getFamilyCount();
   childCount = dependents.filter(function(d) { return d.type === 'child' && d.eligible && d.owner === 'me' && (2026 - d.birthYear) <= 20; }).length;
   lastResult = calcSimpleRefund(salary, fam);
-  if (hasSpouse()) { var spFam = 1 + dependents.filter(function(d){ return d.owner === 'spouse' && d.eligible && d.type !== 'spouse' && (d.type === 'child' ? (2026-d.birthYear) <= 20 : (2026-d.birthYear) >= 60); }).length; spouseResult = calcSimpleRefund(spouseSalary, spFam); }
+  if (hasSpouse()) { var spFam = 1 + dependents.filter(function(d){ return d.owner === 'spouse' && d.eligible && d.type !== 'spouse' && (d.type === 'child' ? ((2026-d.birthYear) <= 20 || d.disabled) : ((2026-d.birthYear) >= 60 || d.disabled)); }).length; spouseResult = calcSimpleRefund(spouseSalary, spFam); }
   else spouseResult = null;
   renderResult(lastResult);
 }
