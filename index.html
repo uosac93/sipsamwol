@@ -986,12 +986,13 @@ function renderFamilyView() {
     var sel = familyEditIdx === idx;
     var label = d.type === 'spouse' ? '배우자' : (d.type === 'child' ? '만'+age+'세' : '만'+age+'세');
     var sub = d.type === 'spouse' ? '' : (d.type === 'child' ? '자녀' : '부모');
-    return '<button onclick="event.stopPropagation();editFamily('+idx+')" style="padding:6px 10px;background:'+(sel?'var(--blue)':'var(--bg)')+';border:'+(sel?'none':'1px solid var(--line)')+';border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:'+(sel?'#fff':'var(--text)')+';touch-action:manipulation">'+label+(sub?' · '+sub:'')+'</button>';
+    var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : 'user-round';
+    return '<button onclick="event.stopPropagation();editFamily('+idx+')" style="display:flex;align-items:center;gap:5px;padding:8px 14px;background:var(--bg);border:2px solid '+(sel?'var(--blue)':'var(--line)')+';border-radius:10px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:'+(sel?'var(--blue)':'var(--text)')+';touch-action:manipulation"><i data-lucide="'+iconName+'" style="width:16px;height:16px"></i>'+label+(sub?' · '+sub:'')+'</button>';
   }
 
   function makeBox(title, deps, who) {
     var h = '<div onclick="familyOwnerTab=\''+who+'\';promptAdd()" style="flex:1;background:var(--bg2);border-radius:14px;padding:16px;min-height:100px;cursor:pointer;transition:all .15s">';
-    h += '<div style="font-size:16px;font-weight:800;color:'+(who==='me'?'var(--blue)':'var(--text2)')+';margin-bottom:10px;text-align:center">'+title+'</div>';
+    h += '<div style="text-align:center;margin-bottom:10px"><i data-lucide="'+(who==='me'?'user':'users')+'" style="width:24px;height:24px;color:'+(who==='me'?'var(--blue)':'var(--text3)')+';display:block;margin:0 auto 4px"></i><span style="font-size:16px;font-weight:800;color:'+(who==='me'?'var(--blue)':'var(--text2)')+'">'+title+'</span></div>';
     if (deps.length > 0) {
       h += '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center">';
       deps.forEach(function(d) { h += makeChip(d); });
@@ -1044,13 +1045,11 @@ function renderFamilyView() {
     detail += '</div></div>';
     if (!ageOk) detail += '<div style="font-size:12px;color:var(--red);padding:8px 0;font-weight:500">'+(d.type==='child'?'만 20세 초과 — 공제 불가':'만 60세 미만 — 공제 불가')+'</div>';
 
-    // 장애인
-    detail += '<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line)">';
+    // 장애인 (토글)
+    detail += '<div onclick="onFamilyDisabled('+i+',!dependents['+i+'].disabled)" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line);cursor:pointer">';
     detail += '<span style="font-size:15px;font-weight:600;color:var(--text2)">장애인</span>';
-    detail += '<div style="display:flex;gap:6px">';
-    detail += '<button onclick="onFamilyDisabled('+i+',true)" style="width:52px;height:36px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;background:'+(d.disabled?'var(--blue)':'var(--bg2)')+';color:'+(d.disabled?'#fff':'var(--text4)')+';touch-action:manipulation">네</button>';
-    detail += '<button onclick="onFamilyDisabled('+i+',false)" style="width:60px;height:36px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;background:'+(!d.disabled?'var(--blue)':'var(--bg2)')+';color:'+(!d.disabled?'#fff':'var(--text4)')+';touch-action:manipulation">아니요</button>';
-    detail += '</div></div>';
+    detail += '<div style="width:44px;height:26px;border-radius:13px;background:'+(d.disabled?'var(--blue)':'var(--line)')+';position:relative;transition:background .2s"><div style="width:22px;height:22px;border-radius:50%;background:#fff;position:absolute;top:2px;left:'+(d.disabled?'20px':'2px')+';transition:left .2s"></div></div>';
+    detail += '</div>';
 
     // 부모 소득
     if (d.type === 'parent') {
