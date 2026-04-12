@@ -897,49 +897,52 @@ function renderFamilyList() {
     var detailIcon = '<i data-lucide="' + detailIconName + '" style="width:20px;height:20px;color:var(--blue)"></i>';
     var ageOk = d.type === 'child' ? age <= 20 : age >= 60;
 
-    detail += '<div style="background:var(--bg);border:1.5px solid var(--line);border-radius:16px;padding:20px;animation:fadeSlideIn .3s ease-out">';
-    detail += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">';
+    detail += '<div style="padding:16px 0;animation:fadeSlideIn .3s ease-out">';
+
+    // 헤더
+    detail += '<div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line)">';
     detail += '<div style="display:flex;align-items:center;gap:8px">' + detailIcon + '<span style="font-size:16px;font-weight:800">' + label + '</span></div>';
     detail += '<button onclick="removeFamily(' + i + ')" style="border:none;background:none;color:var(--text4);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit">삭제</button>';
     detail += '</div>';
 
     // 출생연도
-    detail += '<div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-radius:12px;padding:14px 16px;margin-bottom:12px">';
-    detail += '<span style="font-size:14px;font-weight:600;color:var(--text2)">출생연도</span>';
+    detail += '<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line)">';
+    detail += '<span style="font-size:15px;font-weight:600;color:var(--text2)">출생연도</span>';
     detail += '<div style="display:flex;align-items:center;gap:8px">';
-    detail += '<input type="tel" inputmode="numeric" value="' + d.birthYear + '" onchange="onFamilyYear(' + i + ',this.value)" style="width:90px;height:44px;border:none;border-bottom:2px solid var(--blue);border-radius:0;background:transparent;padding:0;font-size:24px;font-weight:800;font-family:inherit;text-align:center;color:var(--text);outline:none">';
+    detail += '<input type="tel" inputmode="numeric" value="' + d.birthYear + '" onchange="onFamilyYear(' + i + ',this.value)" style="width:80px;height:36px;border:none;border-bottom:2px solid var(--blue);border-radius:0;background:transparent;padding:0;font-size:22px;font-weight:800;font-family:inherit;text-align:center;color:var(--text);outline:none">';
     detail += '<span style="font-size:14px;color:var(--text3);font-weight:600">' + age + '세</span>';
     detail += '</div></div>';
-    if (!ageOk) detail += '<div style="font-size:12px;color:var(--red);font-weight:500;margin-top:-8px;margin-bottom:12px;padding:0 4px">' + (d.type === 'child' ? '20세 초과 — 공제 대상 아님' : '60세 미만 — 공제 대상 아님') + '</div>';
+    if (!ageOk) detail += '<div style="font-size:12px;color:var(--red);font-weight:500;padding:6px 0">' + (d.type === 'child' ? '20세 초과 — 공제 대상 아님' : '60세 미만 — 공제 대상 아님') + '</div>';
 
-    // 장애인 여부
-    detail += '<div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-radius:12px;padding:12px 16px;margin-bottom:12px">';
-    detail += '<span style="font-size:14px;font-weight:600;color:var(--text2)">장애인</span>';
+    // 장애인
+    detail += '<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line)">';
+    detail += '<span style="font-size:15px;font-weight:600;color:var(--text2)">장애인</span>';
     detail += '<div style="display:flex;gap:4px">';
-    detail += '<button onclick="onFamilyDisabled(' + i + ',true)" style="width:48px;height:32px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (d.disabled ? 'var(--blue)' : 'var(--bg)') + ';color:' + (d.disabled ? '#fff' : 'var(--text4)') + '">네</button>';
-    detail += '<button onclick="onFamilyDisabled(' + i + ',false)" style="width:48px;height:32px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (!d.disabled ? 'var(--blue)' : 'var(--bg)') + ';color:' + (!d.disabled ? '#fff' : 'var(--text4)') + '">아니요</button>';
+    detail += '<button onclick="onFamilyDisabled(' + i + ',true)" style="width:48px;height:32px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (d.disabled ? 'var(--blue)' : 'var(--bg2)') + ';color:' + (d.disabled ? '#fff' : 'var(--text4)') + '">네</button>';
+    detail += '<button onclick="onFamilyDisabled(' + i + ',false)" style="width:48px;height:32px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (!d.disabled ? 'var(--blue)' : 'var(--bg2)') + ';color:' + (!d.disabled ? '#fff' : 'var(--text4)') + '">아니요</button>';
     detail += '</div></div>';
 
     // 부모 소득 조건
     if (d.type === 'parent') {
-      detail += '<div style="background:var(--bg2);border-radius:12px;padding:14px 16px;margin-bottom:12px">';
-      detail += '<div style="font-size:14px;font-weight:600;color:var(--text2);margin-bottom:8px">부양가족 등록 가능한가요?</div>';
-      detail += '<div style="font-size:12px;color:var(--text4);margin-bottom:10px;line-height:1.6">월급 500만원 · 연금 516만원 · 사업소득 100만원 · 기타소득 750만원 이하</div>';
-      detail += '<div style="display:flex;gap:6px">';
-      detail += '<button onclick="onFamilyEligible(' + i + ',true)" style="flex:1;height:40px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (d.eligible ? 'var(--blue)' : 'var(--bg)') + ';color:' + (d.eligible ? '#fff' : 'var(--text4)') + '">네</button>';
-      detail += '<button onclick="onFamilyEligible(' + i + ',false)" style="flex:1;height:40px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (!d.eligible ? 'var(--text3)' : 'var(--bg)') + ';color:' + (!d.eligible ? '#fff' : 'var(--text4)') + '">아니요</button>';
-      detail += '</div>';
-      if (!d.eligible) detail += '<div style="font-size:12px;color:var(--red);margin-top:8px;font-weight:500">소득 초과로 공제 대상이 아니에요</div>';
+      detail += '<div style="padding:14px 0;border-bottom:1px solid var(--line)">';
+      detail += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
+      detail += '<span style="font-size:15px;font-weight:600;color:var(--text2)">등록 가능</span>';
+      detail += '<div style="display:flex;gap:4px">';
+      detail += '<button onclick="onFamilyEligible(' + i + ',true)" style="width:48px;height:32px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (d.eligible ? 'var(--blue)' : 'var(--bg2)') + ';color:' + (d.eligible ? '#fff' : 'var(--text4)') + '">네</button>';
+      detail += '<button onclick="onFamilyEligible(' + i + ',false)" style="width:48px;height:32px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (!d.eligible ? 'var(--text3)' : 'var(--bg2)') + ';color:' + (!d.eligible ? '#fff' : 'var(--text4)') + '">아니요</button>';
+      detail += '</div></div>';
+      detail += '<div style="font-size:11px;color:var(--text4);line-height:1.5">월급 500만 · 연금 516만 · 사업소득 100만 · 기타 750만원 이하</div>';
+      if (!d.eligible) detail += '<div style="font-size:12px;color:var(--red);margin-top:4px;font-weight:500">소득 초과</div>';
       detail += '</div>';
     }
 
-    // 배분 선택
+    // 배분
     if (hasSpouseFlag && d.eligible && ageOk) {
-      detail += '<div style="background:var(--bg2);border-radius:12px;padding:14px 16px">';
-      detail += '<div style="font-size:14px;font-weight:600;color:var(--text2);margin-bottom:8px">누가 공제받나요?</div>';
-      detail += '<div style="display:flex;gap:6px">';
-      detail += '<button onclick="onFamilyOwner(' + i + ',\'me\')" style="flex:1;height:40px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (d.owner === 'me' ? 'var(--blue)' : 'var(--bg)') + ';color:' + (d.owner === 'me' ? '#fff' : 'var(--text4)') + '">본인</button>';
-      detail += '<button onclick="onFamilyOwner(' + i + ',\'spouse\')" style="flex:1;height:40px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (d.owner === 'spouse' ? 'var(--blue)' : 'var(--bg)') + ';color:' + (d.owner === 'spouse' ? '#fff' : 'var(--text4)') + '">배우자</button>';
+      detail += '<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0">';
+      detail += '<span style="font-size:15px;font-weight:600;color:var(--text2)">공제</span>';
+      detail += '<div style="display:flex;gap:4px">';
+      detail += '<button onclick="onFamilyOwner(' + i + ',\'me\')" style="width:56px;height:32px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (d.owner === 'me' ? 'var(--blue)' : 'var(--bg2)') + ';color:' + (d.owner === 'me' ? '#fff' : 'var(--text4)') + '">본인</button>';
+      detail += '<button onclick="onFamilyOwner(' + i + ',\'spouse\')" style="width:56px;height:32px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (d.owner === 'spouse' ? 'var(--blue)' : 'var(--bg2)') + ';color:' + (d.owner === 'spouse' ? '#fff' : 'var(--text4)') + '">배우자</button>';
       detail += '</div></div>';
     }
 
