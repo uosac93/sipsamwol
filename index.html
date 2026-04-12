@@ -850,7 +850,7 @@ function renderFamilyList() {
 
   function depChip(d, idx) {
     var age = year - d.birthYear;
-    var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'user-round');
+    var iconName = d.type === 'spouse' ? 'user-round' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'user-round');
     var label = d.type === 'spouse' ? '배우자' : age + '세';
     var typeLabel = d.type === 'spouse' ? '' : (d.type === 'child' ? '자녀' : '부모');
     var sel = familyEditIdx === idx;
@@ -986,13 +986,15 @@ function renderFamilyView() {
     var sel = familyEditIdx === idx;
     var label = d.type === 'spouse' ? '배우자' : (d.type === 'child' ? '만'+age+'세' : '만'+age+'세');
     var sub = d.type === 'spouse' ? '' : (d.type === 'child' ? '자녀' : '부모');
-    var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : 'user-round';
-    return '<button onclick="event.stopPropagation();editFamily('+idx+')" style="display:flex;align-items:center;gap:5px;padding:8px 14px;background:var(--bg);border:2px solid '+(sel?'var(--blue)':'var(--line)')+';border-radius:10px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:'+(sel?'var(--blue)':'var(--text)')+';touch-action:manipulation"><i data-lucide="'+iconName+'" style="width:16px;height:16px"></i>'+label+(sub?' · '+sub:'')+'</button>';
+    var iconName = d.type === 'child' ? 'baby' : 'user-round';
+    var bgColor = sel ? 'var(--blue)' : 'var(--bg2)';
+    var txtColor = sel ? '#fff' : 'var(--text)';
+    return '<button onclick="event.stopPropagation();editFamily('+idx+')" style="display:inline-flex;align-items:center;gap:5px;padding:8px 14px;background:'+bgColor+';border:none;border-radius:20px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:'+txtColor+';touch-action:manipulation"><i data-lucide="'+iconName+'" style="width:14px;height:14px"></i>'+label+(sub?' · '+sub:'')+'</button>';
   }
 
   function makeBox(title, deps, who) {
     var h = '<div onclick="familyOwnerTab=\''+who+'\';promptAdd()" style="flex:1;background:var(--bg2);border-radius:14px;padding:16px;min-height:100px;cursor:pointer;transition:all .15s">';
-    h += '<div style="text-align:center;margin-bottom:10px"><i data-lucide="'+(who==='me'?'user-round':'heart')+'" style="width:24px;height:24px;color:'+(who==='me'?'var(--blue)':'var(--text3)')+';display:block;margin:0 auto 4px"></i><span style="font-size:16px;font-weight:800;color:'+(who==='me'?'var(--blue)':'var(--text2)')+'">'+title+'</span></div>';
+    h += '<div style="text-align:center;margin-bottom:10px"><i data-lucide="'+(who==='me'?'user-round':'user-round')+'" style="width:24px;height:24px;color:'+(who==='me'?'var(--blue)':'var(--text3)')+';display:block;margin:0 auto 4px"></i><span style="font-size:16px;font-weight:800;color:'+(who==='me'?'var(--blue)':'var(--text2)')+'">'+title+'</span></div>';
     if (deps.length > 0) {
       h += '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center">';
       deps.forEach(function(d) { h += makeChip(d); });
