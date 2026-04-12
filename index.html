@@ -1131,7 +1131,9 @@ function calcCatSavingAs(catKey, who) {
 function calcAllCatSavings() {
   var total = 0;
   ['card','housing','pension','insurance','education','medical','donation'].forEach(function(k) {
-    total += calcCatSavingAs(k, catOwner[k]);
+    // 의료비만 몰아주기 가능, 나머지는 본인만
+    if (k === 'medical') total += calcCatSavingAs(k, catOwner[k]);
+    else total += calcCatSaving(k);
   });
   if (childCount >= 1) {
     var childCredit = childCount === 1 ? 150000 : (childCount === 2 ? 350000 : 350000 + (childCount - 2) * 300000);
@@ -1536,11 +1538,12 @@ function renderTipsPanel() {
       h += '<div style="font-size:13px;color:var(--text4);margin-top:6px">입력하기 ›</div>';
     }
     h += '</div>';
-    if (hasSpouse()) {
+    // 의료비만 몰아주기 가능
+    if (hasSpouse() && key === 'medical') {
       var owner = catOwner[key];
       h += '<div style="display:flex;gap:4px;margin-top:8px">';
-      h += '<button onclick="setCatOwner(\'' + key + '\',\'me\')" style="flex:1;height:28px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='me'?'var(--blue)':'var(--line)') + ';color:' + (owner==='me'?'#fff':'var(--text4)') + '">본인</button>';
-      h += '<button onclick="setCatOwner(\'' + key + '\',\'spouse\')" style="flex:1;height:28px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='spouse'?'var(--blue)':'var(--line)') + ';color:' + (owner==='spouse'?'#fff':'var(--text4)') + '">배우자</button>';
+      h += '<button onclick="setCatOwner(\'medical\',\'me\')" style="flex:1;height:28px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='me'?'var(--blue)':'var(--line)') + ';color:' + (owner==='me'?'#fff':'var(--text4)') + '">본인에게 몰기</button>';
+      h += '<button onclick="setCatOwner(\'medical\',\'spouse\')" style="flex:1;height:28px;border:none;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='spouse'?'var(--blue)':'var(--line)') + ';color:' + (owner==='spouse'?'#fff':'var(--text4)') + '">배우자에게 몰기</button>';
       h += '</div>';
     }
     h += '</div>';
