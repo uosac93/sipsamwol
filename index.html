@@ -784,7 +784,7 @@ function chooseSpouse(val) {
 }
 
 function addFamily(type) {
-  dependents.push({ type: type, birthYear: type === 'child' ? 2020 : 1960, eligible: true, owner: 'me' });
+  dependents.push({ type: type, birthYear: type === 'child' ? 2020 : 1960, eligible: true, owner: 'me', disabled: false });
   familyEditIdx = dependents.length - 1;
   renderFamilyList();
 }
@@ -804,6 +804,11 @@ function onFamilyEligible(idx, val) {
   renderFamilyList();
 }
 
+function onFamilyDisabled(idx, val) {
+  dependents[idx].disabled = val;
+  renderFamilyList();
+}
+
 function onFamilyOwner(idx, who) {
   dependents[idx].owner = who;
   renderFamilyList();
@@ -818,13 +823,14 @@ function renderFamilyList() {
   var chips = '';
   dependents.forEach(function(d, i) {
     var age = year - d.birthYear;
-    var icon = d.type === 'child' ? 'baby' : 'user-round';
+    var iconName = d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'person-standing');
+    var iconHtml = '<i data-lucide="' + iconName + '" style="width:24px;height:24px;color:' + (isSelected ? '#fff' : 'var(--text2)') + '"></i>';
     var label = age + '세';
     var ownerLabel = hasSpouseFlag ? (d.owner === 'me' ? '본인' : '배우자') : '';
     var isOk = d.eligible && (d.type === 'child' ? age <= 20 : age >= 60);
     var isSelected = familyEditIdx === i;
     chips += '<button onclick="editFamily(' + i + ')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 18px;background:' + (isSelected ? 'var(--blue)' : 'var(--bg2)') + ';border:none;border-radius:16px;cursor:pointer;font-family:inherit;min-width:76px;transition:all .2s">';
-    chips += '<i data-lucide="' + icon + '" style="width:24px;height:24px;color:' + (isSelected ? '#fff' : 'var(--text2)') + '"></i>';
+    chips += iconHtml;
     chips += '<span style="font-size:14px;font-weight:700;color:' + (isSelected ? '#fff' : 'var(--text)') + '">' + label + '</span>';
     if (ownerLabel) chips += '<span style="font-size:10px;font-weight:600;color:' + (isSelected ? 'rgba(255,255,255,.7)' : 'var(--blue)') + '">' + ownerLabel + '</span>';
     if (!isOk) chips += '<span style="font-size:10px;color:' + (isSelected ? '#FFB3B3' : 'var(--red)') + '">미충족</span>';
@@ -839,12 +845,13 @@ function renderFamilyList() {
     var i = familyEditIdx;
     var age = year - d.birthYear;
     var label = d.type === 'child' ? '자녀' : '부모';
-    var iconName = d.type === 'child' ? 'baby' : 'user-round';
+    var detailIconName = d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'person-standing');
+    var detailIcon = '<i data-lucide="' + detailIconName + '" style="width:20px;height:20px;color:var(--blue)"></i>';
     var ageOk = d.type === 'child' ? age <= 20 : age >= 60;
 
     detail += '<div style="background:var(--bg);border:1.5px solid var(--line);border-radius:16px;padding:20px;animation:fadeSlideIn .3s ease-out">';
     detail += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">';
-    detail += '<div style="display:flex;align-items:center;gap:8px"><i data-lucide="' + iconName + '" style="width:20px;height:20px;color:var(--blue)"></i><span style="font-size:16px;font-weight:800">' + label + '</span></div>';
+    detail += '<div style="display:flex;align-items:center;gap:8px">' + detailIcon + '<span style="font-size:16px;font-weight:800">' + label + '</span></div>';
     detail += '<button onclick="removeFamily(' + i + ')" style="border:none;background:none;color:var(--text4);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit">삭제</button>';
     detail += '</div>';
 
@@ -856,6 +863,14 @@ function renderFamilyList() {
     detail += '<span style="font-size:14px;color:var(--text3);font-weight:600">' + age + '세</span>';
     detail += '</div></div>';
     if (!ageOk) detail += '<div style="font-size:12px;color:var(--red);font-weight:500;margin-top:-8px;margin-bottom:12px;padding:0 4px">' + (d.type === 'child' ? '20세 초과 — 공제 대상 아님' : '60세 미만 — 공제 대상 아님') + '</div>';
+
+    // 장애인 여부
+    detail += '<div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border-radius:12px;padding:12px 16px;margin-bottom:12px">';
+    detail += '<span style="font-size:14px;font-weight:600;color:var(--text2)">장애인</span>';
+    detail += '<div style="display:flex;gap:4px">';
+    detail += '<button onclick="onFamilyDisabled(' + i + ',true)" style="width:48px;height:32px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (d.disabled ? 'var(--blue)' : 'var(--bg)') + ';color:' + (d.disabled ? '#fff' : 'var(--text4)') + '">네</button>';
+    detail += '<button onclick="onFamilyDisabled(' + i + ',false)" style="width:48px;height:32px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (!d.disabled ? 'var(--blue)' : 'var(--bg)') + ';color:' + (!d.disabled ? '#fff' : 'var(--text4)') + '">아니요</button>';
+    detail += '</div></div>';
 
     // 부모 소득 조건
     if (d.type === 'parent') {
