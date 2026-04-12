@@ -159,13 +159,15 @@ body{
 .settings-btn{border:none;background:none;cursor:pointer;padding:8px;color:var(--text3);display:flex;align-items:center;justify-content:center}
 .settings-btn:active{opacity:.4}
 .settings-btn svg{width:22px;height:22px}
-.result-label{font-size:15px;font-weight:500;color:var(--text3);animation:slideUp .5s ease-out both}
+.result-label{font-size:14px;font-weight:600;color:var(--text3);animation:slideUp .5s ease-out both;letter-spacing:1px}
 .result-amount{
-  font-size:48px;font-weight:900;letter-spacing:-2px;color:var(--blue);margin-top:12px;line-height:1.15;
+  font-size:52px;font-weight:900;letter-spacing:-2.5px;margin-top:16px;line-height:1.1;
+  background:linear-gradient(135deg,#1B64DA,#3182F6,#4A9AFF);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   animation:countUp .7s cubic-bezier(.16,1,.3,1) .15s both;
 }
-.result-amount .unit{font-size:24px;font-weight:700;margin-left:2px}
-.result-amount.negative{color:var(--red)}
+.result-amount .unit{font-size:22px;font-weight:700;margin-left:2px}
+.result-amount.negative{background:linear-gradient(135deg,#E03131,#F04452);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .spouse-breakdown{font-size:14px;color:var(--text3);margin-top:12px;animation:fadeIn .5s ease-out .4s both}
 .basis-btn{
   border:none;background:none;font-family:inherit;font-size:13px;font-weight:500;
@@ -1456,29 +1458,29 @@ function renderTipsPanel() {
   var totalMax = 0;
   cats.forEach(function(k) { totalMax += getMaxCatSaving(k); });
 
-  // 3. 절세 진행률 바
-  var pctTotal = totalMax > 0 ? Math.min(Math.round(totalSaving / totalMax * 100), 100) : 0;
-  h += '<div style="background:var(--bg2);border-radius:14px;padding:16px;margin-bottom:16px">';
-  h += '<div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:8px"><span style="color:var(--text2)">절세 달성률</span><span style="color:var(--blue)">' + pctTotal + '%</span></div>';
-  h += '<div class="progress-bar-bg"><div class="progress-bar-fill' + (pctTotal >= 100 ? ' full' : '') + '" style="width:' + pctTotal + '%"></div></div>';
-  h += '<div style="font-size:12px;color:var(--text3);margin-top:6px">현재 ' + fmtAmt(totalSaving) + '원 / 최대 ' + fmtAmt(totalMax) + '원</div>';
-  h += '</div>';
-
-  // 4. 본인/배우자 비교 (배우자 있을 때만)
+  // 4. 본인/배우자 비교 (배우자 있을 때만) — 먼저 표시
   if (hasSpouse() && spouseResult && lastResult) {
     var myAmt = Math.abs(lastResult.refund);
     var spAmt = Math.abs(spouseResult.refund);
     var maxBar = Math.max(myAmt, spAmt);
     var myPct = maxBar > 0 ? Math.round(myAmt / maxBar * 100) : 0;
     var spPct = maxBar > 0 ? Math.round(spAmt / maxBar * 100) : 0;
-    h += '<div style="background:var(--bg2);border-radius:14px;padding:16px;margin-bottom:16px">';
+    h += '<div style="background:var(--bg2);border-radius:14px;padding:16px;margin-bottom:12px">';
     h += '<div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:12px">본인 vs 배우자</div>';
-    h += '<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>본인</span><span style="font-weight:700;color:var(--blue)">' + fmtAmt(myAmt) + '원</span></div>';
-    h += '<div style="height:8px;background:var(--line);border-radius:4px;overflow:hidden"><div style="height:100%;width:' + myPct + '%;background:var(--blue);border-radius:4px"></div></div></div>';
+    h += '<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>본인</span><span style="font-weight:700;color:var(--blue)">' + fmtAmt(myAmt) + '원</span></div>';
+    h += '<div style="height:6px;background:var(--line);border-radius:3px;overflow:hidden"><div style="height:100%;width:' + myPct + '%;background:linear-gradient(90deg,#1B64DA,#4A9AFF);border-radius:3px"></div></div></div>';
     h += '<div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>배우자</span><span style="font-weight:700;color:var(--text3)">' + fmtAmt(spAmt) + '원</span></div>';
-    h += '<div style="height:8px;background:var(--line);border-radius:4px;overflow:hidden"><div style="height:100%;width:' + spPct + '%;background:var(--text4);border-radius:4px"></div></div></div>';
+    h += '<div style="height:6px;background:var(--line);border-radius:3px;overflow:hidden"><div style="height:100%;width:' + spPct + '%;background:linear-gradient(90deg,#8B95A1,#B0B8C1);border-radius:3px"></div></div></div>';
     h += '</div>';
   }
+
+  // 3. 절세 진행률 바 — 카테고리 위
+  var pctTotal = totalMax > 0 ? Math.min(Math.round(totalSaving / totalMax * 100), 100) : 0;
+  h += '<div style="background:var(--bg2);border-radius:14px;padding:16px;margin-bottom:12px">';
+  h += '<div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:8px"><span style="color:var(--text2)">절세 달성률</span><span style="color:var(--blue)">' + pctTotal + '%</span></div>';
+  h += '<div style="height:6px;background:var(--line);border-radius:3px;overflow:hidden"><div style="height:100%;width:' + pctTotal + '%;background:linear-gradient(90deg,#1B64DA,#3182F6,#4A9AFF);border-radius:3px;transition:width .6s"></div></div>';
+  h += '<div style="font-size:12px;color:var(--text3);margin-top:6px">' + fmtAmt(totalSaving) + '원 / ' + fmtAmt(totalMax) + '원</div>';
+  h += '</div>';
 
   // 카테고리 카드 (D+E: 프로그레스 + 탭 상세)
   cats.forEach(function(key) {
