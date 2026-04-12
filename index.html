@@ -494,16 +494,16 @@ body{
 <div id="screen-family" class="screen">
   <div class="input-screen">
     <div class="step-bar">
-      <button class="step-back" onclick="showScreen('spouse')">←</button>
+      <button class="step-back" onclick="showScreen('input')">←</button>
       <div class="step-progress">
         <div class="step-progress-seg done"></div>
+        <div class="step-progress-seg done"></div>
         <div class="step-progress-seg active"></div>
-        <div class="step-progress-seg"></div>
         <div class="step-progress-seg"></div>
       </div>
     </div>
     <div class="input-top">
-      <div class="input-title">우리 가족</div>
+      <div class="input-title">부양가족</div>
       <div class="input-sub">탭해서 수정할 수 있어요</div>
     </div>
     <div id="familyChips" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px"></div>
@@ -513,7 +513,7 @@ body{
     </div>
     <div id="familyList" style="margin-bottom:16px"></div>
     <div style="padding:28px 0 0">
-      <button class="btn-primary" onclick="goToInput()">다음</button>
+      <button class="btn-primary" onclick="goToResult()">환급액 확인하기</button>
     </div>
   </div>
 </div>
@@ -522,11 +522,11 @@ body{
 <div id="screen-input" class="screen">
   <div class="input-screen">
     <div class="step-bar">
-      <button class="step-back" onclick="showScreen('family')">←</button>
+      <button class="step-back" onclick="showScreen('spouse')">←</button>
       <div class="step-progress">
         <div class="step-progress-seg done"></div>
-        <div class="step-progress-seg done"></div>
         <div class="step-progress-seg active"></div>
+        <div class="step-progress-seg"></div>
         <div class="step-progress-seg"></div>
       </div>
     </div>
@@ -550,7 +550,7 @@ body{
       </div>
     </div>
     <div class="input-bottom">
-      <button id="calcBtn" class="btn-primary" disabled onclick="calculate()">환급액 확인하기</button>
+      <button id="calcBtn" class="btn-primary" disabled onclick="goToFamily()">다음</button>
     </div>
   </div>
 </div>
@@ -777,10 +777,10 @@ function chooseSpouse(val) {
   btns[1].classList.toggle('selected', !val);
   // 배우자 급여 섹션 표시/숨김
   document.getElementById('spouseSalarySection').style.display = val ? 'block' : 'none';
-  // 짧은 딜레이 후 가족 구성 화면으로
+  // 짧은 딜레이 후 급여 입력으로
   setTimeout(function() {
-    showScreen('family');
-    renderFamilyList();
+    showScreen('input');
+    salaryInput.focus();
   }, 250);
 }
 
@@ -911,9 +911,14 @@ function editFamily(idx) {
   renderFamilyList();
 }
 
-function goToInput() {
-  showScreen('input');
-  salaryInput.focus();
+function goToFamily() {
+  checkSpouseDependent();
+  showScreen('family');
+  renderFamilyList();
+}
+
+function goToResult() {
+  calculate();
 }
 
 function checkSpouseDependent() {
