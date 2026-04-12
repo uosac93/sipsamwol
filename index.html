@@ -818,7 +818,7 @@ function renderFamilyList() {
   var chips = '';
   dependents.forEach(function(d, i) {
     var age = year - d.birthYear;
-    var icon = d.type === 'child' ? 'baby' : 'heart-handshake';
+    var icon = d.type === 'child' ? 'baby' : 'user-round';
     var label = age + '세';
     var ownerLabel = hasSpouseFlag ? (d.owner === 'me' ? '본인' : '배우자') : '';
     var isOk = d.eligible && (d.type === 'child' ? age <= 20 : age >= 60);
@@ -839,7 +839,7 @@ function renderFamilyList() {
     var i = familyEditIdx;
     var age = year - d.birthYear;
     var label = d.type === 'child' ? '자녀' : '부모';
-    var iconName = d.type === 'child' ? 'baby' : 'heart-handshake';
+    var iconName = d.type === 'child' ? 'baby' : 'user-round';
     var ageOk = d.type === 'child' ? age <= 20 : age >= 60;
 
     detail += '<div style="background:var(--bg);border:1.5px solid var(--line);border-radius:16px;padding:20px;animation:fadeSlideIn .3s ease-out">';
