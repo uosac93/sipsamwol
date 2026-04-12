@@ -775,11 +775,8 @@ function chooseSpouse(val) {
   btns[1].classList.toggle('selected', !val);
   // 배우자 급여 섹션 표시/숨김
   document.getElementById('spouseSalarySection').style.display = val ? 'block' : 'none';
-  // 짧은 딜레이 후 급여 입력으로
-  setTimeout(function() {
-    showScreen('input');
-    salaryInput.focus();
-  }, 250);
+  showScreen('input');
+  salaryInput.focus();
 }
 
 function addFamily(type) {
