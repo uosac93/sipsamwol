@@ -801,18 +801,19 @@ function updateAddMenu() {
 function addFamilyAndClose(type) {
   addMenuOpen = false;
   addFamily(type);
+  renderFamilyView();
 }
 
 function setFamilyTab(who) {
   familyOwnerTab = who;
   familyEditIdx = -1;
-  renderFamilyFlow();
+  renderFamilyView();
 }
 
 function removeFamily(idx) {
   dependents.splice(idx, 1);
   familyEditIdx = -1;
-  renderFamilyFlow();
+  renderFamilyView();
 }
 
 function onFamilyYear(idx, val) {
@@ -821,17 +822,17 @@ function onFamilyYear(idx, val) {
 
 function onFamilyEligible(idx, val) {
   dependents[idx].eligible = val;
-  renderFamilyFlow();
+  renderFamilyView();
 }
 
 function onFamilyDisabled(idx, val) {
   dependents[idx].disabled = val;
-  renderFamilyFlow();
+  renderFamilyView();
 }
 
 function onFamilyOwner(idx, who) {
   dependents[idx].owner = who;
-  renderFamilyFlow();
+  renderFamilyView();
 }
 
 var familyEditIdx = -1;
@@ -957,7 +958,7 @@ function renderFamilyList() {
 
 function editFamily(idx) {
   familyEditIdx = familyEditIdx === idx ? -1 : idx;
-  renderFamilyFlow();
+  renderFamilyView();
 }
 
 function goToFamily() {
@@ -1100,7 +1101,7 @@ function _unused_renderFamilyFlow() {
     var current = children.filter(function(d) { return !d._yearSet; })[0];
     var idx = children.indexOf(current) + 1;
     var total = children.length;
-    if (!current) { familyStep = 'ask-parent'; renderFamilyFlow(); return; }
+    if (!current) { familyStep = 'ask-parent'; renderFamilyView(); return; }
 
     h += '<div class="input-top"><div class="input-title" style="font-size:28px">' + (total > 1 ? idx + '번째 ' : '') + '자녀 출생연도</div></div>';
     h += '<div style="text-align:center;padding:20px 0">';
@@ -1170,7 +1171,7 @@ function addChildren(n) {
     dependents.push({ type: 'child', birthYear: 2020, eligible: true, owner: 'me', disabled: false, _yearSet: false });
   }
   familyStep = 'child-year';
-  renderFamilyFlow();
+  renderFamilyView();
 }
 
 function setChildYear() {
@@ -1180,13 +1181,13 @@ function setChildYear() {
     children[0].birthYear = parseInt(sel.value);
     children[0]._yearSet = true;
   }
-  renderFamilyFlow(); // 다음 자녀 또는 ask-parent로
+  renderFamilyView(); // 다음 자녀 또는 ask-parent로
 }
 
 function addParent() {
   dependents.push({ type: 'parent', birthYear: 1960, eligible: true, owner: 'me', disabled: false });
   familyStep = 'parent-year';
-  renderFamilyFlow();
+  renderFamilyView();
 }
 
 function setParentYear() {
@@ -1196,7 +1197,7 @@ function setParentYear() {
     parents[parents.length - 1].birthYear = parseInt(sel.value);
   }
   familyStep = 'parent-more';
-  renderFamilyFlow();
+  renderFamilyView();
 }
 
 function checkSpouseDependent() {
@@ -2078,13 +2079,19 @@ function getCatSteps(key, ans) {
     s.push({ type: 'done' }); return s;
   }
   if (key === 'pension') {
-    s.push({ type: 'input', title: '2026년 연금저축\n얼마 정도 넣게 돼요?', fields: [CAT_META.pension.fields[0], CAT_META.pension.fields[1]] });
-    s.push({ type: 'input', title: '보험료를\n입력해 주세요', sub: '일반 12% · 장애인전용 15% (각 100만원 한도)', fields: [CAT_META.pension.fields[2], CAT_META.pension.fields[3]] });
+    s.push({ type: 'input', title: '연금저축·IRP\n얼마 넣고 있나요?', sub: '연금저축 600만 + IRP 합산 900만 한도', fields: CAT_META.pension.fields });
     s.push({ type: 'done' }); return s;
   }
-  if (key === 'living') {
-    s.push({ type: 'input', title: '교육비를\n입력해 주세요', sub: '본인 한도 없음 · 초중고 300만원 · 대학 900만원', fields: [CAT_META.living.fields[0], CAT_META.living.fields[1], CAT_META.living.fields[2]] });
-    s.push({ type: 'input', title: '의료비를\n입력해 주세요', sub: '총급여 3%(' + fmtAmt(Math.round(getTotalPay() * 0.03)) + '원) 초과분부터 공제', fields: [CAT_META.living.fields[3], CAT_META.living.fields[4], CAT_META.living.fields[5], CAT_META.living.fields[6]], extra: 'medicalAdvice' });
+  if (key === 'insurance') {
+    s.push({ type: 'input', title: '보험료를\n입력해 주세요', sub: '일반 12% · 장애인전용 15% (각 100만원 한도)', fields: CAT_META.insurance.fields });
+    s.push({ type: 'done' }); return s;
+  }
+  if (key === 'education') {
+    s.push({ type: 'input', title: '교육비를\n입력해 주세요', sub: '본인 한도 없음 · 초중고 300만원 · 대학 900만원', fields: CAT_META.education.fields });
+    s.push({ type: 'done' }); return s;
+  }
+  if (key === 'medical') {
+    s.push({ type: 'input', title: '의료비를\n입력해 주세요', sub: '총급여 3%(' + fmtAmt(Math.round(getTotalPay() * 0.03)) + '원) 초과분부터 공제', fields: CAT_META.medical.fields, extra: 'medicalAdvice' });
     s.push({ type: 'done' }); return s;
   }
   if (key === 'donation') {
