@@ -1558,7 +1558,7 @@ function calcCatSaving(catKey) {
     // 고향사랑기부금: 10만원 전액, 10~20만원 40%, 20만원 초과 15% (한도 2000만원)
     if (ci.hometown > 0) {
       var ht = ci.hometown * 10000;
-      saving += Math.min(ht, 100000) * 1.1;
+      saving += Math.round(Math.min(ht, 100000) * 1.1);
       if (ht > 100000 && ht <= 200000) saving += Math.round((ht - 100000) * 0.40 * 1.1);
       else if (ht > 200000) {
         saving += Math.round(100000 * 0.40 * 1.1);
@@ -1568,7 +1568,7 @@ function calcCatSaving(catKey) {
     // 정치자금: 10만원 전액, 초과~3천만원 15%, 3천만원 초과 25%
     if (ci.political > 0) {
       var pt = ci.political * 10000;
-      saving += Math.min(pt, 100000) * 1.1;
+      saving += Math.round(Math.min(pt, 100000) * 1.1);
       if (pt > 100000) {
         var over = pt - 100000;
         if (over <= 29900000) saving += Math.round(over * 0.15 * 1.1);
