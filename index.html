@@ -502,17 +502,7 @@ body{
         <div class="step-progress-seg"></div>
       </div>
     </div>
-    <div class="input-top">
-      <div class="input-title">부양가족</div>
-      <div class="input-sub">탭해서 수정, 드래그해서 배분</div>
-    </div>
-    <div id="familyTab" style="margin-bottom:12px"></div>
-    <div id="familyTree" style="margin-bottom:12px"></div>
-    <div id="familyAddBtns"></div>
-    <div id="familyList" style="margin-bottom:16px"></div>
-    <div style="padding:28px 0 0">
-      <button class="btn-primary" onclick="goToResult()">환급액 확인하기</button>
-    </div>
+    <div id="familyFlow"></div>
   </div>
 </div>
 
@@ -794,7 +784,8 @@ function updateAddMenu() {
   var el = document.getElementById('familyAddBtns');
   if (!el) return;
   if (addMenuOpen) {
-    el.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;animation:fadeSlideIn .2s ease-out"><button onclick="addFamilyAndClose(\'child\')" style="width:100%;padding:16px 20px;border:2px solid var(--input-line);border-radius:14px;background:#fff;font-size:16px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;touch-action:manipulation">자녀 추가</button><button onclick="addFamilyAndClose(\'parent\')" style="width:100%;padding:16px 20px;border:2px solid var(--input-line);border-radius:14px;background:#fff;font-size:16px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;touch-action:manipulation">부모 추가</button></div>';
+    el.innerHTML = '<div style="display:flex;gap:8px;animation:fadeSlideIn .2s ease-out"><button onclick="addFamilyAndClose(\'child\')" style="flex:1;padding:14px;border:none;border-radius:12px;background:var(--bg2);font-size:15px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:center;touch-action:manipulation"><i data-lucide="baby" style="width:20px;height:20px;color:var(--blue);display:block;margin:0 auto 4px"></i>자녀</button><button onclick="addFamilyAndClose(\'parent\')" style="flex:1;padding:14px;border:none;border-radius:12px;background:var(--bg2);font-size:15px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:center;touch-action:manipulation"><i data-lucide="user-round" style="width:20px;height:20px;color:var(--blue);display:block;margin:0 auto 4px"></i>부모</button></div>';
+    if (window.lucide) lucide.createIcons();
   } else {
     el.innerHTML = '';
   }
@@ -861,14 +852,15 @@ function renderFamilyList() {
   }
 
   function renderBranch(title, sal, deps, who) {
-    var h = '<div style="flex:1;background:var(--bg2);border-radius:14px;padding:16px;text-align:center;animation:fadeSlideIn .4s ease-out both;cursor:pointer" onclick="familyOwnerTab=\'' + who + '\';toggleAddMenu()">';
-    h += '<div style="font-size:18px;font-weight:800;color:' + (who === 'me' ? 'var(--blue)' : 'var(--text2)') + ';margin-bottom:12px">' + title + '</div>';
+    var h = '<div style="flex:1;background:var(--bg2);border-radius:16px;padding:20px 16px;text-align:center;cursor:pointer;transition:all .15s;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center" onclick="familyOwnerTab=\'' + who + '\';toggleAddMenu()">';
+    h += '<div style="font-size:17px;font-weight:800;color:' + (who === 'me' ? 'var(--blue)' : 'var(--text2)') + '">' + title + '</div>';
     if (deps.length > 0) {
-      h += '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center">';
+      h += '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:14px">';
       deps.forEach(function(d) { h += depChip(d, dependents.indexOf(d)); });
       h += '</div>';
+      h += '<div style="margin-top:10px;font-size:12px;color:var(--text4)">탭해서 추가</div>';
     } else {
-      h += '<div style="font-size:24px;color:var(--text4);padding:8px 0">+</div>';
+      h += '<div style="margin-top:12px"><i data-lucide="plus" style="width:28px;height:28px;color:var(--text4)"></i></div>';
     }
     h += '</div>';
     return h;
@@ -960,14 +952,142 @@ function editFamily(idx) {
   renderFamilyList();
 }
 
+var familyStep = 'ask-child'; // ask-child, child-count, child-year, ask-parent, parent-year, parent-income, assign, summary
+
 function goToFamily() {
   checkSpouseDependent();
+  familyStep = 'ask-child';
+  dependents = dependents.filter(function(d) { return d.type === 'spouse'; }); // 배우자 부양가족만 유지
   showScreen('family');
-  renderFamilyList();
+  renderFamilyFlow();
 }
 
 function goToResult() {
   calculate();
+}
+
+function renderFamilyFlow() {
+  var h = '';
+  var year = 2026;
+
+  if (familyStep === 'ask-child') {
+    h += '<div class="input-top"><div class="input-title" style="font-size:28px">자녀가 있나요?</div>';
+    h += '<div class="input-sub">자녀 세액공제와 교육비 공제에 반영돼요</div></div>';
+    h += '<div style="display:flex;flex-direction:column;gap:12px">';
+    h += '<button onclick="familyStep=\'child-count\';renderFamilyFlow()" style="width:100%;padding:18px 20px;border:2px solid var(--input-line);border-radius:14px;background:#fff;font-size:17px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;touch-action:manipulation">있어요</button>';
+    h += '<button onclick="familyStep=\'ask-parent\';renderFamilyFlow()" style="width:100%;padding:18px 20px;border:2px solid var(--input-line);border-radius:14px;background:#fff;font-size:17px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;touch-action:manipulation">없어요</button>';
+    h += '</div>';
+
+  } else if (familyStep === 'child-count') {
+    h += '<div class="input-top"><div class="input-title" style="font-size:28px">몇 명인가요?</div></div>';
+    h += '<div style="display:flex;flex-direction:column;gap:12px">';
+    [1,2,3].forEach(function(n) {
+      h += '<button onclick="addChildren(' + n + ')" style="width:100%;padding:18px 20px;border:2px solid var(--input-line);border-radius:14px;background:#fff;font-size:17px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;touch-action:manipulation">' + n + '명' + (n===3?' 이상':'') + '</button>';
+    });
+    h += '</div>';
+
+  } else if (familyStep === 'child-year') {
+    var children = dependents.filter(function(d) { return d.type === 'child'; });
+    var current = children.filter(function(d) { return !d._yearSet; })[0];
+    var idx = children.indexOf(current) + 1;
+    var total = children.length;
+    if (!current) { familyStep = 'ask-parent'; renderFamilyFlow(); return; }
+
+    h += '<div class="input-top"><div class="input-title" style="font-size:28px">' + (total > 1 ? idx + '번째 ' : '') + '자녀 출생연도</div></div>';
+    h += '<div style="text-align:center;padding:20px 0">';
+    h += '<select id="childYearSelect" style="font-size:32px;font-weight:800;color:var(--blue);border:none;border-bottom:2px solid var(--blue);background:transparent;font-family:inherit;outline:none;text-align:center;padding:8px 0;-webkit-appearance:none">';
+    for (var y = 2026; y >= 2000; y--) { h += '<option value="' + y + '"' + (y === current.birthYear ? ' selected' : '') + '>' + y + '</option>'; }
+    h += '</select>';
+    h += '<div style="font-size:15px;color:var(--text3);margin-top:8px">만 <span id="childAgeDisplay">' + (year - current.birthYear) + '</span>세</div>';
+    h += '</div>';
+    h += '<button onclick="setChildYear()" class="btn-primary">다음</button>';
+
+  } else if (familyStep === 'ask-parent') {
+    h += '<div class="input-top"><div class="input-title" style="font-size:28px">부양하는 부모님이<br>있나요?</div>';
+    h += '<div class="input-sub">만 60세 이상, 소득 조건 충족 시 공제</div></div>';
+    h += '<div style="display:flex;flex-direction:column;gap:12px">';
+    h += '<button onclick="addParent()" style="width:100%;padding:18px 20px;border:2px solid var(--input-line);border-radius:14px;background:#fff;font-size:17px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;touch-action:manipulation">있어요</button>';
+    h += '<button onclick="familyStep=\'summary\';renderFamilyFlow()" style="width:100%;padding:18px 20px;border:2px solid var(--input-line);border-radius:14px;background:#fff;font-size:17px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;touch-action:manipulation">없어요</button>';
+    h += '</div>';
+
+  } else if (familyStep === 'parent-year') {
+    var parents = dependents.filter(function(d) { return d.type === 'parent'; });
+    var current = parents[parents.length - 1];
+    h += '<div class="input-top"><div class="input-title" style="font-size:28px">부모님 출생연도</div></div>';
+    h += '<div style="text-align:center;padding:20px 0">';
+    h += '<select id="parentYearSelect" style="font-size:32px;font-weight:800;color:var(--blue);border:none;border-bottom:2px solid var(--blue);background:transparent;font-family:inherit;outline:none;text-align:center;padding:8px 0;-webkit-appearance:none">';
+    for (var y = 1970; y >= 1930; y--) { h += '<option value="' + y + '"' + (y === current.birthYear ? ' selected' : '') + '>' + y + '</option>'; }
+    h += '</select>';
+    h += '<div style="font-size:15px;color:var(--text3);margin-top:8px">만 ' + (year - current.birthYear) + '세</div>';
+    h += '</div>';
+    h += '<div style="background:var(--bg2);border-radius:12px;padding:14px;margin-bottom:16px">';
+    h += '<div style="font-size:13px;color:var(--text3);line-height:1.6">소득 조건: 월급 500만 · 연금 516만 · 사업 100만 · 기타 750만원 이하</div></div>';
+    h += '<button onclick="setParentYear()" class="btn-primary">다음</button>';
+
+  } else if (familyStep === 'parent-more') {
+    h += '<div class="input-top"><div class="input-title" style="font-size:28px">부모님 한 분 더<br>등록할까요?</div></div>';
+    h += '<div style="display:flex;flex-direction:column;gap:12px">';
+    h += '<button onclick="addParent()" style="width:100%;padding:18px 20px;border:2px solid var(--input-line);border-radius:14px;background:#fff;font-size:17px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;touch-action:manipulation">추가할래요</button>';
+    h += '<button onclick="familyStep=\'summary\';renderFamilyFlow()" style="width:100%;padding:18px 20px;border:2px solid var(--input-line);border-radius:14px;background:#fff;font-size:17px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;touch-action:manipulation">이제 됐어요</button>';
+    h += '</div>';
+
+  } else if (familyStep === 'summary') {
+    childCount = dependents.filter(function(d) { return d.type === 'child' && d.eligible && (year - d.birthYear) <= 20; }).length;
+    h += '<div class="input-top"><div class="input-title" style="font-size:28px">우리 가족</div></div>';
+    if (dependents.length === 0) {
+      h += '<div style="text-align:center;color:var(--text4);padding:32px 0;font-size:15px">부양가족이 없어요</div>';
+    } else {
+      dependents.forEach(function(d, i) {
+        var age = year - d.birthYear;
+        var typeLabel = d.type === 'spouse' ? '배우자' : (d.type === 'child' ? '자녀' : '부모');
+        h += '<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line)">';
+        h += '<div style="display:flex;align-items:center;gap:10px">';
+        h += '<i data-lucide="' + (d.type === 'child' ? 'baby' : (d.type === 'spouse' ? 'heart' : 'user-round')) + '" style="width:20px;height:20px;color:var(--blue)"></i>';
+        h += '<span style="font-size:16px;font-weight:600">' + typeLabel + ' · ' + d.birthYear + '년 · 만 ' + age + '세</span>';
+        h += '</div>';
+        if (d.type !== 'spouse') h += '<button onclick="dependents.splice(' + i + ',1);renderFamilyFlow()" style="border:none;background:none;color:var(--text4);font-size:12px;cursor:pointer;font-family:inherit">삭제</button>';
+        h += '</div>';
+      });
+    }
+    h += '<div style="padding:24px 0 0"><button class="btn-primary" onclick="goToResult()">환급액 확인하기</button></div>';
+  }
+
+  document.getElementById('familyFlow').innerHTML = h;
+  if (window.lucide) lucide.createIcons();
+}
+
+function addChildren(n) {
+  for (var i = 0; i < n; i++) {
+    dependents.push({ type: 'child', birthYear: 2020, eligible: true, owner: 'me', disabled: false, _yearSet: false });
+  }
+  familyStep = 'child-year';
+  renderFamilyFlow();
+}
+
+function setChildYear() {
+  var sel = document.getElementById('childYearSelect');
+  var children = dependents.filter(function(d) { return d.type === 'child' && !d._yearSet; });
+  if (children.length > 0) {
+    children[0].birthYear = parseInt(sel.value);
+    children[0]._yearSet = true;
+  }
+  renderFamilyFlow(); // 다음 자녀 또는 ask-parent로
+}
+
+function addParent() {
+  dependents.push({ type: 'parent', birthYear: 1960, eligible: true, owner: 'me', disabled: false });
+  familyStep = 'parent-year';
+  renderFamilyFlow();
+}
+
+function setParentYear() {
+  var sel = document.getElementById('parentYearSelect');
+  var parents = dependents.filter(function(d) { return d.type === 'parent'; });
+  if (parents.length > 0) {
+    parents[parents.length - 1].birthYear = parseInt(sel.value);
+  }
+  familyStep = 'parent-more';
+  renderFamilyFlow();
 }
 
 function checkSpouseDependent() {
