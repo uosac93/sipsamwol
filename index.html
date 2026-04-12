@@ -1704,8 +1704,8 @@ function renderTipsPanel() {
     if (hasSpouse() && key === 'medical') {
       var owner = catOwner[key];
       h += '<div style="display:flex;gap:4px;margin-top:8px">';
-      h += '<button onclick="setCatOwner(\'medical\',\'me\')" style="flex:1;height:24px;border:none;border-radius:6px;font-size:10px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='me'?'var(--blue)':'transparent') + ';color:' + (owner==='me'?'#fff':'var(--text4)') + '">본인</button>';
-      h += '<button onclick="setCatOwner(\'medical\',\'spouse\')" style="flex:1;height:24px;border:none;border-radius:6px;font-size:10px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='spouse'?'var(--blue)':'transparent') + ';color:' + (owner==='spouse'?'#fff':'var(--text4)') + '">배우자</button>';
+      h += '<button onclick="setCatOwner(\'medical\',\'me\')" style="flex:1;height:32px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='me'?'var(--blue)':'transparent') + ';color:' + (owner==='me'?'#fff':'var(--text4)') + '">본인</button>';
+      h += '<button onclick="setCatOwner(\'medical\',\'spouse\')" style="flex:1;height:32px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:' + (owner==='spouse'?'var(--blue)':'transparent') + ';color:' + (owner==='spouse'?'#fff':'var(--text4)') + '">배우자</button>';
       h += '</div>';
     }
     h += '</div>';
