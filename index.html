@@ -1660,8 +1660,7 @@ function getFamilyAdvice(catKey) {
     return { who: 'spouse', reason: '배우자가 더 많이 돌려받아요' };
   }
 
-  if (catKey === 'living') {
-    // 의료비: 소득 낮은 쪽이 3% 문턱 빨리 넘음
+  if (catKey === 'medical') {
     if (myTP <= spTP) return { who: 'me', reason: '소득이 낮아서 3% 문턱을 빨리 넘을 수 있어요' };
     return { who: 'spouse', reason: '배우자 소득이 낮아서 3% 문턱을 빨리 넘을 수 있어요' };
   }
@@ -2302,7 +2301,8 @@ function getMaxCatSaving(key) {
   if (key === 'card') { var bl = getCardBaseLimit(tp); return Math.round(bl * mr * 1.1); }
   if (key === 'housing') { var m = 0; if (tp <= 80000000) m += Math.round(10000000 * 0.17 * 1.1); if (tp <= 70000000) m += Math.round(3000000 * 0.4 * mr * 1.1); m += Math.round(20000000 * mr * 1.1); return m; }
   if (key === 'pension') { var pr = tp <= 55000000 ? 0.15 : 0.12; return Math.round(9000000 * pr * 1.1 + 1000000 * 0.12 * 1.1 + 1000000 * 0.15 * 1.1); }
-  if (key === 'living') return Math.round(9000000 * 0.15 * 1.1 + 7000000 * 0.15 * 1.1);
+  if (key === 'education') return Math.round(9000000 * 0.15 * 1.1);
+  if (key === 'medical') return Math.round(7000000 * 0.15 * 1.1);
   if (key === 'donation') return Math.round(20000000 * 0.15 * 1.1 + 100000 * 1.1);
   return 0;
 }
