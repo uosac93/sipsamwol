@@ -824,7 +824,7 @@ function renderFamilyList() {
   var chips = '';
   dependents.forEach(function(d, i) {
     var age = year - d.birthYear;
-    var iconName = d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'person-standing');
+    var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'person-standing');
     var iconHtml = '<i data-lucide="' + iconName + '" style="width:24px;height:24px;color:' + (isSelected ? '#fff' : 'var(--text2)') + '"></i>';
     var label = age + '세';
     var ownerLabel = hasSpouseFlag ? (d.owner === 'me' ? '본인' : '배우자') : '';
@@ -846,7 +846,7 @@ function renderFamilyList() {
     var i = familyEditIdx;
     var age = year - d.birthYear;
     var label = d.type === 'child' ? '자녀' : '부모';
-    var detailIconName = d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'person-standing');
+    var detailIconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'person-standing');
     var detailIcon = '<i data-lucide="' + detailIconName + '" style="width:20px;height:20px;color:var(--blue)"></i>';
     var ageOk = d.type === 'child' ? age <= 20 : age >= 60;
 
@@ -916,11 +916,27 @@ function goToInput() {
   salaryInput.focus();
 }
 
+function checkSpouseDependent() {
+  // 배우자 급여 500만 이하면 자동으로 부양가족 추가
+  var existing = dependents.filter(function(d) { return d.type === 'spouse'; });
+  if (hasSpouseFlag && spouseSalary > 0 && spouseSalary <= 500) {
+    if (existing.length === 0) {
+      dependents.unshift({ type: 'spouse', birthYear: 1990, eligible: true, owner: 'me', disabled: false });
+      renderFamilyList();
+    }
+  } else {
+    // 500만 초과하면 배우자 부양가족 제거
+    dependents = dependents.filter(function(d) { return d.type !== 'spouse'; });
+    renderFamilyList();
+  }
+}
+
 function onSpouseSalaryInput(el) {
   var raw = el.value.replace(/[^0-9]/g, '');
   if (raw.length > 6) raw = raw.slice(0, 6);
   el.value = raw ? Number(raw).toLocaleString() : '';
   spouseSalary = Number(raw) || 0;
+  checkSpouseDependent();
 }
 
 // ===========================
