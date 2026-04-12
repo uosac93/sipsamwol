@@ -852,10 +852,11 @@ function renderFamilyList() {
     var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'user-round');
     var label = d.type === 'spouse' ? '배우자' : age + '세';
     var typeLabel = d.type === 'spouse' ? '' : (d.type === 'child' ? '자녀' : '부모');
-    return '<button onclick="editFamily(' + idx + ')" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 12px;background:' + (familyEditIdx === idx ? 'var(--blue)' : 'var(--bg)') + ';border:none;border-radius:10px;cursor:pointer;font-family:inherit;min-width:52px;transition:all .15s;animation:springIn .4s ease-out both">' +
-      '<i data-lucide="' + iconName + '" style="width:20px;height:20px;color:' + (familyEditIdx === idx ? '#fff' : 'var(--text2)') + '"></i>' +
-      '<span style="font-size:11px;font-weight:700;color:' + (familyEditIdx === idx ? '#fff' : 'var(--text)') + '">' + label + '</span>' +
-      (typeLabel ? '<span style="font-size:9px;color:' + (familyEditIdx === idx ? 'rgba(255,255,255,.7)' : 'var(--text4)') + '">' + typeLabel + '</span>' : '') +
+    var sel = familyEditIdx === idx;
+    return '<button onclick="editFamily(' + idx + ')" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 12px;background:var(--bg);border:' + (sel ? '2px solid var(--blue)' : '2px solid transparent') + ';border-radius:12px;cursor:pointer;font-family:inherit;min-width:52px;transition:all .15s">' +
+      '<i data-lucide="' + iconName + '" style="width:20px;height:20px;color:' + (sel ? 'var(--blue)' : 'var(--text3)') + '"></i>' +
+      '<span style="font-size:11px;font-weight:700;color:' + (sel ? 'var(--blue)' : 'var(--text)') + '">' + label + '</span>' +
+      (typeLabel ? '<span style="font-size:9px;color:var(--text4)">' + typeLabel + '</span>' : '') +
       '</button>';
   }
 
