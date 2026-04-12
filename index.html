@@ -506,11 +506,9 @@ body{
       <div class="input-title">부양가족</div>
       <div class="input-sub">탭해서 수정, 드래그해서 배분</div>
     </div>
-    <div id="familyTree" style="margin-bottom:16px"></div>
-    <div style="display:flex;gap:8px;margin-bottom:16px">
-      <button class="choice-btn" style="height:48px;justify-content:center;margin:0;flex:1" onclick="addFamily('child')">+ 자녀</button>
-      <button class="choice-btn" style="height:48px;justify-content:center;margin:0;flex:1" onclick="addFamily('parent')">+ 부모</button>
-    </div>
+    <div id="familyTab" style="margin-bottom:12px"></div>
+    <div id="familyTree" style="margin-bottom:12px"></div>
+    <div id="familyAddBtns" style="display:flex;gap:8px;margin-bottom:12px"></div>
     <div id="familyList" style="margin-bottom:16px"></div>
     <div style="padding:28px 0 0">
       <button class="btn-primary" onclick="goToResult()">환급액 확인하기</button>
@@ -785,8 +783,14 @@ function chooseSpouse(val) {
 }
 
 function addFamily(type) {
-  dependents.push({ type: type, birthYear: type === 'child' ? 2020 : 1960, eligible: true, owner: 'me', disabled: false });
+  dependents.push({ type: type, birthYear: type === 'child' ? 2020 : 1960, eligible: true, owner: familyOwnerTab, disabled: false });
   familyEditIdx = dependents.length - 1;
+  renderFamilyList();
+}
+
+function setFamilyTab(who) {
+  familyOwnerTab = who;
+  familyEditIdx = -1;
   renderFamilyList();
 }
 
@@ -816,92 +820,54 @@ function onFamilyOwner(idx, who) {
 }
 
 var familyEditIdx = -1;
+var familyOwnerTab = 'me';
 
 function renderFamilyList() {
   var year = 2026;
 
-  // 트리 시각화
-  var tree = '';
-  var myDeps = dependents.filter(function(d,i) { return d.owner === 'me' && d.eligible; });
-  var spDeps = dependents.filter(function(d,i) { return d.owner === 'spouse' && d.eligible; });
+  // 탭+트리 시각화
+  // 탭: 본인/배우자 선택
+  var tab = '';
   var isSpouseDependent = dependents.some(function(d) { return d.type === 'spouse'; });
+  if (hasSpouseFlag && !isSpouseDependent) {
+    tab += '<div style="display:flex;gap:6px">';
+    tab += '<button onclick="setFamilyTab(\'me\')" style="flex:1;height:52px;border:none;border-radius:14px;font-family:inherit;cursor:pointer;font-size:14px;font-weight:700;background:' + (familyOwnerTab==='me'?'var(--blue)':'var(--bg2)') + ';color:' + (familyOwnerTab==='me'?'#fff':'var(--text3)') + '">본인<br><span style="font-size:11px;font-weight:500">' + salary.toLocaleString() + '만원</span></button>';
+    tab += '<button onclick="setFamilyTab(\'spouse\')" style="flex:1;height:52px;border:none;border-radius:14px;font-family:inherit;cursor:pointer;font-size:14px;font-weight:700;background:' + (familyOwnerTab==='spouse'?'var(--blue)':'var(--bg2)') + ';color:' + (familyOwnerTab==='spouse'?'#fff':'var(--text3)') + '">배우자<br><span style="font-size:11px;font-weight:500">' + spouseSalary.toLocaleString() + '만원</span></button>';
+    tab += '</div>';
+  }
+  document.getElementById('familyTab').innerHTML = tab;
+
+  // 선택한 쪽 부양가족 칩
+  var currentDeps = hasSpouseFlag && !isSpouseDependent
+    ? dependents.filter(function(d) { return d.owner === familyOwnerTab; })
+    : dependents;
 
   function depChip(d, idx) {
     var age = year - d.birthYear;
     var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'user-round');
-    var label = d.type === 'spouse' ? '배우자' : (d.type === 'child' ? age + '세' : age + '세');
+    var label = d.type === 'spouse' ? '배우자' : age + '세';
     var typeLabel = d.type === 'spouse' ? '' : (d.type === 'child' ? '자녀' : '부모');
-    return '<button onclick="editFamily(' + idx + ')" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 12px;background:' + (familyEditIdx === idx ? 'var(--blue)' : 'var(--bg)') + ';border:none;border-radius:12px;cursor:pointer;font-family:inherit;min-width:56px">' +
-      '<i data-lucide="' + iconName + '" style="width:20px;height:20px;color:' + (familyEditIdx === idx ? '#fff' : 'var(--text2)') + '"></i>' +
-      '<span style="font-size:11px;font-weight:700;color:' + (familyEditIdx === idx ? '#fff' : 'var(--text)') + '">' + label + '</span>' +
+    return '<button onclick="editFamily(' + idx + ')" style="display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 14px;background:' + (familyEditIdx === idx ? 'var(--blue)' : 'var(--bg2)') + ';border:none;border-radius:12px;cursor:pointer;font-family:inherit;min-width:60px;transition:all .15s">' +
+      '<i data-lucide="' + iconName + '" style="width:22px;height:22px;color:' + (familyEditIdx === idx ? '#fff' : 'var(--text2)') + '"></i>' +
+      '<span style="font-size:12px;font-weight:700;color:' + (familyEditIdx === idx ? '#fff' : 'var(--text)') + '">' + label + '</span>' +
       (typeLabel ? '<span style="font-size:9px;color:' + (familyEditIdx === idx ? 'rgba(255,255,255,.7)' : 'var(--text4)') + '">' + typeLabel + '</span>' : '') +
       '</button>';
   }
 
-  if (hasSpouseFlag && !isSpouseDependent) {
-    // 맞벌이: 두 트리
-    tree += '<div style="display:flex;gap:12px">';
-    // 본인 트리
-    tree += '<div style="flex:1;background:var(--bg2);border-radius:14px;padding:14px;text-align:center">';
-    tree += '<div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px">본인</div>';
-    tree += '<div style="font-size:11px;color:var(--text3);margin-bottom:10px">' + salary.toLocaleString() + '만원</div>';
-    if (myDeps.length > 0) {
-      tree += '<div style="width:1px;height:12px;background:var(--line);margin:0 auto"></div>';
-      tree += '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:6px">';
-      myDeps.forEach(function(d) { var idx = dependents.indexOf(d); tree += depChip(d, idx); });
-      tree += '</div>';
-    } else {
-      tree += '<div style="font-size:11px;color:var(--text4);margin-top:8px">부양가족 없음</div>';
-    }
-    tree += '</div>';
-    // 배우자 트리
-    tree += '<div style="flex:1;background:var(--bg2);border-radius:14px;padding:14px;text-align:center">';
-    tree += '<div style="font-size:13px;font-weight:700;color:var(--text3);margin-bottom:4px">배우자</div>';
-    tree += '<div style="font-size:11px;color:var(--text3);margin-bottom:10px">' + spouseSalary.toLocaleString() + '만원</div>';
-    if (spDeps.length > 0) {
-      tree += '<div style="width:1px;height:12px;background:var(--line);margin:0 auto"></div>';
-      tree += '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:6px">';
-      spDeps.forEach(function(d) { var idx = dependents.indexOf(d); tree += depChip(d, idx); });
-      tree += '</div>';
-    } else {
-      tree += '<div style="font-size:11px;color:var(--text4);margin-top:8px">부양가족 없음</div>';
-    }
-    tree += '</div>';
+  var tree = '';
+  if (currentDeps.length > 0) {
+    tree += '<div style="display:flex;flex-wrap:wrap;gap:8px">';
+    currentDeps.forEach(function(d) { var idx = dependents.indexOf(d); tree += depChip(d, idx); });
     tree += '</div>';
   } else {
-    // 독신 또는 배우자가 부양가족인 경우: 단일 트리
-    tree += '<div style="background:var(--bg2);border-radius:14px;padding:14px;text-align:center">';
-    tree += '<div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px">본인</div>';
-    tree += '<div style="font-size:11px;color:var(--text3);margin-bottom:10px">' + salary.toLocaleString() + '만원</div>';
-    if (dependents.length > 0) {
-      tree += '<div style="width:1px;height:12px;background:var(--line);margin:0 auto"></div>';
-      tree += '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:6px">';
-      dependents.forEach(function(d, idx) { if (d.eligible) tree += depChip(d, idx); });
-      tree += '</div>';
-    }
-    tree += '</div>';
+    tree += '<div style="text-align:center;color:var(--text4);font-size:13px;padding:16px 0">부양가족이 없어요</div>';
   }
-
   document.getElementById('familyTree').innerHTML = tree;
 
-  // 칩 렌더링 (하단 전체 목록 제거 — 트리로 대체)
-  var chips = '';
-  dependents.forEach(function(d, i) {
-    var age = year - d.birthYear;
-    var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'user-round');
-    var iconHtml = '<i data-lucide="' + iconName + '" style="width:24px;height:24px;color:' + (isSelected ? '#fff' : 'var(--text2)') + '"></i>';
-    var label = age + '세';
-    var ownerLabel = hasSpouseFlag ? (d.owner === 'me' ? '본인' : '배우자') : '';
-    var isOk = d.eligible && (d.type === 'child' ? age <= 20 : age >= 60);
-    var isSelected = familyEditIdx === i;
-    chips += '<button onclick="editFamily(' + i + ')" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 18px;background:' + (isSelected ? 'var(--blue)' : 'var(--bg2)') + ';border:none;border-radius:16px;cursor:pointer;font-family:inherit;min-width:76px;transition:all .2s">';
-    chips += iconHtml;
-    chips += '<span style="font-size:14px;font-weight:700;color:' + (isSelected ? '#fff' : 'var(--text)') + '">' + label + '</span>';
-    if (ownerLabel) chips += '<span style="font-size:10px;font-weight:600;color:' + (isSelected ? 'rgba(255,255,255,.7)' : 'var(--blue)') + '">' + ownerLabel + '</span>';
-    if (!isOk) chips += '<span style="font-size:10px;color:' + (isSelected ? '#FFB3B3' : 'var(--red)') + '">미충족</span>';
-    chips += '</button>';
-  });
-  // chips는 트리로 대체됨
+  // 추가 버튼
+  var addBtns = '<button class="choice-btn" style="height:44px;justify-content:center;margin:0;flex:1;font-size:13px" onclick="addFamily(\'child\')">+ 자녀</button>';
+  addBtns += '<button class="choice-btn" style="height:44px;justify-content:center;margin:0;flex:1;font-size:13px" onclick="addFamily(\'parent\')">+ 부모</button>';
+  document.getElementById('familyAddBtns').innerHTML = addBtns;
 
   // 상세 편집 (선택된 가족)
   var detail = '';
