@@ -1245,14 +1245,15 @@ function getCardThresholdInfo() {
     var extraLimit = 2000000;
     if (tp <= 70000000) { extraDed += cultureOver * 0.30; extraLimit = 3000000; }
     extraDed = Math.min(extraDed, extraLimit);
-    var extraRaw = marketOver * 0.40 + transportOver * 0.40 + (tp <= 70000000 ? cultureOver * 0.30 : 0);
+    var cultureEligible = tp <= 70000000;
+    var extraRaw = marketOver * 0.40 + transportOver * 0.40 + (cultureEligible ? cultureOver * 0.30 : 0);
     var extraCapRatio = extraRaw > 0 ? extraDed / extraRaw : 0;
     perCard.credit = { amount: ci.credit * 10000, deduction: Math.round(creditOver * 0.15 * capRatio), taxSaving: Math.round(creditOver * 0.15 * capRatio * mr * 1.1) };
     perCard.debit = { amount: ci.debit * 10000, deduction: Math.round(debitOver * 0.30 * capRatio), taxSaving: Math.round(debitOver * 0.30 * capRatio * mr * 1.1) };
     perCard.cash = { amount: ci.cash * 10000, deduction: Math.round(cashOver * 0.30 * capRatio), taxSaving: Math.round(cashOver * 0.30 * capRatio * mr * 1.1) };
     perCard.market = { amount: (ci.market||0) * 10000, deduction: Math.round(marketOver * 0.40 * extraCapRatio), taxSaving: Math.round(marketOver * 0.40 * extraCapRatio * mr * 1.1) };
     perCard.transport = { amount: (ci.transport||0) * 10000, deduction: Math.round(transportOver * 0.40 * extraCapRatio), taxSaving: Math.round(transportOver * 0.40 * extraCapRatio * mr * 1.1) };
-    perCard.culture = { amount: (ci.culture||0) * 10000, deduction: Math.round(cultureOver * 0.30 * extraCapRatio), taxSaving: Math.round(cultureOver * 0.30 * extraCapRatio * mr * 1.1) };
+    perCard.culture = { amount: (ci.culture||0) * 10000, deduction: cultureEligible ? Math.round(cultureOver * 0.30 * extraCapRatio) : 0, taxSaving: cultureEligible ? Math.round(cultureOver * 0.30 * extraCapRatio * mr * 1.1) : 0 };
     baseDed = baseDed + extraDed;
   } else {
     ['credit','debit','cash','market','transport','culture'].forEach(function(k) {
