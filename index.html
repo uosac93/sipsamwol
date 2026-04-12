@@ -1555,6 +1555,8 @@ function renderCatStep() {
     var saving = calcCatSaving('card');
     h += '<div class="cat-result-box"><div class="cat-result-label">예상 절세액</div>';
     h += '<div class="cat-result-value" id="catSavingDisplay">' + fmtAmt(saving) + '원</div></div>';
+    // 카드 불러오기
+    h += '<button class="card-import-btn" style="width:100%;margin-bottom:16px;height:44px;padding:0 16px" onclick="openAuthPicker()">카드 사용내역 불러오기</button>';
     // 기본 카드 입력
     function renderCardField(f) {
       var val = ci[f.key] || 0;
