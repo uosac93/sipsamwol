@@ -828,7 +828,7 @@ function renderFamilyList() {
 
   function depChip(d, idx) {
     var age = year - d.birthYear;
-    var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'person-standing');
+    var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'user-round');
     var label = d.type === 'spouse' ? '배우자' : (d.type === 'child' ? age + '세' : age + '세');
     var typeLabel = d.type === 'spouse' ? '' : (d.type === 'child' ? '자녀' : '부모');
     return '<button onclick="editFamily(' + idx + ')" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 12px;background:' + (familyEditIdx === idx ? 'var(--blue)' : 'var(--bg)') + ';border:none;border-radius:12px;cursor:pointer;font-family:inherit;min-width:56px">' +
@@ -888,7 +888,7 @@ function renderFamilyList() {
   var chips = '';
   dependents.forEach(function(d, i) {
     var age = year - d.birthYear;
-    var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'person-standing');
+    var iconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'user-round');
     var iconHtml = '<i data-lucide="' + iconName + '" style="width:24px;height:24px;color:' + (isSelected ? '#fff' : 'var(--text2)') + '"></i>';
     var label = age + '세';
     var ownerLabel = hasSpouseFlag ? (d.owner === 'me' ? '본인' : '배우자') : '';
@@ -910,7 +910,7 @@ function renderFamilyList() {
     var i = familyEditIdx;
     var age = year - d.birthYear;
     var label = d.type === 'child' ? '자녀' : '부모';
-    var detailIconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'person-standing');
+    var detailIconName = d.type === 'spouse' ? 'heart' : d.type === 'child' ? 'baby' : (d.disabled ? 'accessibility' : 'user-round');
     var detailIcon = '<i data-lucide="' + detailIconName + '" style="width:20px;height:20px;color:var(--blue)"></i>';
     var ageOk = d.type === 'child' ? age <= 20 : age >= 60;
 
