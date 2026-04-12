@@ -1883,19 +1883,6 @@ function onCatInput(el) {
     if (thArea) thArea.innerHTML = renderCardThresholdHTML();
     var ti = getCardThresholdInfo();
     document.querySelectorAll('.card-field-deduct').forEach(function(d) { d.remove(); });
-    if (ti.overThreshold) {
-      document.querySelectorAll('.card-field-input').forEach(function(wrap) {
-        var inp = wrap.querySelector('.cat-input');
-        if (!inp) return;
-        var fk = inp.getAttribute('data-field');
-        var pc = ti.perCard[fk];
-        if (pc && catInputs.card[fk] > 0 && pc.taxSaving > 0) {
-          var d = document.createElement('div'); d.className = 'card-field-deduct';
-          d.textContent = '절세 ' + fmtAmt(pc.taxSaving) + '원';
-          wrap.appendChild(d);
-        }
-      });
-    }
   }
 }
 
