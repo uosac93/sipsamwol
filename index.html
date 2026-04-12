@@ -1535,7 +1535,7 @@ function showScreen(id) {
 function getFamilyCount() {
   var count = 1; // 본인
   dependents.forEach(function(d) {
-    if (d.eligible) {
+    if (d.eligible && d.owner === 'me') {
       var age = 2026 - d.birthYear;
       if (d.type === 'child' && age <= 20) count++;
       else if (d.type === 'parent' && age >= 60) count++;
@@ -1547,6 +1547,7 @@ function getFamilyCount() {
 
 function calculate() {
   var fam = getFamilyCount();
+  childCount = dependents.filter(function(d) { return d.type === 'child' && d.eligible && (2026 - d.birthYear) <= 20; }).length;
   lastResult = calcSimpleRefund(salary, fam);
   if (hasSpouse()) { var spFam = 1 + dependents.filter(function(d){ return d.owner === 'spouse' && d.eligible && (d.type === 'child' ? (2026-d.birthYear) <= 20 : (2026-d.birthYear) >= 60); }).length; spouseResult = calcSimpleRefund(spouseSalary, spFam); }
   else spouseResult = null;
