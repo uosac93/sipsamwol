@@ -818,6 +818,7 @@ function removeFamily(idx) {
 
 function onFamilyYear(idx, val) {
   dependents[idx].birthYear = parseInt(val) || 2000;
+  renderFamilyView();
 }
 
 function onFamilyEligible(idx, val) {
